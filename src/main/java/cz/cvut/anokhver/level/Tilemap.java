@@ -3,6 +3,7 @@ package cz.cvut.anokhver.level;
 
 import static cz.cvut.anokhver.level.SingleTile.loadImageForTile;
 
+import cz.cvut.anokhver.Configuration;
 import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;
@@ -38,8 +39,9 @@ public class Tilemap {
                 for (String s : line.split("")) {
                     // Create a new Tile object based on the character read from the file
                     // and add it to the Tilemap
+
                     Image image = loadImageForTile(s);
-                    SingleTile tile = new SingleTile(image, x, y, 40, 60);
+                    SingleTile tile = new SingleTile(image, x, y);
                     this.setTile(x, y, tile);
                     x++;
                 }

@@ -1,5 +1,8 @@
 package cz.cvut.anokhver.level;
 
+import cz.cvut.anokhver.Configuration;
+import static cz.cvut.anokhver.FileManagement.create_proper_path;
+
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Star;
 import javafx.scene.canvas.Canvas;
@@ -15,9 +18,11 @@ public class Level {
     private Tilemap map;
 
     public Level(Integer id) {
+        Configuration.init("config.json");
+
         this.id = id;
-        this.map = new Tilemap(40, 20, id);
-        String dir = System.getProperty("user.dir") + "\\src\\main\\resources\\level" + id.toString();
+        this.map = new Tilemap(Configuration.getMapWidth(), Configuration.getMapHeight(), id);
+        String dir = create_proper_path(Configuration.getPathLevel() + id.toString());
         map.readMap(dir);
     }
 
@@ -30,11 +35,13 @@ public class Level {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (int i = 0; i < map.getWidth(); i++) {
-            System.out.println("i rendered " + String.valueOf(i));
+            //System.out.println("i rendered " + String.valueOf(i));
+
             for (int j = 0; j < map.getHeight(); j++) {
                 SingleTile tile = map.getTile(i, j);
                 tile.render(gc);
-                System.out.println("i rendered JJJJJJ" + String.valueOf(j));
+
+                //System.out.println("i rendered JJJJJJ" + String.valueOf(j));
             }
         }
     }

@@ -36,7 +36,7 @@ public class GameLogic {
     }
 
     public static void new_game(){
-
+        Configuration.init("config.json");
         Scene currentScene = stage.getScene();
 
         // If there is a current scene, hide it before setting the new scene
@@ -46,7 +46,7 @@ public class GameLogic {
         }
 
         Level first_level = new Level(1);
-        Canvas canvas = new Canvas(1000, 1000);
+        Canvas canvas = new Canvas(Configuration.getWindowWidth(), Configuration.getWindowHeight());
         first_level.drawTileMap(canvas);
         Pane pane = new Pane(canvas);
         Scene scene = new Scene(pane);
