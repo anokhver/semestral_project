@@ -1,7 +1,7 @@
 package cz.cvut.anokhver.enteties;
 
 import cz.cvut.anokhver.items.Item;
-import cz.cvut.anokhver.level.Coordinates;
+import cz.cvut.anokhver.movement.Coordinates;
 
 public class Enemy {
 

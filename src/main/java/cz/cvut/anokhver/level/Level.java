@@ -2,14 +2,13 @@ package cz.cvut.anokhver.level;
 
 import cz.cvut.anokhver.additional.Configuration;
 import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
-import static cz.cvut.anokhver.level.SingleTile.loadImageForTile;
 
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
+import cz.cvut.anokhver.movement.Coordinates;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 import java.util.List;
 

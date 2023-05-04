@@ -1,6 +1,7 @@
 package cz.cvut.anokhver.level;
 
 import cz.cvut.anokhver.enteties.Player;
+import cz.cvut.anokhver.movement.Coordinates;
 
 public class LevelHandler {
     protected final Player character;

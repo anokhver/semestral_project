@@ -23,6 +23,8 @@ public class GameLauncher extends Application {
         primaryStage.setTitle(Configuration.getWindowName());
         primaryStage.setResizable(false);
 
+
+
         String dir = create_proper_path( Configuration.getPathIcon());
         File icon = new File(dir);
 

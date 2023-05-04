@@ -11,7 +11,6 @@ public class Configuration {
 
     private static JSONObject json_config;
 
-
     public static void init(String path) {
         File file = new File(path);
         try {

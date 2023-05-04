@@ -1,11 +1,9 @@
 package cz.cvut.anokhver.enteties;
 import cz.cvut.anokhver.additional.Configuration;
-import cz.cvut.anokhver.level.Coordinates;
+import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.menu.Inventory;
+import cz.cvut.anokhver.movement.Direction;
 import javafx.scene.image.Image;
-
-import javax.swing.text.Element;
-import javax.swing.text.html.ImageView;
 
 import java.io.File;
 
@@ -21,7 +19,7 @@ public class Player{
     private final Inventory inventory;
     private Coordinates position;
 
-    private Image texture;
+    private final Image texture;
 
 
     public Player(float damage, float walkSpeed, float health, float speedDamage, Inventory inventory) {
@@ -114,4 +112,39 @@ public class Player{
     public Image getTexture() {
         return texture;
     }
+    public void move(Direction direction) {
+        Configuration.init(create_proper_path("config.json"));
+
+        int x = position.getX();
+        int y = position.getY();
+        float speed = walk_speed;
+
+        // Update the player's position based on the given direction
+        switch (direction) {
+            case TOP:
+                y -= speed;
+                break;
+            case BOTTOM:
+                y += speed;
+                break;
+            case RIGHT:
+                x += speed;
+                break;
+            case LEFT:
+                x -= speed;
+                break;
+            default:
+                break;
+        }
+
+        // Update the player's position if it's within the game world boundaries
+        if (x >= 0 && x <= Configuration.getMapWidth() - texture.getWidth() && y >= 0 && y <= Configuration.getMapHeight() - texture.getHeight()) {
+            position = new Coordinates(x, y);
+        }
+        System.out.println(position);
+        setPosition(position);
+    }
+
+
 }
+

@@ -1,4 +1,4 @@
-package cz.cvut.anokhver.level;
+package cz.cvut.anokhver.movement;
 
 public class Coordinates {
     private int x;
