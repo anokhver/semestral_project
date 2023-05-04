@@ -1,12 +1,15 @@
 package cz.cvut.anokhver.level;
 
-import cz.cvut.anokhver.Configuration;
-import static cz.cvut.anokhver.FileManagement.create_proper_path;
+import cz.cvut.anokhver.additional.Configuration;
+import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
+import static cz.cvut.anokhver.level.SingleTile.loadImageForTile;
 
 import cz.cvut.anokhver.enteties.Enemy;
+import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 import java.util.List;
 
@@ -31,7 +34,7 @@ public class Level {
     }
 
     public void drawTileMap(Canvas canvas) {
-        System.out.println("Staeted rendered" + String.valueOf(map.getWidth()) + " " + String.valueOf(map.getHeight()));
+        System.out.println("Started rendered" + String.valueOf(map.getWidth()) + " " + String.valueOf(map.getHeight()));
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (int i = 0; i < map.getWidth(); i++) {
@@ -45,6 +48,16 @@ public class Level {
             }
         }
     }
+
+    public void drawPlayer(Canvas canvas, Player hero)
+    {
+        Configuration.init("config.json");
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        hero.setPosition(new Coordinates(100, 100)); // Set the initial position of the player
+        gc.drawImage(hero.getTexture(), hero.getPosition().getX(), hero.getPosition().getY(), Configuration.getTileSize(), Configuration.getTileSize());
+
+    }
+
     public Integer getId() {
         return id;
     }

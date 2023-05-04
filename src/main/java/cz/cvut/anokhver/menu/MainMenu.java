@@ -1,17 +1,15 @@
 package cz.cvut.anokhver.menu;
 
-import javafx.event.EventHandler;
+import cz.cvut.anokhver.additional.Configuration;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+
+import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 
 public class MainMenu extends Menu {
 
@@ -21,6 +19,7 @@ public class MainMenu extends Menu {
 
 
     public MainMenu(){
+        Configuration.init(create_proper_path("config.json"));
 
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
@@ -40,7 +39,7 @@ public class MainMenu extends Menu {
 
         this.getChildren().add(exitButton);
 
-        scene = new Scene(this, 800, 600);
+        scene = new Scene(this, Configuration.getWindowWidth(), Configuration.getWindowHeight());
 
     }
 

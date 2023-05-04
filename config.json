@@ -7,7 +7,9 @@
   "pathIcon": "src/main/resources/additional/AppIconNightWalk.png",
   "pathTile": "src/main/resources/tiles/",
   "pathLevel" : "src/main/resources/level",
+  "pathPlayerTexture": "src/main/resources/textures/player.png",
 
   "mapWidth": 40,
   "mapHeight" : 20
 }
+

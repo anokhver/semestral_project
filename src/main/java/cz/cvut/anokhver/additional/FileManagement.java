@@ -1,4 +1,4 @@
-package cz.cvut.anokhver;
+package cz.cvut.anokhver.additional;
 
 import java.io.File;
 

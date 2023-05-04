@@ -1,12 +1,13 @@
 package cz.cvut.anokhver;
 
+import cz.cvut.anokhver.additional.Configuration;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
 import java.io.File;
 
-import static cz.cvut.anokhver.FileManagement.create_proper_path;
+import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 
 public class GameLauncher extends Application {
     public static void main(String[] args) {

@@ -1,11 +1,11 @@
 package cz.cvut.anokhver.level;
 
-import cz.cvut.anokhver.Configuration;
+import cz.cvut.anokhver.additional.Configuration;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.io.File;
-import static cz.cvut.anokhver.FileManagement.create_proper_path;
+import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 
 public class SingleTile{
     private final Image image;

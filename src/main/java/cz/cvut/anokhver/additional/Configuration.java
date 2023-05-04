@@ -1,4 +1,4 @@
-package cz.cvut.anokhver;
+package cz.cvut.anokhver.additional;
 
 import org.json.JSONObject;
 
@@ -41,10 +41,9 @@ public class Configuration {
     public static String getPathIcon() {
         return json_config.getString("pathIcon");
     }
-    public static String getPathTile() {
+    public static String getPathTile() {return json_config.getString("pathTile");}
 
-        return json_config.getString("pathTile");
-    }
+    public static String getPathPlayer(){return json_config.getString("pathPlayerTexture");}
 
     public static String getPathLevel() {
         return json_config.getString("pathLevel");

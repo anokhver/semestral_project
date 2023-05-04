@@ -3,7 +3,6 @@ package cz.cvut.anokhver.level;
 
 import static cz.cvut.anokhver.level.SingleTile.loadImageForTile;
 
-import cz.cvut.anokhver.Configuration;
 import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;

@@ -1,6 +1,15 @@
 package cz.cvut.anokhver.enteties;
+import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.level.Coordinates;
 import cz.cvut.anokhver.menu.Inventory;
+import javafx.scene.image.Image;
+
+import javax.swing.text.Element;
+import javax.swing.text.html.ImageView;
+
+import java.io.File;
+
+import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 
 public class Player{
     private float damage;
@@ -12,20 +21,34 @@ public class Player{
     private final Inventory inventory;
     private Coordinates position;
 
+    private Image texture;
+
+
     public Player(float damage, float walkSpeed, float health, float speedDamage, Inventory inventory) {
+        Configuration.init(create_proper_path("config.json"));
+
+
         this.damage = damage;
         walk_speed = walkSpeed;
         this.health = health;
         speed_damage = speedDamage;
         this.inventory = inventory;
+
+        this.texture = new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()));
+
     }
 
     public Player() {
+        Configuration.init(create_proper_path("config.json"));
+
         this.damage = 20;
         walk_speed = 5;
         this.health = 100;
         speed_damage = 10;
         this.inventory = new Inventory();
+
+        this.texture = new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()));
+
     }
 
     public float getDamage() {
@@ -86,5 +109,9 @@ public class Player{
 
     public void setPosition(Coordinates position) {
         this.position = position;
+    }
+
+    public Image getTexture() {
+        return texture;
     }
 }
