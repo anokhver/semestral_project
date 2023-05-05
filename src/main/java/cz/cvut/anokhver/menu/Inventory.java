@@ -5,7 +5,7 @@ import cz.cvut.anokhver.items.Collar;
 import cz.cvut.anokhver.items.Hat;
 import cz.cvut.anokhver.items.Item;
 
-public class Inventory extends Menu{
+public class Inventory extends AMenu {
     private Item[] backPack;
     private Collar yourCollar;
     private Hat yourHat;

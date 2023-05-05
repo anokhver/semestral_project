@@ -11,7 +11,7 @@ import javafx.scene.text.FontWeight;
 
 import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 
-public class MainMenu extends Menu {
+public class MainMenu extends AMenu {
 
     protected Button startButton;
     protected Button loadButton;

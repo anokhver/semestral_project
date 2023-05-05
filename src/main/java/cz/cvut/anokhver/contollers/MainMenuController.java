@@ -2,12 +2,11 @@ package cz.cvut.anokhver.contollers;
 
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.menu.MainMenu;
-import cz.cvut.anokhver.menu.Menu;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
-public class MainMenuController extends Contoller{
+public class MainMenuController extends AContoller {
 
     private final MainMenu view;
 
@@ -38,5 +37,10 @@ public class MainMenuController extends Contoller{
     @Override
     public VBox getView() {
         return view;
+    }
+
+    @Override
+    public void update(double delta) {
+
     }
 }

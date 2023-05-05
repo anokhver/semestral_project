@@ -40,7 +40,7 @@ public class Player{
         Configuration.init(create_proper_path("config.json"));
 
         this.damage = 20;
-        walk_speed = 5;
+        walk_speed = 120;
         this.health = 100;
         speed_damage = 10;
         this.inventory = new Inventory();
@@ -112,39 +112,6 @@ public class Player{
     public Image getTexture() {
         return texture;
     }
-    public void move(Direction direction) {
-        Configuration.init(create_proper_path("config.json"));
-
-        int x = position.getX();
-        int y = position.getY();
-        float speed = walk_speed;
-
-        // Update the player's position based on the given direction
-        switch (direction) {
-            case TOP:
-                y -= speed;
-                break;
-            case BOTTOM:
-                y += speed;
-                break;
-            case RIGHT:
-                x += speed;
-                break;
-            case LEFT:
-                x -= speed;
-                break;
-            default:
-                break;
-        }
-
-        // Update the player's position if it's within the game world boundaries
-        if (x >= 0 && x <= Configuration.getMapWidth() - texture.getWidth() && y >= 0 && y <= Configuration.getMapHeight() - texture.getHeight()) {
-            position = new Coordinates(x, y);
-        }
-        System.out.println(position);
-        setPosition(position);
-    }
-
 
 }
 

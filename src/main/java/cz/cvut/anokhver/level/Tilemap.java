@@ -27,7 +27,7 @@ public class Tilemap {
         return tiles[x][y];
     }
 
-    protected void readMap(String path) {
+    public void readMap(String path) {
         try {
             File mapFile = new File(path);
             Scanner fileSc = new Scanner(mapFile);

@@ -1,38 +1,45 @@
 package cz.cvut.anokhver;
 
 import cz.cvut.anokhver.additional.Configuration;
-import cz.cvut.anokhver.contollers.Contoller;
+import cz.cvut.anokhver.contollers.AContoller;
+import cz.cvut.anokhver.contollers.Level;
 import cz.cvut.anokhver.contollers.MainMenuController;
 import cz.cvut.anokhver.enteties.Player;
-import cz.cvut.anokhver.level.Level;
 
-
-import cz.cvut.anokhver.movement.Direction;
-import javafx.scene.input.KeyCode;
+import cz.cvut.anokhver.contollers.LevelHandler;
+import cz.cvut.anokhver.movement.Coordinates;
+import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import javafx.scene.layout.Pane;
-
 public class GameLogic {
 
 
-    //STAGE + MENU
+    /**
+     * STAGE + MENU
+     */
     private static Stage stage;
-    private static final Dictionary<String, Contoller> controllers = new Hashtable<String, Contoller>();
+    private static final Dictionary<String, AContoller> controllers = new Hashtable<String, AContoller>();
 
-    //THE GAME PARAMETERS
-    private static Contoller cur_state;
+    public static AContoller getCur_state() {
+        return cur_state;
+    }
 
-    private static Level cur_level;
+    /**
+     * THE GAME PARAMETERS
+     */
+    private static AContoller cur_state;
+
+    protected static LevelHandler cur_level;
     private static final Player hero = new Player();
-
+    private static GameLoop gameLoop = new GameLoop();
 
     public GameLogic(Stage primaryStage){
         GameLogic.stage = primaryStage;
+        hero.setPosition(new Coordinates(100,100));
+
 
         controllers.put("MainMenu", new MainMenuController());
         cur_state = controllers.get("MainMenu");
@@ -56,42 +63,31 @@ public class GameLogic {
             currentStage.hide();
         }
 
-        //drawing first level
-        cur_level = new Level(1);
-        Canvas cur_canvas = new Canvas(Configuration.getWindowWidth(), Configuration.getWindowHeight());
-        cur_level.drawTileMap(cur_canvas);
-        cur_level.drawPlayer(cur_canvas, hero);
-
-        //setting the canvas
-        Pane pane = new Pane(cur_canvas);
-        currentScene = new Scene(pane);
-
-        stage.setScene(currentScene);
-        // Show the Stage
-        stage.show();
-
+        //drawing level
+        cur_level = new LevelHandler(hero, new Level(1), stage);
+        cur_level.draw_level_start();
+        //starting game loop
+        gameLoop.start();
     }
     public static void load_game(){
         System.out.println("LOADING GAME");
 
     }
 
-    public static void handleKeyPressed(KeyCode code) {
-        switch (code) {
-            case W:
-                hero.move(Direction.TOP);
-                break;
-            case A:
-                hero.move(Direction.LEFT);
-                break;
-            case S:
-                hero.move(Direction.BOTTOM);
-                break;
-            case D:
-                hero.move(Direction.RIGHT);
-                break;
+
+}
+
+class GameLoop extends AnimationTimer {
+    private long lastNanoTime = System.nanoTime();
+
+    @Override
+    public void handle(long now) {
+        double delta = (now - lastNanoTime) / 1000000000.0;
+
+        // Frame rate cap
+        if (delta > 1/1000.00) {
+            lastNanoTime = now;
+            GameLogic.cur_level.update(delta);
         }
     }
-
-
 }
