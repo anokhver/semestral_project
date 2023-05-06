@@ -9,30 +9,25 @@ import java.io.File;
 
 import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 
-public class Player{
+public class Player extends Movable{
     private float damage;
-    private float walk_speed;
     private float health;
     private float speed_damage;
     private Integer coins = 0;
     private boolean live = true;
     private final Inventory inventory;
-    private Coordinates position;
-
-    private final Image texture;
 
 
     public Player(float damage, float walkSpeed, float health, float speedDamage, Inventory inventory) {
         Configuration.init(create_proper_path("config.json"));
 
-
         this.damage = damage;
-        walk_speed = walkSpeed;
         this.health = health;
         speed_damage = speedDamage;
         this.inventory = inventory;
 
-        this.texture = new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()));
+        setWalk_speed(walkSpeed);
+        setTexture(new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()), Configuration.getPlayerWidth(), Configuration.getPlayerHeight(), false, false));
 
     }
 
@@ -40,12 +35,12 @@ public class Player{
         Configuration.init(create_proper_path("config.json"));
 
         this.damage = 20;
-        walk_speed = 120;
         this.health = 100;
         speed_damage = 10;
         this.inventory = new Inventory();
 
-        this.texture = new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()));
+        setWalk_speed(120);
+        setTexture(new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()), Configuration.getPlayerWidth(), Configuration.getPlayerHeight(), false, false));
 
     }
 
@@ -55,14 +50,6 @@ public class Player{
 
     public void setDamage(float damage) {
         this.damage = damage;
-    }
-
-    public float getWalk_speed() {
-        return walk_speed;
-    }
-
-    public void setWalk_speed(float walk_speed) {
-        this.walk_speed = walk_speed;
     }
 
     public float getHealth() {
@@ -101,17 +88,8 @@ public class Player{
         this.live = live;
     }
 
-    public Coordinates getPosition() {
-        return position;
-    }
 
-    public void setPosition(Coordinates position) {
-        this.position = position;
-    }
 
-    public Image getTexture() {
-        return texture;
-    }
 
 }
 

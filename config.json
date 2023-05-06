@@ -1,8 +1,9 @@
 {
   "windowName": "Night_walk",
   "windowWidth": 1200,
-  "windowHeight": 1000,
+  "windowHeight": 1200,
   "tileSize": 64,
+
 
   "pathIcon": "src/main/resources/additional/AppIconNightWalk.png",
   "pathTile": "src/main/resources/tiles/",
@@ -10,6 +11,10 @@
   "pathPlayerTexture": "src/main/resources/textures/player.png",
 
   "mapWidth": 40,
-  "mapHeight" : 20
+  "mapHeight" : 13,
+
+  "playerWidth":100,
+  "playerHeight": 100
+
 }
 

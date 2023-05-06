@@ -59,8 +59,7 @@ public class GameLogic {
 
         // If there is a current scene, hide it before setting the new scene
         if (currentScene != null) {
-            Stage currentStage = (Stage) currentScene.getWindow();
-            currentStage.hide();
+            stage.hide();
         }
 
         //drawing level

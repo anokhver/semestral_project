@@ -1,6 +1,7 @@
 package cz.cvut.anokhver.contollers;
 
 import cz.cvut.anokhver.additional.Configuration;
+import cz.cvut.anokhver.enteties.Movable;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.level.SingleTile;
 import cz.cvut.anokhver.level.Tilemap;
@@ -18,8 +19,10 @@ public class LevelView extends Scene {
     public LevelView() {
         super(new Pane(), Configuration.getWindowWidth(), Configuration.getWindowHeight());
 
-        cur_canvases.put("player", new Canvas(Configuration.getWindowWidth(), Configuration.getWindowHeight()));
-        cur_canvases.put("map", new Canvas(Configuration.getWindowWidth(), Configuration.getWindowHeight()));
+        cur_canvases.put("player", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
+                Configuration.getMapHeight()*Configuration.getTileSize()));
+        cur_canvases.put("map", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
+               Configuration.getMapHeight()*Configuration.getTileSize()));
 
         Pane pane = (Pane) this.getRoot();
         pane.getChildren().addAll(cur_canvases.get("map"), cur_canvases.get("player"));
@@ -32,10 +35,9 @@ public class LevelView extends Scene {
 
     public void draw_all(Tilemap map, Player hero){
         drawTileMap(map);
-        drawPlayer(hero);
+        drawCreature(hero);
 
     }
-
 
 
     public void drawTileMap(Tilemap map) {
@@ -51,18 +53,22 @@ public class LevelView extends Scene {
             }
         }
     }
-
-    public void drawPlayer(Player hero)
+    public void updateCamera(double playerX, double playerY) {
+        double offsetX = Configuration.getWindowWidth() / 2 - playerX;
+        double offsetY = Configuration.getWindowHeight() / 2 - playerY;
+        this.getRoot().setTranslateX(offsetX);
+        this.getRoot().setTranslateY(offsetY);
+    }
+    public void drawCreature(Movable enetety)
     {
         Configuration.init("config.json");
         GraphicsContext gc = cur_canvases.get("player").getGraphicsContext2D();
-        gc.drawImage(hero.getTexture(), hero.getPosition().getX(), hero.getPosition().getY(), Configuration.getTileSize(), Configuration.getTileSize());
+        gc.drawImage(enetety.getTexture(), enetety.getPosition().getX(), enetety.getPosition().getY());
 
     }
 
     public void clearPlayer(){
         GraphicsContext gc = cur_canvases.get("player").getGraphicsContext2D();
-        gc.clearRect(0, 0, Configuration.getWindowWidth(), Configuration.getWindowHeight());
-
+        gc.clearRect(0, 0, Configuration.getMapWidth()*Configuration.getTileSize(), Configuration.getMapWidth()*Configuration.getTileSize());
     }
 }

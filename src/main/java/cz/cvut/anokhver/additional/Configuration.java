@@ -55,4 +55,8 @@ public class Configuration {
     public static int getMapHeight(){
         return json_config.getInt("mapHeight");
     }
+
+    public static int getPlayerWidth(){ return json_config.getInt("playerWidth");}
+    public static int getPlayerHeight(){ return json_config.getInt("playerHeight");}
+
 }

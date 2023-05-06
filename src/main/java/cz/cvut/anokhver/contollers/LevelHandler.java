@@ -4,19 +4,11 @@ import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-
-import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
-import static java.lang.Thread.sleep;
 
 public class LevelHandler extends AContoller {
 
@@ -69,73 +61,35 @@ public class LevelHandler extends AContoller {
      * updating + rendering
      */
     public void update(double delta) {
-
-        if (pushed_keys.contains("W"))
-        {
-            move_hero(Direction.TOP, delta);
-
-
-        }
-        if (pushed_keys.contains("A"))
-        {
-            move_hero(Direction.LEFT, delta);
-
-
-        }
-        if (pushed_keys.contains("S"))
-        {
-            move_hero(Direction.BOTTOM, delta);
-
-        }
-        if (pushed_keys.contains("D"))
-        {
-            move_hero(Direction.RIGHT, delta);
-        }
-
+        check_player(delta);
         render();
 
     }
 
     public void render(){
         view.clearPlayer();
-        view.drawPlayer(hero);
+        view.drawCreature(hero);
+
+        view.updateCamera(hero.getPosition().getX(), hero.getPosition().getY());
     }
-    /**
-     * moving player
-     */
-    public void move_hero(Direction direction, double delta) {
-        Configuration.init(create_proper_path("config.json"));
 
-
-        float speed = (float) (hero.getWalk_speed() * delta);
-        int x = hero.getPosition().getX();
-        int y = hero.getPosition().getY();
-        System.out.println("HI!! " + x +" "+ y + speed);
-
-        // Update the player's position based on the given direction
-        switch (direction) {
-            case TOP:
-                y -= speed;
-                break;
-            case BOTTOM:
-                y += speed*2;
-                break;
-            case RIGHT:
-                x += speed*2;
-                break;
-            case LEFT:
-                x -= speed;
-                break;
-            default:
-                break;
-        }
-
-        // Update the player's position if it's within the game world boundaries
-        if ((x >= 0 || x <= Configuration.getMapWidth() - hero.getTexture().getWidth())
-                && (y >= 0 || y <= Configuration.getMapHeight() - hero.getTexture().getHeight()))
+    private void check_player(double delta){
+        if (pushed_keys.contains("W"))
         {
-            System.out.println("MOVED!! " + x + y);
-            hero.setPosition(new Coordinates(x, y));
+            hero.move(Direction.TOP, delta);
+        }
+        if (pushed_keys.contains("A"))
+        {
+            hero.move(Direction.LEFT, delta);
+        }
+        if (pushed_keys.contains("S"))
+        {
+            hero.move(Direction.BOTTOM, delta);
+
+        }
+        if (pushed_keys.contains("D"))
+        {
+            hero.move(Direction.RIGHT, delta);
         }
     }
 
