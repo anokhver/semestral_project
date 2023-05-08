@@ -35,5 +35,13 @@ public class Coordinates {
         int newY = original.getY() + other.getY();
         return new Coordinates(newX, newY);
     }
+
+    public static double minus(Coordinates a, Coordinates b) {
+        int dx = a.getX() - b.getX();
+        int dy = a.getY() - b.getY();
+        return Math.sqrt(dx*dx + dy*dy);
+    }
+
+
 }
 

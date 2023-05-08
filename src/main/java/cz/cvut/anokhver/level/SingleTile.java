@@ -15,8 +15,6 @@ public class SingleTile{
     private final int height;
 
     public SingleTile(Image image, int x, int y) {
-        Configuration.init("config.json");
-
         this.image = image;
         this.x = x;
         this.y = y;
@@ -28,8 +26,6 @@ public class SingleTile{
         gc.drawImage(image, width*x, y*height, width, height);
     }
     public static Image loadImageForTile(String tileChar) {
-        Configuration.init("config.json");
-
         String dir = create_proper_path( Configuration.getPathTile() + tileChar + ".png");
         //System.out.println(dir);
 

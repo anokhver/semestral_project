@@ -19,8 +19,6 @@ public class MainMenu extends AMenu {
 
 
     public MainMenu(){
-        Configuration.init(create_proper_path("config.json"));
-
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
         this.setPadding(new Insets(20, 20, 20, 20));

@@ -1,21 +1,26 @@
 package cz.cvut.anokhver;
 
-import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.contollers.Level;
 import cz.cvut.anokhver.contollers.MainMenuController;
 import cz.cvut.anokhver.enteties.Player;
-
 import cz.cvut.anokhver.contollers.LevelHandler;
+import cz.cvut.anokhver.menu.AreYouWinningSon;
 import cz.cvut.anokhver.movement.Coordinates;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.logging.Logger;
+
 
 public class GameLogic {
+    private static Logger log = Logger.getLogger(GameLogic.class.getName());
 
+    //public static Logger log = Logger.getLogger(GameLogic.class.getName());
 
     /**
      * STAGE + MENU
@@ -34,12 +39,13 @@ public class GameLogic {
     private static GameLoop gameLoop = new GameLoop();
 
     public GameLogic(Stage primaryStage){
+        log.info("Setting up the logic");
+
         GameLogic.stage = primaryStage;
+        //log.info("Setting coordinates to player 100, 100");
         hero.setPosition(new Coordinates(100,100));
 
         controllers.put("MainMenu", new MainMenuController());
-        controllers.put("CurLevel", new LevelHandler());
-
         cur_state = controllers.get("MainMenu");
         new_game();
 
@@ -48,13 +54,14 @@ public class GameLogic {
         stage.show();
     }
 
-    public void setMainMenu(){
+    public static void setMainMenu(){
+        log.info("Open main menu");
         cur_state = controllers.get("MainMenu");
         stage.setScene(cur_state.getView().getScene());
     }
 
     public static void new_game(){
-        Configuration.init("config.json");
+        log.info("Start new game");
         stage.setScene(null);
 
         //creating and drawing
@@ -66,11 +73,17 @@ public class GameLogic {
         gameLoop.start();
     }
     public static void load_game(){
-        System.out.println("LOADING GAME");
-
+        log.info("Loading game from save");
     }
 
-
+    public static void win(){
+        hero.setStar_counter(0);
+        gameLoop.stop();
+        Scene winning_scene = new AreYouWinningSon();
+        stage.setScene(new AreYouWinningSon());
+        stage.show();
+        log.info("Player won!");
+    }
     public static AContoller getCur_state() {
         return cur_state;
     }

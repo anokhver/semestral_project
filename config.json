@@ -2,19 +2,24 @@
   "windowName": "Night_walk",
   "windowWidth": 1200,
   "windowHeight": 1200,
-  "tileSize": 64,
+  "tileSize": 110,
 
 
   "pathIcon": "src/main/resources/additional/AppIconNightWalk.png",
   "pathTile": "src/main/resources/tiles/",
   "pathLevel" : "src/main/resources/level",
   "pathPlayerTexture": "src/main/resources/textures/player.png",
+  "pathStarTexture": "src/main/resources/textures/star",
 
-  "mapWidth": 40,
-  "mapHeight" : 13,
+  "mapWidth": 10,
+  "mapHeight" : 10,
 
-  "playerWidth":100,
-  "playerHeight": 100
+  "playerWidth":150,
+  "playerHeight": 150,
 
+
+  "countStars": 3,
+  "minimalDistStarts": 2,
+  "pickupDistanceStar": 100
 }
 
