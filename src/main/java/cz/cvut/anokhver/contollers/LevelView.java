@@ -30,7 +30,6 @@ public class LevelView extends Scene {
         pane.getChildren().get(0).setOpacity(1.0);
         pane.getChildren().get(1).setOpacity(1.0);
 
-        //how to set this scene from pane
     }
 
     public void draw_all(Tilemap map, Player hero){

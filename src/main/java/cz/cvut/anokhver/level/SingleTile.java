@@ -25,9 +25,7 @@ public class SingleTile{
     }
 
     public void render(GraphicsContext gc) {
-        int y_actuall = height*y;
-        if(y_actuall != 0) y_actuall -= 20*y;
-        gc.drawImage(image, width*x, y_actuall, width, height);
+        gc.drawImage(image, width*x, y*height, width, height);
     }
     public static Image loadImageForTile(String tileChar) {
         Configuration.init("config.json");

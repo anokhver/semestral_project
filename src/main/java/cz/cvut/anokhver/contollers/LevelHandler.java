@@ -15,10 +15,10 @@ public class LevelHandler extends AContoller {
     private static Stage cur_stage;
 
     private final LevelView view;
-    private final Level level_config;
+    private Level level_config;
     private HashSet<String> pushed_keys = new HashSet<>();
 
-    protected final Player hero;
+    protected Player hero;
 
     /**
      * basic functions
@@ -32,17 +32,17 @@ public class LevelHandler extends AContoller {
         view = new LevelView();
     }
 
+    public LevelHandler(){
+        view = new LevelView();
+    }
+
     public void draw_level_start(){
 
         view.draw_all(level_config.getMap(), hero);
-        cur_stage.setScene(view);
-
-        //setting the key managing
         view.setOnKeyPressed(this::keyPressedHandler);
         view.setOnKeyReleased(this::keyReleasedHandler);
 
-        // Show the Stage
-        cur_stage.show();
+        cur_stage.setScene(view);
     }
     public void keyPressedHandler(KeyEvent e) {
         String code = e.getCode().toString();
@@ -108,5 +108,30 @@ public class LevelHandler extends AContoller {
     public VBox getView() {
         return null;
     }
+
+    public static Stage getCur_stage() {
+        return cur_stage;
+    }
+
+    public static void setCur_stage(Stage cur_stage) {
+        LevelHandler.cur_stage = cur_stage;
+    }
+
+    public Level getLevel_config() {
+        return level_config;
+    }
+
+    public void setLevel_config(Level level_config) {
+        this.level_config = level_config;
+    }
+
+    public Player getHero() {
+        return hero;
+    }
+
+    public void setHero(Player hero) {
+        this.hero = hero;
+    }
+
 
 }

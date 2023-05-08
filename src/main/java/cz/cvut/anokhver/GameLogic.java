@@ -23,9 +23,6 @@ public class GameLogic {
     private static Stage stage;
     private static final Dictionary<String, AContoller> controllers = new Hashtable<String, AContoller>();
 
-    public static AContoller getCur_state() {
-        return cur_state;
-    }
 
     /**
      * THE GAME PARAMETERS
@@ -40,11 +37,14 @@ public class GameLogic {
         GameLogic.stage = primaryStage;
         hero.setPosition(new Coordinates(100,100));
 
-
         controllers.put("MainMenu", new MainMenuController());
-        cur_state = controllers.get("MainMenu");
+        controllers.put("CurLevel", new LevelHandler());
 
-        setMainMenu();
+        cur_state = controllers.get("MainMenu");
+        new_game();
+
+        //setMainMenu();
+
         stage.show();
     }
 
@@ -55,15 +55,12 @@ public class GameLogic {
 
     public static void new_game(){
         Configuration.init("config.json");
-        Scene currentScene = stage.getScene();
+        stage.setScene(null);
 
-        // If there is a current scene, hide it before setting the new scene
-        if (currentScene != null) {
-            stage.hide();
-        }
-
-        //drawing level
+        //creating and drawing
         cur_level = new LevelHandler(hero, new Level(1), stage);
+        controllers.put("CurLevel", cur_level);
+
         cur_level.draw_level_start();
         //starting game loop
         gameLoop.start();
@@ -73,6 +70,10 @@ public class GameLogic {
 
     }
 
+
+    public static AContoller getCur_state() {
+        return cur_state;
+    }
 
 }
 
