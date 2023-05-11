@@ -1,10 +1,15 @@
 package cz.cvut.anokhver.contollers;
 
+import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
+import cz.cvut.anokhver.level.Level;
+import cz.cvut.anokhver.level.LevelView;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
+
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -12,11 +17,8 @@ import javafx.stage.Stage;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class LevelHandler extends AContoller {
-    private static Logger log = Logger.getLogger(LevelHandler.class.getName());
-
     private static Stage cur_stage;
 
     private LevelView view;
@@ -30,7 +32,7 @@ public class LevelHandler extends AContoller {
      * basic functions
      */
     public LevelHandler(Player hero, Level level, Stage stage){
-        log.info("Setting level handler...");
+        GameLauncher.log.info("Setting level handler...");
         //basic setting
         this.hero = hero;
         this.level_config = level;
@@ -41,7 +43,7 @@ public class LevelHandler extends AContoller {
 
 
     public void draw_level_start(){
-        log.info("First draw of scene");
+        GameLauncher.log.info("First draw of scene");
         view.draw_all(level_config.getMap(), hero, level_config.getStars());
         view.setOnKeyPressed(this::keyPressedHandler);
         view.setOnKeyReleased(this::keyReleasedHandler);
@@ -120,7 +122,7 @@ public class LevelHandler extends AContoller {
                 hero.setStar_counter(hero.getStar_counter() + 1);
                 view.clearStar();
                 view.drawStar(level_config.getStars());
-                log.info(Player.class.getName() + " picked up " + hero.getStar_counter() + " stars");
+                GameLauncher.log.info(Player.class.getName() + " picked up " + hero.getStar_counter() + " stars");
             }
         }
         //fight
@@ -132,13 +134,13 @@ public class LevelHandler extends AContoller {
         //inventory
         if(pushed_keys.contains(KeyCode.E))
         {
-            log.info(Player.class.getName() + " opened inventory");
+            GameLauncher.log.info(Player.class.getName() + " opened inventory");
 
         }
         //in game menu
         if(pushed_keys.contains(KeyCode.ESCAPE))
         {
-            log.info(Player.class.getName() + " in game menu");
+            GameLauncher.log.info(Player.class.getName() + " in game menu");
 
         }
     }

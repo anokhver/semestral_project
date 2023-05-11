@@ -3,6 +3,7 @@ package cz.cvut.anokhver.level;
 
 import static cz.cvut.anokhver.level.SingleTile.loadImageForTile;
 
+import cz.cvut.anokhver.GameLauncher;
 import javafx.scene.image.Image;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class Tilemap {
     }
 
     public void readMap(String path) {
+        GameLauncher.log.info("Reading map from:" + path);
         try {
             File mapFile = new File(path);
             Scanner fileSc = new Scanner(mapFile);

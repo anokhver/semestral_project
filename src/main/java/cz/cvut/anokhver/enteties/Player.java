@@ -1,5 +1,6 @@
 package cz.cvut.anokhver.enteties;
 
+import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.menu.Inventory;
 import cz.cvut.anokhver.movement.Coordinates;
@@ -7,14 +8,11 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 import java.util.List;
-import java.util.logging.Logger;
 
 import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 import static cz.cvut.anokhver.movement.Coordinates.minus;
 
 public class Player extends Movable{
-    private static Logger log = Logger.getLogger(Player.class.getName());
-
     private float damage;
     private float health;
     private float speed_damage;
@@ -35,7 +33,7 @@ public class Player extends Movable{
     }
 
     public Player() {
-        log.info("Creating default player...");
+        GameLauncher.log.info("Creating default player...");
         this.damage = 20;
         this.health = 100;
         speed_damage = 10;

@@ -1,5 +1,6 @@
-package cz.cvut.anokhver.contollers;
+package cz.cvut.anokhver.level;
 
+import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.additional.Configuration;
 import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 import static cz.cvut.anokhver.movement.Coordinates.minus;
@@ -15,11 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
 
 public class Level {
 
-    private static Logger log = Logger.getLogger(Level.class.getName());
 
     private final Integer id;
     private List<Enemy> enemies;
@@ -28,10 +27,10 @@ public class Level {
     private Tilemap map;
 
     public Level(Integer id) {
-        log.info("Generating level...");
+        GameLauncher.log.info("Generating level...");
         this.id = id;
         String dir = create_proper_path(Configuration.getPathLevel() + id.toString());
-        configuration_map(dir);
+        configureMap(dir);
 
         this.map = new Tilemap(Configuration.getMapWidth(), Configuration.getMapHeight(), id);
         map.readMap(dir);
@@ -40,7 +39,7 @@ public class Level {
     }
 
     public List<Star> generateStars() {
-        log.info("Generating stars on the level...");
+        GameLauncher.log.info("Generating stars on the level...");
         //default configurations
         Coordinates border = new Coordinates(map.getWidth(), map.getHeight());
         int count = Configuration.getCountStars();
@@ -52,7 +51,7 @@ public class Level {
 
         //generating stars while the list is not full
         while (stars.size() < count) {
-            Coordinates new_coor = new Coordinates(random.nextInt(border.getX())*Configuration.getTileSize(), random.nextInt(border.getY())*Configuration.getTileSize());
+            Coordinates new_coor = new Coordinates(random.nextInt(border.getX()) * Configuration.getTileSize(), random.nextInt(border.getY()) * Configuration.getTileSize());
             boolean tooClose = false;
 
             //cheking if they are too close
@@ -92,27 +91,30 @@ public class Level {
         this.stars = stars;
     }
 
-    public void configuration_map(String dir){
-        log.info("Configuring map...");
+    public void configureMap(String dir) {
+        try {
+            GameLauncher.log.info("Configuring map...");
+            int mapWidth = 0;
+            int mapHeight = 0;
 
-        int mapWidth = 0;
-        int mapHeight = 0;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(dir))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // Count the number of symbols in the line
-                int lineLength = line.length();
-                if (lineLength > mapWidth) {
-                    mapWidth = lineLength;
+            try (BufferedReader br = new BufferedReader(new FileReader(dir))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    // Count the number of symbols in the line
+                    int lineLength = line.length();
+                    if (lineLength > mapWidth) {
+                        mapWidth = lineLength;
+                    }
+                    mapHeight++;
                 }
-                mapHeight++;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        Configuration.setMapWidth(mapWidth);
-        Configuration.setMapHeight(mapHeight);
+            Configuration.setMapWidth(mapWidth);
+            Configuration.setMapHeight(mapHeight);
+
+        } catch (IOException e) {
+            GameLauncher.log.info("Failed to configure map: " + e.getMessage());
+        }
     }
 }
+

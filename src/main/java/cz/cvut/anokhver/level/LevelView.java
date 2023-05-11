@@ -1,16 +1,17 @@
-package cz.cvut.anokhver.contollers;
+package cz.cvut.anokhver.level;
 
 import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.enteties.Movable;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
-import cz.cvut.anokhver.level.SingleTile;
-import cz.cvut.anokhver.level.Tilemap;
+
 
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,7 +21,9 @@ public class LevelView extends Scene {
 
     public LevelView() {
         super(new Pane(), Configuration.getWindowWidth(), Configuration.getWindowHeight());
+        Pane pane = (Pane) this.getRoot();
 
+        cur_canvases.put("background", new Canvas(Configuration.getWindowWidth(), Configuration.getWindowHeight()));
         cur_canvases.put("player", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
                 Configuration.getMapHeight()*Configuration.getTileSize()));
         cur_canvases.put("map", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
@@ -28,12 +31,13 @@ public class LevelView extends Scene {
         cur_canvases.put("star", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
                 Configuration.getMapHeight()*Configuration.getTileSize()));
 
-        Pane pane = (Pane) this.getRoot();
-        pane.getChildren().addAll(cur_canvases.get("map"), cur_canvases.get("player"), cur_canvases.get("star"));
+        fillWithBlack(cur_canvases.get("background"));
+        pane.getChildren().addAll(cur_canvases.get("background"),cur_canvases.get("map"), cur_canvases.get("player"), cur_canvases.get("star"));
 
         pane.getChildren().get(0).setOpacity(1.0);
         pane.getChildren().get(1).setOpacity(1.0);
         pane.getChildren().get(2).setOpacity(1.0);
+        pane.getChildren().get(3).setOpacity(1.0);
 
 
     }
@@ -44,7 +48,13 @@ public class LevelView extends Scene {
         drawStar(stars);
     }
 
-    protected void drawStar(List<Star> stars) {
+    public void fillWithBlack(Canvas canvas) {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    public void drawStar(List<Star> stars) {
         GraphicsContext gc = cur_canvases.get("star").getGraphicsContext2D();
 
         for(Star st : stars)
@@ -72,6 +82,10 @@ public class LevelView extends Scene {
         double offsetY = (Configuration.getWindowHeight() >> 1) - playerY;
         this.getRoot().setTranslateX(offsetX);
         this.getRoot().setTranslateY(offsetY);
+
+        cur_canvases.get("background").setLayoutX(-offsetX);
+        cur_canvases.get("background").setLayoutY(-offsetY);
+
     }
     public void drawCreature(Movable enetety)
     {

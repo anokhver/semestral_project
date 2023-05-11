@@ -1,7 +1,7 @@
 package cz.cvut.anokhver;
 
 import cz.cvut.anokhver.contollers.AContoller;
-import cz.cvut.anokhver.contollers.Level;
+import cz.cvut.anokhver.level.Level;
 import cz.cvut.anokhver.contollers.MainMenuController;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.contollers.LevelHandler;
@@ -11,14 +11,13 @@ import cz.cvut.anokhver.movement.Coordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.logging.Logger;
 
 
 public class GameLogic {
-    private static Logger log = Logger.getLogger(GameLogic.class.getName());
 
     //public static Logger log = Logger.getLogger(GameLogic.class.getName());
 
@@ -39,7 +38,7 @@ public class GameLogic {
     private static GameLoop gameLoop = new GameLoop();
 
     public GameLogic(Stage primaryStage){
-        log.info("Setting up the logic");
+        GameLauncher.log.info("Setting up the logic");
 
         GameLogic.stage = primaryStage;
         //log.info("Setting coordinates to player 100, 100");
@@ -47,21 +46,20 @@ public class GameLogic {
 
         controllers.put("MainMenu", new MainMenuController());
         cur_state = controllers.get("MainMenu");
-        new_game();
-
-        //setMainMenu();
+        setMainMenu();
 
         stage.show();
     }
 
     public static void setMainMenu(){
-        log.info("Open main menu");
+        GameLauncher.log.info("Open main menu");
         cur_state = controllers.get("MainMenu");
+        cur_state.getView().getScene().setFill(Color.BLACK);
         stage.setScene(cur_state.getView().getScene());
     }
 
     public static void new_game(){
-        log.info("Start new game");
+        GameLauncher.log.info("Start new game");
         stage.setScene(null);
 
         //creating and drawing
@@ -73,7 +71,7 @@ public class GameLogic {
         gameLoop.start();
     }
     public static void load_game(){
-        log.info("Loading game from save");
+        GameLauncher.log.info("Loading game from save");
     }
 
     public static void win(){
@@ -82,7 +80,7 @@ public class GameLogic {
         Scene winning_scene = new AreYouWinningSon();
         stage.setScene(new AreYouWinningSon());
         stage.show();
-        log.info("Player won!");
+        GameLauncher.log.info("Player won!");
     }
     public static AContoller getCur_state() {
         return cur_state;
