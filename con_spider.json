@@ -1,0 +1,13 @@
+{
+  "damage": 1.5,
+  "damageRadius": 0.005,
+  "health": 30,
+  "name": "spider",
+  "seeRadius": 8,
+  "speedDamage": 20,
+  "textureHeight": 110,
+  "texturePath": "src/main/resources/textures/spider.png",
+  "textureWidth": 200,
+  "walkSpeed": 121
+}
+

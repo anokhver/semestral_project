@@ -19,7 +19,7 @@
 
 
   "countStars": 3,
-  "minimalDistStarts": 2,
+  "minimalDistStarts": 4,
   "pickupDistanceStar": 100
 }
 

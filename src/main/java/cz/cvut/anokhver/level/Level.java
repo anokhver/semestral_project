@@ -7,24 +7,21 @@ import static cz.cvut.anokhver.movement.Coordinates.minus;
 
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Star;
-import cz.cvut.anokhver.level.Tilemap;
 import cz.cvut.anokhver.movement.Coordinates;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Level {
-
 
     private final Integer id;
     private List<Enemy> enemies;
     private List<Star> stars;
 
     private Tilemap map;
+    private Integer enemyCount = 3;
 
     public Level(Integer id) {
         GameLauncher.log.info("Generating level...");
@@ -36,12 +33,47 @@ public class Level {
         map.readMap(dir);
 
         stars = generateStars();
+        enemies = generateEnemies();
+    }
+
+    public List<Enemy> generateEnemies() {
+        GameLauncher.log.info("Generating enemies on the level...");
+        Coordinates border = new Coordinates((map.getWidth() - 2)* Configuration.getTileSize(), (map.getHeight() - 2)* Configuration.getTileSize());
+        List<String> configFiles = Arrays.asList("frog", "spider", "moth");
+        int minDistance = Configuration.getMinimalDistStars();
+
+        List<Enemy> enemies = new ArrayList<>();
+        Random random = new Random();
+
+        // Generate enemies while the list is not full
+        while (enemies.size() < enemyCount) {
+            Coordinates new_coor = new Coordinates(random.nextInt(border.getX()), random.nextInt(border.getY()));
+            boolean tooClose = false;
+
+            // Check if the enemy is too close to any other enemy
+            for (Enemy enemy : enemies) {
+                double dist = minus(enemy.getPosition(), new_coor);
+                if (dist < minDistance) {
+                    tooClose = true;
+                    break;
+                }
+            }
+            // If not too close, add the enemy to the list
+            if (!tooClose) {
+                // Load enemy configurations from JSON files
+                Enemy enemy = new Enemy(configFiles.get(random.nextInt(configFiles.size())), new_coor);
+                enemies.add(enemy);
+            }
+
+        }
+
+        return enemies;
     }
 
     public List<Star> generateStars() {
         GameLauncher.log.info("Generating stars on the level...");
         //default configurations
-        Coordinates border = new Coordinates(map.getWidth(), map.getHeight());
+        Coordinates border = new Coordinates((map.getWidth() - 1)* Configuration.getTileSize(), (map.getHeight() - 1)* Configuration.getTileSize());
         int count = Configuration.getCountStars();
         int minDistance = Configuration.getMinimalDistStars();
 
@@ -51,7 +83,7 @@ public class Level {
 
         //generating stars while the list is not full
         while (stars.size() < count) {
-            Coordinates new_coor = new Coordinates(random.nextInt(border.getX()) * Configuration.getTileSize(), random.nextInt(border.getY()) * Configuration.getTileSize());
+            Coordinates new_coor = new Coordinates(random.nextInt(border.getX()), random.nextInt(border.getY()));
             boolean tooClose = false;
 
             //cheking if they are too close
@@ -116,5 +148,10 @@ public class Level {
             GameLauncher.log.info("Failed to configure map: " + e.getMessage());
         }
     }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+
 }
 

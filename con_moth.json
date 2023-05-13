@@ -1,0 +1,14 @@
+{
+  "damage": 1,
+  "damageRadius": 0.05,
+  "health": 10,
+  "name": "moth",
+  "seeRadius": 4,
+  "speedDamage": 20,
+  "textureHeight": 120,
+  "texturePath": "src/main/resources/textures/moth.png",
+  "textureWidth": 110,
+  "walkSpeed": 110
+}
+
+

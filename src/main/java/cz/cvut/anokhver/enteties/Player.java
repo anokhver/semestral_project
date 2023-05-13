@@ -16,28 +16,30 @@ public class Player extends Movable{
     private float damage;
     private float health;
     private float speed_damage;
+    private double damage_radius;
     private Integer coins = 0;
-    private boolean live = true;
     private final Inventory inventory;
     private int star_counter = 0;
 
-    public Player(float damage, float walkSpeed, float health, float speedDamage, Inventory inventory) {
+    public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius, Inventory inventory) {
         this.damage = damage;
         this.health = health;
-        speed_damage = speedDamage;
+        this.speed_damage = speedDamage;
+        this.damage_radius = damageRadius;
         this.inventory = inventory;
 
-        setWalk_speed(walkSpeed);
-        setTexture(new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()), Configuration.getPlayerWidth(), Configuration.getPlayerHeight(), false, true));
+        this.setWalk_speed(walkSpeed);
+        this.setTexture(new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()), Configuration.getPlayerWidth(), Configuration.getPlayerHeight(), false, true));
 
     }
 
     public Player() {
         GameLauncher.log.info("Creating default player...");
-        this.damage = 20;
-        this.health = 100;
-        speed_damage = 10;
+        this.damage = 1;
+        this.health = 25;
+        speed_damage = 1;
         this.inventory = new Inventory();
+        damage_radius = 1.5;
 
         setWalk_speed(120);
         setTexture(new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()), Configuration.getPlayerWidth(), Configuration.getPlayerHeight(), false, false));
@@ -105,16 +107,13 @@ public class Player extends Movable{
         return inventory;
     }
 
-    public boolean isLive() {
-        return live;
+
+    public double getDamage_radius() {
+        return damage_radius;
     }
 
-    public void setLive(boolean live) {
-        this.live = live;
+    public void setDamage_radius(double damage_radius) {
+        this.damage_radius = damage_radius;
     }
-
-
-
-
 }
 

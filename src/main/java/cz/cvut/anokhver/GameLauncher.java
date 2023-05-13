@@ -3,10 +3,6 @@ package cz.cvut.anokhver;
 import cz.cvut.anokhver.additional.Configuration;
 import javafx.application.Application;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -21,6 +17,8 @@ public class GameLauncher extends Application {
     public static Logger log;
 
     public static void main(String[] args) {
+
+        //setting up the logger
         try {
             LogManager.getLogManager().readConfiguration(
                     GameLauncher.class.getResourceAsStream("/logger/logging.properties"));
@@ -36,7 +34,7 @@ public class GameLauncher extends Application {
 
         Configuration.init(create_proper_path("config.json"));
         log.info("Launching game");
-        //setting the stage and scene
+        //setting the main stage
 
         primaryStage.setTitle(Configuration.getWindowName());
         primaryStage.setResizable(false);

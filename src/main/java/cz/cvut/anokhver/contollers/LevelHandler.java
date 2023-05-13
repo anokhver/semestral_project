@@ -2,6 +2,8 @@ package cz.cvut.anokhver.contollers;
 
 import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.GameLogic;
+import cz.cvut.anokhver.additional.Configuration;
+import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
 import cz.cvut.anokhver.level.Level;
@@ -18,15 +20,20 @@ import javafx.stage.Stage;
 import java.util.HashSet;
 import java.util.List;
 
+import static cz.cvut.anokhver.enteties.Movable.rangeCalculateCreatures;
+
 public class LevelHandler extends AContoller {
     private static Stage cur_stage;
 
-    private LevelView view;
+    private final LevelView view;
     private Level level_config;
-    private HashSet<KeyCode> pushed_keys = new HashSet<>();
+    private final HashSet<KeyCode> pushed_keys = new HashSet<>();
 
     protected Player hero;
     private int redrawStarsCounter = 0;
+
+    private int moveCounter = 10;
+    private final int MOVE_INTERVAL = 20; // make the enemies move every 20 ticks
 
     /**
      * basic functions
@@ -35,6 +42,7 @@ public class LevelHandler extends AContoller {
         GameLauncher.log.info("Setting level handler...");
         //basic setting
         this.hero = hero;
+        this.hero.setHealth(100);
         this.level_config = level;
         cur_stage = stage;
 
@@ -52,9 +60,7 @@ public class LevelHandler extends AContoller {
     }
     public void keyPressedHandler(KeyEvent e) {
         KeyCode code = e.getCode();
-        if (!pushed_keys.contains(code)) {
-            pushed_keys.add(code);
-        }
+        pushed_keys.add(code);
     }
 
     public void keyReleasedHandler(KeyEvent e) {
@@ -65,26 +71,52 @@ public class LevelHandler extends AContoller {
     /**
      * updating + rendering
      */
-    public void update(double delta) {
-        check_keys(delta);
-        render();
-        if(hero.getStar_counter() == 3)
-        {
-            GameLogic.win();
+        public void update(double delta) {
+            check_keys(delta);
+            level_config.getEnemies().removeIf(enemy -> enemy.getHealth() <= 0);
+            render();
+            // increment the move counter
+            moveCounter++;
+
+            // if the move counter reaches the interval, make the enemies move randomly and reset the counter
+            if (moveCounter >= MOVE_INTERVAL) {
+                for (Enemy enemy : level_config.getEnemies()) {
+                    enemy.setCurDir(enemy.generateDirection());
+                }
+                moveCounter = 0;
+            }
+            for (Enemy enemy : level_config.getEnemies()) {
+                enemy.move(enemy.getCurDirection(),delta);
+                enemy.cooldown-=1;
+                damagePlayerIfInRange(enemy);
+            }
+
+            if(hero.getStar_counter() == 3)
+            {
+                GameLogic.win();
+            }
+
+            if (hero.getHealth() <= 0)
+            {
+                GameLogic.win();
+            }
+
+
         }
-    }
 
     public void render(){
-        view.clearPlayer();
-        view.drawCreature(hero);
+        view.clearCanvas(view.cur_canvases.get("player").getGraphicsContext2D());
+        view.drawCreature(hero, view.cur_canvases.get("player").getGraphicsContext2D());
 
+        view.clearCanvas(view.cur_canvases.get("enemies").getGraphicsContext2D());
+        view.drawEnemies(level_config.getEnemies());
         view.updateCamera(hero.getPosition().getX(), hero.getPosition().getY());
         redrawStarsCounter++;
 
         // Redraw the stars every REDRAW_STARS_INTERVAL ticks
         int REDRAW_STARS_INTERVAL = 10;
         if (redrawStarsCounter >= REDRAW_STARS_INTERVAL) {
-            view.clearStar();
+            view.clearCanvas(view.cur_canvases.get("star").getGraphicsContext2D());
             view.drawStar(level_config.getStars());
             redrawStarsCounter = 0;
         }
@@ -120,7 +152,7 @@ public class LevelHandler extends AContoller {
                 stars.remove(ind);
                 level_config.setStars(stars);
                 hero.setStar_counter(hero.getStar_counter() + 1);
-                view.clearStar();
+                view.clearCanvas(view.cur_canvases.get("star").getGraphicsContext2D());
                 view.drawStar(level_config.getStars());
                 GameLauncher.log.info(Player.class.getName() + " picked up " + hero.getStar_counter() + " stars");
             }
@@ -128,7 +160,14 @@ public class LevelHandler extends AContoller {
         //fight
         if(pushed_keys.contains(KeyCode.R))
         {
-            System.out.println("Fight");
+
+            int ind_enemy = checkForEnemies(level_config.getEnemies(), hero);
+            if(ind_enemy != -1)
+            {
+                Enemy cur_enemy = level_config.getEnemies().get(ind_enemy);
+                cur_enemy.setHealth(cur_enemy.getHealth() - hero.getDamage());
+                GameLauncher.log.info("Hero damaged enemy" + ind_enemy + " " + cur_enemy.getName());
+            }
 
         }
         //inventory
@@ -144,6 +183,28 @@ public class LevelHandler extends AContoller {
 
         }
     }
+
+    public int checkForEnemies(List<Enemy> enemies, Player player) {
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy enemy = enemies.get(i);
+            double distance = rangeCalculateCreatures(player, enemy);
+            if (distance <= hero.getDamage_radius() * Configuration.getTileSize()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void damagePlayerIfInRange(Enemy enemy) {
+        double distance = rangeCalculateCreatures(hero, enemy);
+        System.out.println(distance + "\n");
+        if (distance <= enemy.getDamageRadius() * Configuration.getTileSize()/2 && enemy.cooldown <= 0 ) {
+            hero.setHealth((float) (hero.getHealth() - enemy.getDamage()));
+            GameLauncher.log.info("Player was damaged by " + enemy.getName() + " now health is: " + hero.getHealth());
+            enemy.cooldown = enemy.getSpeedDamage();
+        }
+    }
+
 
     /**
      * GETTERS SETTERS
