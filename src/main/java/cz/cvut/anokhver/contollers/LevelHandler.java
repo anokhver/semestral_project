@@ -42,14 +42,16 @@ public class LevelHandler extends AContoller {
         GameLauncher.log.info("Setting level handler...");
         //basic setting
         this.hero = hero;
-        this.hero.setHealth(100);
+        this.hero.setHealth(80);
         this.level_config = level;
         cur_stage = stage;
 
         view = new LevelView();
     }
 
-
+    /*===========================
+     *Basic setting
+     ===========================*/
     public void draw_level_start(){
         GameLauncher.log.info("First draw of scene");
         view.draw_all(level_config.getMap(), hero, level_config.getStars());
@@ -68,49 +70,59 @@ public class LevelHandler extends AContoller {
         pushed_keys.remove(code);
     }
 
-    /**
-     * updating + rendering
-     */
-        public void update(double delta) {
-            check_keys(delta);
-            level_config.getEnemies().removeIf(enemy -> enemy.getHealth() <= 0);
-            render();
-            // increment the move counter
-            moveCounter++;
+    /*===========================
+     *Updating & Rendering
+     ===========================*/
+    public void update(double delta) {
+        check_keys(delta);
+        //clear killed enemies
+        level_config.getEnemies().removeIf(enemy -> enemy.getHealth() <= 0);
+        //change heart texture
+        view.getHealthView().checkForChange(hero.getHealth());
 
-            // if the move counter reaches the interval, make the enemies move randomly and reset the counter
-            if (moveCounter >= MOVE_INTERVAL) {
-                for (Enemy enemy : level_config.getEnemies()) {
-                    enemy.setCurDir(enemy.generateDirection());
-                }
-                moveCounter = 0;
-            }
+        render();
+        // increment the move counter for controlling random monsters movement
+        moveCounter++;
+        // if the move counter reaches the interval, make the enemies move randomly and reset the counter
+        if (moveCounter >= MOVE_INTERVAL) {
             for (Enemy enemy : level_config.getEnemies()) {
-                enemy.move(enemy.getCurDirection(),delta);
-                enemy.cooldown-=1;
-                damagePlayerIfInRange(enemy);
+                enemy.setCurDir(enemy.generateDirection());
             }
-
-            if(hero.getStar_counter() == 3)
-            {
-                GameLogic.win();
-            }
-
-            if (hero.getHealth() <= 0)
-            {
-                GameLogic.win();
-            }
-
-
+            moveCounter = 0;
+        }
+        //damaging player if he is close enough
+        for (Enemy enemy : level_config.getEnemies()) {
+            enemy.move(enemy.getCurDirection(),delta);
+            enemy.cooldown-=1;
+            damagePlayerIfInRange(enemy);
         }
 
+        //win
+        if(hero.getStar_counter() == 3)
+        {
+            GameLogic.win();
+        }
+        //lose :(
+        if (hero.getHealth() <= 0)
+        {
+            GameLogic.win();
+        }
+
+
+    }
+
     public void render(){
+        view.updateCamera(hero.getPosition().getX(), hero.getPosition().getY());
+
+        view.clearCanvas(view.cur_canvases.get("heroStats").getGraphicsContext2D());
+        view.drawStats(hero);
+
         view.clearCanvas(view.cur_canvases.get("player").getGraphicsContext2D());
         view.drawCreature(hero, view.cur_canvases.get("player").getGraphicsContext2D());
 
         view.clearCanvas(view.cur_canvases.get("enemies").getGraphicsContext2D());
         view.drawEnemies(level_config.getEnemies());
-        view.updateCamera(hero.getPosition().getX(), hero.getPosition().getY());
+
         redrawStarsCounter++;
 
         // Redraw the stars every REDRAW_STARS_INTERVAL ticks
@@ -197,18 +209,16 @@ public class LevelHandler extends AContoller {
 
     public void damagePlayerIfInRange(Enemy enemy) {
         double distance = rangeCalculateCreatures(hero, enemy);
-        System.out.println(distance + "\n");
-        if (distance <= enemy.getDamageRadius() * Configuration.getTileSize()/2 && enemy.cooldown <= 0 ) {
+        if (distance <= enemy.getDamageRadius() * Configuration.getTileSize() && enemy.cooldown <= 0 ) {
             hero.setHealth((float) (hero.getHealth() - enemy.getDamage()));
             GameLauncher.log.info("Player was damaged by " + enemy.getName() + " now health is: " + hero.getHealth());
             enemy.cooldown = enemy.getSpeedDamage();
         }
     }
 
-
-    /**
-     * GETTERS SETTERS
-     */
+    /*===========================
+      *Getters & Setters
+     ===========================*/
     public Level getLevel(){
         return level_config;
     }

@@ -5,13 +5,17 @@ import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Movable;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
+import cz.cvut.anokhver.playerStatsView.CoinView;
+import cz.cvut.anokhver.playerStatsView.HealthView;
 
-
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,38 +23,39 @@ import java.util.List;
 public class LevelView extends Scene {
 
     public HashMap<String, Canvas> cur_canvases = new HashMap<>();
+    private final HealthView healthView = new HealthView();
+    private final CoinView coinView = new CoinView();
 
     public LevelView() {
         super(new Pane(), Configuration.getWindowWidth(), Configuration.getWindowHeight());
         Pane pane = (Pane) this.getRoot();
 
         cur_canvases.put("background", new Canvas(Configuration.getWindowWidth(), Configuration.getWindowHeight()));
-        cur_canvases.put("player", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
-                Configuration.getMapHeight()*Configuration.getTileSize()));
-        cur_canvases.put("map", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
-               Configuration.getMapHeight()*Configuration.getTileSize()));
-        cur_canvases.put("star", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
-                Configuration.getMapHeight()*Configuration.getTileSize()));
-        cur_canvases.put("enemies", new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(),
-                Configuration.getMapHeight()*Configuration.getTileSize()));
-
         fillWithBlack(cur_canvases.get("background"));
-        pane.getChildren().addAll(cur_canvases.get("background"),cur_canvases.get("map"), cur_canvases.get("player"), cur_canvases.get("star"),cur_canvases.get("enemies"));
 
-        pane.getChildren().get(0).setOpacity(1.0);
-        pane.getChildren().get(1).setOpacity(1.0);
-        pane.getChildren().get(2).setOpacity(1.0);
-        pane.getChildren().get(3).setOpacity(1.0);
-        pane.getChildren().get(4).setOpacity(1.0);
+        String[] canvasKeys = { "map", "player", "star", "enemies", "heroStats" };
 
+        for (String key : canvasKeys) {
+            cur_canvases.put(key, new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(), Configuration.getMapHeight()*Configuration.getTileSize()));
+        }
 
+        pane.getChildren().setAll(cur_canvases.get("background"), cur_canvases.get("map"), cur_canvases.get("player"), cur_canvases.get("star"), cur_canvases.get("enemies"), cur_canvases.get("heroStats"));
 
+        for (Node node : pane.getChildren()) {
+            node.setOpacity(1.0);
+        }
+
+        // Order the canvases
     }
 
+    /*===========================
+    *Drawing & Cleaning
+    ===========================*/
     public void draw_all(Tilemap map, Player hero, List<Star> stars){
         drawTileMap(map);
         drawCreature(hero, cur_canvases.get("player").getGraphicsContext2D());
         drawStar(stars);
+        drawStats(hero);
     }
 
     public void fillWithBlack(Canvas canvas) {
@@ -78,6 +83,21 @@ public class LevelView extends Scene {
     }
 
 
+    public void drawStats(Player hero)
+    {
+        GraphicsContext gc = cur_canvases.get("heroStats").getGraphicsContext2D();
+        //draw heart
+        gc.drawImage(healthView.getCurTexture(), 0, 0);
+        //draw coins
+        gc.drawImage(coinView.getCurTexture(), 0, Configuration.getTileSize());
+
+        gc.setFill(Color.WHITE);
+        gc.setFont(Font.font("Impact", FontWeight.BOLD, 14));
+        gc.fillText(String.valueOf(hero.getHealth()), Configuration.getTileSize() + 5, 15);
+        gc.fillText(String.valueOf(hero.getCoins()), Configuration.getTileSize() + 5, Configuration.getTileSize() + 15);
+
+    }
+
     public void drawTileMap(Tilemap map) {
         System.out.println("Started rendered" + String.valueOf(map.getWidth()) + " " + String.valueOf(map.getHeight()));
 
@@ -100,6 +120,9 @@ public class LevelView extends Scene {
         cur_canvases.get("background").setLayoutX(-offsetX);
         cur_canvases.get("background").setLayoutY(-offsetY);
 
+        cur_canvases.get("heroStats").setLayoutX(-offsetX);
+        cur_canvases.get("heroStats").setLayoutY(-offsetY);
+
     }
     public void drawCreature(Movable enetety,GraphicsContext gc )
     {
@@ -110,4 +133,23 @@ public class LevelView extends Scene {
         gc.clearRect(0, 0, Configuration.getMapWidth()*Configuration.getTileSize(), Configuration.getMapHeight()*Configuration.getTileSize());
     }
 
+
+    /*===========================
+     *Getters & Setters
+     ===========================*/
+    public HashMap<String, Canvas> getCur_canvases() {
+        return cur_canvases;
+    }
+
+    public void setCur_canvases(HashMap<String, Canvas> cur_canvases) {
+        this.cur_canvases = cur_canvases;
+    }
+
+    public HealthView getHealthView() {
+        return healthView;
+    }
+
+    public CoinView getCoinView() {
+        return coinView;
+    }
 }

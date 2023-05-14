@@ -44,7 +44,7 @@ public class Enemy extends Movable{
         this.health = EnemyConfigurations.getHealth();
         this.damage = EnemyConfigurations.getDamage();
         this.speedDamage = EnemyConfigurations.getSpeedDamage();
-        this.damageRadius = EnemyConfigurations.getSeeRadius();
+        this.damageRadius = EnemyConfigurations.getDamageRadius();
         this.seeRadius  =EnemyConfigurations.getSeeRadius();
         this.setWalk_speed(EnemyConfigurations.getWalkSpeed());
 

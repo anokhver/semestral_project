@@ -1,10 +1,10 @@
 {
   "damage": 0.5,
-  "damageRadius": 0.005,
+  "damageRadius": 2,
   "health": 20,
   "name": "frog",
   "seeRadius": 6,
-  "speedDamage": 20,
+  "speedDamage": 5,
   "textureHeight": 110,
   "texturePath": "src/main/resources/textures/frog.png",
   "textureWidth": 130,

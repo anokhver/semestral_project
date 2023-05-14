@@ -10,6 +10,8 @@
   "pathLevel" : "src/main/resources/level",
   "pathPlayerTexture": "src/main/resources/textures/player.png",
   "pathStarTexture": "src/main/resources/textures/star",
+  "pathHeartTexture": "src/main/resources/textures/heart",
+  "pathCoinTexture": "src/main/resources/textures/coin",
 
   "mapWidth": 10,
   "mapHeight" : 10,

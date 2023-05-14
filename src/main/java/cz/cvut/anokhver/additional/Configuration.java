@@ -44,6 +44,8 @@ public class Configuration {
 
     public static String getPathPlayer(){return json_config.getString("pathPlayerTexture");}
     public static String getPathStar(){return json_config.getString("pathStarTexture");}
+    public static String getPathHeart(){return json_config.getString("pathHeartTexture");}
+    public static String getPathCoin(){return json_config.getString("pathCoinTexture");}
 
     public static String getPathLevel() {
         return json_config.getString("pathLevel");
