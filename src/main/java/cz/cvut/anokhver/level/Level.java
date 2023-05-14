@@ -17,11 +17,11 @@ import java.util.*;
 public class Level {
 
     private final Integer id;
-    private List<Enemy> enemies;
+    private final List<Enemy> enemies;
     private List<Star> stars;
 
     private Tilemap map;
-    private Integer enemyCount = 3;
+    private Integer enemyCount = 1;
 
     public Level(Integer id) {
         GameLauncher.log.info("Generating level...");

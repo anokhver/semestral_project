@@ -9,7 +9,6 @@ import cz.cvut.anokhver.menu.AreYouWinningSon;
 import cz.cvut.anokhver.movement.Coordinates;
 
 import javafx.animation.AnimationTimer;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
@@ -25,8 +24,7 @@ public class GameLogic {
      * STAGE + MENU
      */
     private static Stage stage;
-    private static final Dictionary<String, AContoller> controllers = new Hashtable<String, AContoller>();
-
+    private static final Dictionary<String, AContoller> controllers = new Hashtable<>();
 
     /**
      * THE GAME PARAMETERS
@@ -35,7 +33,7 @@ public class GameLogic {
 
     protected static LevelHandler cur_level;
     private static final Player hero = new Player();
-    private static GameLoop gameLoop = new GameLoop();
+    private static final GameLoop gameLoop = new GameLoop();
 
     public GameLogic(Stage primaryStage){
         GameLauncher.log.info("Setting up the logic");
@@ -75,12 +73,11 @@ public class GameLogic {
     }
 
     public static void win(){
+        cur_level = null;
         hero.setStar_counter(0);
         gameLoop.stop();
-        Scene winning_scene = new AreYouWinningSon();
         stage.setScene(new AreYouWinningSon());
         stage.show();
-        GameLauncher.log.info("Player won!");
     }
     public static AContoller getCur_state() {
         return cur_state;

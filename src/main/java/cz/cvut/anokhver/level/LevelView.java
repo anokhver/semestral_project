@@ -5,6 +5,7 @@ import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Movable;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
+import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.playerStatsView.CoinView;
 import cz.cvut.anokhver.playerStatsView.HealthView;
 
@@ -31,9 +32,11 @@ public class LevelView extends Scene {
         Pane pane = (Pane) this.getRoot();
 
         cur_canvases.put("background", new Canvas(Configuration.getWindowWidth(), Configuration.getWindowHeight()));
+        cur_canvases.put("heroStats", new Canvas(Configuration.getWindowWidth(), Configuration.getWindowHeight()));
+
         fillWithBlack(cur_canvases.get("background"));
 
-        String[] canvasKeys = { "map", "player", "star", "enemies", "heroStats" };
+        String[] canvasKeys = { "map", "player", "star", "enemies"};
 
         for (String key : canvasKeys) {
             cur_canvases.put(key, new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(), Configuration.getMapHeight()*Configuration.getTileSize()));
@@ -74,8 +77,6 @@ public class LevelView extends Scene {
     }
 
     public void drawEnemies(List<Enemy> enemies) {
-        GraphicsContext gc = cur_canvases.get("enemies").getGraphicsContext2D();
-
         for(Enemy enemy : enemies)
         {
             drawCreature(enemy, cur_canvases.get("enemies").getGraphicsContext2D());
@@ -96,10 +97,19 @@ public class LevelView extends Scene {
         gc.fillText(String.valueOf(hero.getHealth()), Configuration.getTileSize() + 5, 15);
         gc.fillText(String.valueOf(hero.getCoins()), Configuration.getTileSize() + 5, Configuration.getTileSize() + 15);
 
+        Coordinates drawing_coor = new Coordinates(0, 0);
+        Star just_for_texture = new Star(drawing_coor);
+        for(int i = 0; i < hero.getStar_counter(); i++)
+        {
+            drawing_coor = new Coordinates(Configuration.getWindowWidth() - Configuration.getTileSize()*(3-i), 0);
+            just_for_texture.setPosition(drawing_coor);
+            just_for_texture.setAnim_ind(0);
+            just_for_texture.render(gc);
+        }
     }
 
     public void drawTileMap(Tilemap map) {
-        System.out.println("Started rendered" + String.valueOf(map.getWidth()) + " " + String.valueOf(map.getHeight()));
+        System.out.println("Started rendered" + map.getWidth() + " " + map.getHeight());
 
         GraphicsContext gc = cur_canvases.get("map").getGraphicsContext2D();
         for (int i = 0; i < map.getWidth(); i++) {

@@ -3,13 +3,13 @@ package cz.cvut.anokhver.menu;
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 
-import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 import java.io.File;
 
@@ -20,7 +20,6 @@ public class AreYouWinningSon extends Scene {
     public AreYouWinningSon()
     {
         super(new Pane(), Configuration.getWindowWidth(), Configuration.getWindowHeight());
-
         Image image = new Image("file:" + File.separator + create_proper_path("src/main/resources/additional/win.png"), Configuration.getWindowWidth(), Configuration.getWindowHeight(), false, false);
 
         // Create an ImageView to display the image
@@ -30,12 +29,11 @@ public class AreYouWinningSon extends Scene {
         Pane root = (Pane) this.getRoot();
         root.getChildren().add(imageView);
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(5));
 
-        this.setOnKeyPressed(event -> {
-            delay.play();
-            // Close the stage when any key is pressed
-            GameLogic.setMainMenu();
+        this.setOnKeyPressed(keyevent -> {
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> GameLogic.setMainMenu()));
+            timeline.play();
+
         });
 
 

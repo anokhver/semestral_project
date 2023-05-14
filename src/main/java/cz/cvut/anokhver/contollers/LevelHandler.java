@@ -12,10 +12,13 @@ import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
 
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,10 +33,13 @@ public class LevelHandler extends AContoller {
     private final HashSet<KeyCode> pushed_keys = new HashSet<>();
 
     protected Player hero;
+
+    //some variables that help but could be done much better...
+    private int moveCounter = 0;
     private int redrawStarsCounter = 0;
 
-    private int moveCounter = 10;
     private final int MOVE_INTERVAL = 20; // make the enemies move every 20 ticks
+    private Boolean gameWon = false;
 
     /**
      * basic functions
@@ -81,9 +87,9 @@ public class LevelHandler extends AContoller {
         view.getHealthView().checkForChange(hero.getHealth());
 
         render();
+        // if the move counter reaches the interval, make the enemies move randomly and reset the counter
         // increment the move counter for controlling random monsters movement
         moveCounter++;
-        // if the move counter reaches the interval, make the enemies move randomly and reset the counter
         if (moveCounter >= MOVE_INTERVAL) {
             for (Enemy enemy : level_config.getEnemies()) {
                 enemy.setCurDir(enemy.generateDirection());
@@ -100,11 +106,19 @@ public class LevelHandler extends AContoller {
         //win
         if(hero.getStar_counter() == 3)
         {
-            GameLogic.win();
+            if(!gameWon){
+                GameLauncher.log.info("You win yepi :D");
+                level_config.getEnemies().removeAll(level_config.getEnemies());
+            }
+
+            gameWon = true; // set gameWon to true
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> GameLogic.win()));
+            timeline.play();
         }
         //lose :(
         if (hero.getHealth() <= 0)
         {
+
             GameLogic.win();
         }
 
@@ -210,7 +224,7 @@ public class LevelHandler extends AContoller {
     public void damagePlayerIfInRange(Enemy enemy) {
         double distance = rangeCalculateCreatures(hero, enemy);
         if (distance <= enemy.getDamageRadius() * Configuration.getTileSize() && enemy.cooldown <= 0 ) {
-            hero.setHealth((float) (hero.getHealth() - enemy.getDamage()));
+            hero.setHealth((hero.getHealth() - enemy.getDamage()));
             GameLauncher.log.info("Player was damaged by " + enemy.getName() + " now health is: " + hero.getHealth());
             enemy.cooldown = enemy.getSpeedDamage();
         }

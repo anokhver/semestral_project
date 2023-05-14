@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class Enemy extends Movable{
 
-    private String name;
+    private final String name;
     private float health;
     private float damage;
     private float speedDamage;
@@ -20,9 +20,7 @@ public class Enemy extends Movable{
     private float seeRadius;
     public float cooldown = 0;
     private Item dropChance;
-
-
-    private Direction curDirection;
+    private Direction curDirection = Direction.STOP;
     ///===================================//
     ///========= Constructors ============//
     ///===================================//

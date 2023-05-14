@@ -22,16 +22,20 @@ public class MainMenu extends AMenu {
         this.setPadding(new Insets(20, 20, 20, 20));
 
         Label titleLabel = new Label("Night Walk");
-        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 36));
+        titleLabel.setFont(Font.font("Impact", FontWeight.BOLD, 100));
         this.getChildren().add(titleLabel);
 
         startButton = new Button("New Game");
+        startButton.setFont(Font.font("Impact", FontWeight.BOLD, 36));
         this.getChildren().add(startButton);
 
         loadButton = new Button("Load Game");
+        loadButton.setFont(Font.font("Impact", FontWeight.BOLD, 36));
+
         this.getChildren().add(loadButton);
 
         exitButton = new Button("Exit");
+        exitButton.setFont(Font.font("Impact", FontWeight.BOLD, 36));
 
         this.getChildren().add(exitButton);
 
