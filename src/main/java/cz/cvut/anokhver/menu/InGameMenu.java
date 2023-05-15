@@ -1,7 +1,9 @@
 package cz.cvut.anokhver.menu;
 
+import cz.cvut.anokhver.additional.Configuration;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
@@ -18,16 +20,21 @@ public class InGameMenu extends AMenu {
         this.setAlignment(Pos.CENTER);
         this.setPadding(new Insets(20, 20, 20, 20));
 
-        Label titleLabel = new Label("Night Walk");
-        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 36));
+        Label titleLabel = new Label("Menu");
+        titleLabel.setFont(Font.font("Impact", FontWeight.BOLD, 100));
         this.getChildren().add(titleLabel);
 
-        continueButton = new Button("Continue");
+        continueButton = new Button("Continue Game");
+        continueButton.setFont(Font.font("Impact", FontWeight.BOLD, 36));
         this.getChildren().add(continueButton);
 
-
         exitButton = new Button("Exit");
+        exitButton.setFont(Font.font("Impact", FontWeight.BOLD, 36));
+
         this.getChildren().add(exitButton);
+
+        scene = new Scene(this, Configuration.getWindowWidth(), Configuration.getWindowHeight());
+
 
     }
 
@@ -36,4 +43,22 @@ public class InGameMenu extends AMenu {
     public void init() {
         new InGameMenu();
     }
+
+    public Button getContinueButton() {
+        return continueButton;
+    }
+
+    public void setContinueButton(Button continueButton) {
+        this.continueButton = continueButton;
+    }
+
+    public Button getExitButton() {
+        return exitButton;
+    }
+
+    public void setExitButton(Button exitButton) {
+        this.exitButton = exitButton;
+    }
+
+
 }

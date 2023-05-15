@@ -2,11 +2,11 @@ package cz.cvut.anokhver.enteties;
 
 import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.additional.Configuration;
-import cz.cvut.anokhver.menu.Inventory;
+import cz.cvut.anokhver.additional.PlayerConfigutations;
+import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.movement.Coordinates;
-import javafx.scene.image.Image;
+import cz.cvut.anokhver.movement.Direction;
 
-import java.io.File;
 import java.util.List;
 
 import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
@@ -18,10 +18,10 @@ public class Player extends Movable{
     private float speed_damage;
     private double damage_radius;
     private Integer coins = 0;
-    private final Inventory inventory;
+    private final InventoryController inventory;
     private int star_counter = 0;
 
-    public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius, Inventory inventory) {
+    public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius, InventoryController inventory) {
         this.damage = damage;
         this.health = health;
         this.speed_damage = speedDamage;
@@ -29,21 +29,23 @@ public class Player extends Movable{
         this.inventory = inventory;
 
         this.setWalk_speed(walkSpeed);
-        this.setTexture(new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()), Configuration.getPlayerWidth(), Configuration.getPlayerHeight(), false, true));
-
+        loadAllTextures(Configuration.getPlayerWidth(), Configuration.getPlayerHeight());
+        setCurTextureDirection(Direction.STOP);
+        setTexture(getTextures().get("anim4"));
     }
 
     public Player() {
         GameLauncher.log.info("Creating default player...");
-        this.damage = 1;
-        this.health = 25;
-        speed_damage = 1;
-        this.inventory = new Inventory();
-        damage_radius = 1.5;
+        PlayerConfigutations.init(create_proper_path("con_player.json"));
+        this.damage = PlayerConfigutations.getDamage();
+        this.health = PlayerConfigutations.getHealth();
+        speed_damage = PlayerConfigutations.getSpeedDamage();
+        damage_radius = PlayerConfigutations.getDamageRadius();
+        this.inventory = new InventoryController();
 
-        setWalk_speed(120);
-        setTexture(new Image("file:" + File.separator + create_proper_path(Configuration.getPathPlayer()), Configuration.getPlayerWidth(), Configuration.getPlayerHeight(), false, false));
-
+        setWalk_speed(PlayerConfigutations.getWalkSpeed());
+        loadAllTextures(PlayerConfigutations.getTextureWidth(), PlayerConfigutations.getTextureHeight());
+        setCurTextureDirection(Direction.STOP);
     }
 
     public int checkForStars(List<Star> stars){
@@ -103,7 +105,7 @@ public class Player extends Movable{
         this.coins = coins;
     }
 
-    public Inventory getInventory() {
+    public InventoryController getInventory() {
         return inventory;
     }
 

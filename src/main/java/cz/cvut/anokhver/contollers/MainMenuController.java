@@ -21,7 +21,7 @@ public class MainMenuController extends AContoller {
 
         view.getStartButton().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                GameLogic.new_game();
+                GameLogic.new_game(1);
             }
         });
 

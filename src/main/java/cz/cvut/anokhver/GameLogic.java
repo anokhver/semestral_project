@@ -1,24 +1,23 @@
 package cz.cvut.anokhver;
 
 import cz.cvut.anokhver.contollers.AContoller;
+import cz.cvut.anokhver.contollers.GameMenuController;
 import cz.cvut.anokhver.level.Level;
 import cz.cvut.anokhver.contollers.MainMenuController;
 import cz.cvut.anokhver.enteties.Player;
-import cz.cvut.anokhver.contollers.LevelHandler;
+import cz.cvut.anokhver.level.LevelHandler;
 import cz.cvut.anokhver.menu.AreYouWinningSon;
 import cz.cvut.anokhver.movement.Coordinates;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import javafx.scene.paint.Color;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 
 public class GameLogic {
-
-    //public static Logger log = Logger.getLogger(GameLogic.class.getName());
 
     /**
      * STAGE + MENU
@@ -43,6 +42,8 @@ public class GameLogic {
         hero.setPosition(new Coordinates(100,100));
 
         controllers.put("MainMenu", new MainMenuController());
+        controllers.put("InGameMenu", new GameMenuController());
+        controllers.put("Inventory", hero.getInventory());
         cur_state = controllers.get("MainMenu");
         setMainMenu();
 
@@ -50,23 +51,50 @@ public class GameLogic {
     }
 
     public static void setMainMenu(){
-        GameLauncher.log.info("Open main menu");
+        stage.setScene(null);
         cur_state = controllers.get("MainMenu");
-        cur_state.getView().getScene().setFill(Color.BLACK);
         stage.setScene(cur_state.getView().getScene());
+        GameLauncher.log.info("Open main menu");
     }
 
-    public static void new_game(){
+    public static void setInGameMenu(){
+        cur_state = controllers.get("InGameMenu");
+        stage.setScene(cur_state.getView().getScene());
+        GameLauncher.log.info("Open in game menu");
+        stage.show();
+    }
+
+    public static void setInventory(){
+        cur_state = controllers.get("Inventory");
+        stage.setScene(cur_state.getView().getScene());
+
+        stage.getScene().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.E) {
+                renewGame();
+            }
+        });
+
+        stage.show();
+    }
+
+    public static void new_game(int id){
         GameLauncher.log.info("Start new game");
         stage.setScene(null);
 
         //creating and drawing
-        cur_level = new LevelHandler(hero, new Level(1), stage);
+        cur_level = new LevelHandler(hero, new Level(id), stage);
         controllers.put("CurLevel", cur_level);
 
         cur_level.draw_level_start();
         //starting game loop
-        gameLoop.start();
+        startGame();
+    }
+
+    public static void renewGame(){
+        GameLauncher.log.info("Renew new game");
+        stage.setScene(null);
+        cur_level.draw_level_start();
+        startGame();
     }
     public static void load_game(){
         GameLauncher.log.info("Loading game from save");
@@ -75,12 +103,23 @@ public class GameLogic {
     public static void win(){
         cur_level = null;
         hero.setStar_counter(0);
-        gameLoop.stop();
+        stopGame();
         stage.setScene(new AreYouWinningSon());
-        stage.show();
     }
-    public static AContoller getCur_state() {
-        return cur_state;
+
+    public static void lose(){
+        cur_level = null;
+        hero.setStar_counter(0);
+        stopGame();
+        stage.setScene(new AreYouWinningSon());
+    }
+
+    public static void stopGame() {
+        gameLoop.stop();
+    }
+
+    public static void startGame() {
+        gameLoop.start();
     }
 
 }

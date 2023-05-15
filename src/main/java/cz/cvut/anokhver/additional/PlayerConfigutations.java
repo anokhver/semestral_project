@@ -1,4 +1,4 @@
-package cz.cvut.anokhver.enteties;
+package cz.cvut.anokhver.additional;
 
 import org.json.JSONObject;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class EnemyConfigurations {
+public class PlayerConfigutations {
 
     private static JSONObject json_config;
 
@@ -33,11 +33,17 @@ public class EnemyConfigurations {
     public static float getDamage(){return json_config.getFloat("damage");}
     public static float getSpeedDamage(){return json_config.getFloat("speedDamage");}
     public static float getDamageRadius(){return json_config.getFloat("damageRadius");}
-    public static float getSeeRadius(){return json_config.getFloat("seeRadius");}
     public static float getWalkSpeed(){return json_config.getFloat("walkSpeed");}
-
     public static int getTextureWidth(){return json_config.getInt("textureWidth");}
     public static int getTextureHeight(){return json_config.getInt("textureHeight");}
 
+    public static boolean getItem(String itemName){
+        return json_config.getBoolean(itemName);
+    }
 
+    public static Integer getMilk(){
+        return json_config.getInt("Milk");
+    }
+
+    public static Integer getBackPackSpace(){return json_config.getInt("backpackSpace");}
 }

@@ -1,5 +1,6 @@
 package cz.cvut.anokhver.enteties;
 
+import cz.cvut.anokhver.additional.EnemyConfigurations;
 import cz.cvut.anokhver.items.Item;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
@@ -43,7 +44,7 @@ public class Enemy extends Movable{
         this.damage = EnemyConfigurations.getDamage();
         this.speedDamage = EnemyConfigurations.getSpeedDamage();
         this.damageRadius = EnemyConfigurations.getDamageRadius();
-        this.seeRadius  =EnemyConfigurations.getSeeRadius();
+        this.seeRadius  = EnemyConfigurations.getSeeRadius();
         this.setWalk_speed(EnemyConfigurations.getWalkSpeed());
 
         Image img = new Image("file:" + File.separator + create_proper_path(EnemyConfigurations.getTexture()), EnemyConfigurations.getTextureWidth(), EnemyConfigurations.getTextureHeight(), false, true);

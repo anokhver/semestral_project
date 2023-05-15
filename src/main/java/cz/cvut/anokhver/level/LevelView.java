@@ -54,11 +54,11 @@ public class LevelView extends Scene {
     /*===========================
     *Drawing & Cleaning
     ===========================*/
-    public void draw_all(Tilemap map, Player hero, List<Star> stars){
+    public void draw_all(Tilemap map, Player hero, List<Star> stars, Integer time){
         drawTileMap(map);
         drawCreature(hero, cur_canvases.get("player").getGraphicsContext2D());
         drawStar(stars);
-        drawStats(hero);
+        drawStats(hero, time);
     }
 
     public void fillWithBlack(Canvas canvas) {
@@ -84,7 +84,7 @@ public class LevelView extends Scene {
     }
 
 
-    public void drawStats(Player hero)
+    public void drawStats(Player hero, Integer time)
     {
         GraphicsContext gc = cur_canvases.get("heroStats").getGraphicsContext2D();
         //draw heart
@@ -96,6 +96,8 @@ public class LevelView extends Scene {
         gc.setFont(Font.font("Impact", FontWeight.BOLD, 14));
         gc.fillText(String.valueOf(hero.getHealth()), Configuration.getTileSize() + 5, 15);
         gc.fillText(String.valueOf(hero.getCoins()), Configuration.getTileSize() + 5, Configuration.getTileSize() + 15);
+        gc.setFont(Font.font("Impact", FontWeight.BOLD, 30));
+        gc.fillText("Time left : " + time, Configuration.getWindowWidth() >> 1, 30);
 
         Coordinates drawing_coor = new Coordinates(0, 0);
         Star just_for_texture = new Star(drawing_coor);

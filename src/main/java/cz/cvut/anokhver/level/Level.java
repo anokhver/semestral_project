@@ -1,6 +1,7 @@
 package cz.cvut.anokhver.level;
 
 import cz.cvut.anokhver.GameLauncher;
+import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
 import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 import static cz.cvut.anokhver.movement.Coordinates.minus;
@@ -8,6 +9,9 @@ import static cz.cvut.anokhver.movement.Coordinates.minus;
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Star;
 import cz.cvut.anokhver.movement.Coordinates;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,6 +26,10 @@ public class Level {
 
     private Tilemap map;
     private Integer enemyCount = 1;
+
+    private Timeline timer;
+    private int elapsedSeconds = 0;
+    private int totalTime = 60;
 
     public Level(Integer id) {
         GameLauncher.log.info("Generating level...");
@@ -102,7 +110,29 @@ public class Level {
 
         return stars;
     }
+    public void startTimer() {
+        timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            elapsedSeconds++;
+            if (getRemainingTime() <= 0) {
+                GameLogic.lose();
+            }
+        }));
+        timer.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
+        timer.play();
+    }
 
+    public int getRemainingTime() {
+        return totalTime - elapsedSeconds;
+    }
+
+    public void stopTimer() {
+        if (timer != null) {
+            timer.stop();
+        }
+    }
+    /*===========================
+    *Getters & Setters
+    ===========================*/
     public Integer getId() {
         return id;
     }

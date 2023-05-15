@@ -8,7 +8,7 @@
   "pathIcon": "src/main/resources/additional/AppIconNightWalk.png",
   "pathTile": "src/main/resources/tiles/",
   "pathLevel" : "src/main/resources/level",
-  "pathPlayerTexture": "src/main/resources/textures/player.png",
+  "pathPlayerTexture": "src/main/resources/textures/player",
   "pathStarTexture": "src/main/resources/textures/star",
   "pathHeartTexture": "src/main/resources/textures/heart",
   "pathCoinTexture": "src/main/resources/textures/coin",

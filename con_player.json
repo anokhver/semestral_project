@@ -1,0 +1,17 @@
+{
+  "damage": 1,
+  "damageRadius": 1.5,
+  "health": 80,
+  "speedDamage": 1,
+  "textureHeight": 150,
+  "texturePath": "src/main/resources/textures/player",
+  "textureWidth": 150,
+  "walkSpeed": 120,
+  "inventorySpace": 10,
+  "Hat": false,
+  "Collar": false,
+  "Bonus": false,
+  "Milk": 0,
+  "backpackSpace": 10
+}
+

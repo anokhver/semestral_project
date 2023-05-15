@@ -1,13 +1,12 @@
-package cz.cvut.anokhver.contollers;
+package cz.cvut.anokhver.level;
 
 import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
+import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
-import cz.cvut.anokhver.level.Level;
-import cz.cvut.anokhver.level.LevelView;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
 
@@ -34,6 +33,7 @@ public class LevelHandler extends AContoller {
 
     protected Player hero;
 
+
     //some variables that help but could be done much better...
     private int moveCounter = 0;
     private int redrawStarsCounter = 0;
@@ -48,7 +48,6 @@ public class LevelHandler extends AContoller {
         GameLauncher.log.info("Setting level handler...");
         //basic setting
         this.hero = hero;
-        this.hero.setHealth(80);
         this.level_config = level;
         cur_stage = stage;
 
@@ -60,7 +59,8 @@ public class LevelHandler extends AContoller {
      ===========================*/
     public void draw_level_start(){
         GameLauncher.log.info("First draw of scene");
-        view.draw_all(level_config.getMap(), hero, level_config.getStars());
+        level_config.startTimer();
+        view.draw_all(level_config.getMap(), hero, level_config.getStars(), level_config.getRemainingTime());
         view.setOnKeyPressed(this::keyPressedHandler);
         view.setOnKeyReleased(this::keyReleasedHandler);
 
@@ -109,6 +109,7 @@ public class LevelHandler extends AContoller {
             if(!gameWon){
                 GameLauncher.log.info("You win yepi :D");
                 level_config.getEnemies().removeAll(level_config.getEnemies());
+                level_config.stopTimer();
             }
 
             gameWon = true; // set gameWon to true
@@ -119,7 +120,7 @@ public class LevelHandler extends AContoller {
         if (hero.getHealth() <= 0)
         {
 
-            GameLogic.win();
+            GameLogic.lose();
         }
 
 
@@ -129,7 +130,7 @@ public class LevelHandler extends AContoller {
         view.updateCamera(hero.getPosition().getX(), hero.getPosition().getY());
 
         view.clearCanvas(view.cur_canvases.get("heroStats").getGraphicsContext2D());
-        view.drawStats(hero);
+        view.drawStats(hero, level_config.getRemainingTime());
 
         view.clearCanvas(view.cur_canvases.get("player").getGraphicsContext2D());
         view.drawCreature(hero, view.cur_canvases.get("player").getGraphicsContext2D());
@@ -154,19 +155,25 @@ public class LevelHandler extends AContoller {
         if (pushed_keys.contains(KeyCode.W))
         {
             hero.move(Direction.TOP, delta);
+            hero.setCurTextureDirection(Direction.TOP);
         }
         if (pushed_keys.contains(KeyCode.A))
         {
             hero.move(Direction.LEFT, delta);
+            hero.setCurTextureDirection(Direction.LEFT);
+
         }
         if (pushed_keys.contains(KeyCode.S))
         {
             hero.move(Direction.BOTTOM, delta);
+            hero.setCurTextureDirection(Direction.BOTTOM);
 
         }
         if (pushed_keys.contains(KeyCode.D))
         {
             hero.move(Direction.RIGHT, delta);
+            hero.setCurTextureDirection(Direction.RIGHT);
+
         }
         //objet interact
         if(pushed_keys.contains(KeyCode.SPACE))
@@ -199,14 +206,23 @@ public class LevelHandler extends AContoller {
         //inventory
         if(pushed_keys.contains(KeyCode.E))
         {
+            pushed_keys.remove(KeyCode.E);
             GameLauncher.log.info(Player.class.getName() + " opened inventory");
+            //stopping timer and game
+            level_config.stopTimer();
+            GameLogic.stopGame();
 
+            GameLogic.setInventory();
         }
         //in game menu
         if(pushed_keys.contains(KeyCode.ESCAPE))
         {
-            GameLauncher.log.info(Player.class.getName() + " in game menu");
+            pushed_keys.remove(KeyCode.ESCAPE);
+            //stopping timer and game
+            level_config.stopTimer();
+            GameLogic.stopGame();
 
+            GameLogic.setInGameMenu();
         }
     }
 
