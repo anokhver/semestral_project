@@ -1,9 +1,10 @@
 package cz.cvut.anokhver.contollers;
 
 import cz.cvut.anokhver.GameLauncher;
-import cz.cvut.anokhver.additional.PlayerConfigutations;
+import cz.cvut.anokhver.additional.PlayerConfigurations;
 import cz.cvut.anokhver.items.*;
 import cz.cvut.anokhver.menu.Inventory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
 public class InventoryController extends AContoller {
@@ -12,46 +13,86 @@ public class InventoryController extends AContoller {
     private Hat yourHat = null;
     private Bonus yourBonus = null;
 
-    private VBox view;
+    private Inventory view;
+
     public InventoryController() {
         // Initialize the inventory
-        backPack = new Item[PlayerConfigutations.getBackPackSpace()]; // Set the size of the backpack
-        if (PlayerConfigutations.getItem("Collar"))
+        backPack = new Item[PlayerConfigurations.getBackPackSpace()]; // Set the size of the backpack
+        if (PlayerConfigurations.getItem("Collar"))
         {
-            yourCollar = new Collar("Collar", 0);
+            addItem(new Collar("Collar", 0));
         }
-        if (PlayerConfigutations.getItem("Hat"))
+        if (PlayerConfigurations.getItem("Hat"))
         {
-            yourHat = new Hat("Hat", 0);
+            addItem(new Hat("Hat", 0));
         }
-        if (PlayerConfigutations.getItem("Bonus"))
+        if (PlayerConfigurations.getItem("Bonus"))
         {
-            yourBonus = new Bonus("Bonus", 0);
+            addItem(new Bonus("Bonus", 0));
+
         }
-        for(int i = 0; i < PlayerConfigutations.getMilk(); i++)
+        for(int i = 0; i < PlayerConfigurations.getMilk(); i++)
         {
             addItem(new Milk("Milk", 0));
         }
         view = new Inventory();
+
+        view.setOnKeyPressed(event -> {
+            KeyCode keyCode = event.getCode();
+            if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN || keyCode == KeyCode.LEFT || keyCode == KeyCode.RIGHT) {
+                handleArrowKeyPress(keyCode);
+            } else if (keyCode == KeyCode.ENTER) {
+                handleEnterKeyPress();
+            }
+        });
+        view.updateInventoryView(backPack);
     }
 
-    public static void handleSlotClick(int slotIndex) {
+    private void handleEnterKeyPress() {
         // Handle the slot click event
-        GameLauncher.log.info("Clicked slot: " + (slotIndex + 1));
+        GameLauncher.log.info("Clicked slot: " + (view.getSelectedSlotIndex() + 1));
 
         // Perform any desired actions with the clicked slot
-        Item clickedItem = backPack[slotIndex];
+        Item clickedItem = backPack[view.getSelectedSlotIndex()];
         if (clickedItem != null) {
-            if(clickedItem.getName() == "Milk")
-            {
-                System.out.println("IT is milk lol");
-            }
-
+           System.out.println(clickedItem.getName());
         } else {
             // Slot is empty
             System.out.println("Slot is empty");
         }
     }
+
+    private void handleArrowKeyPress(KeyCode keyCode) {
+        int selectedSlotIndex = view.getSelectedSlotIndex();
+        // Handle arrow key presses for navigating through the inventory
+        switch (keyCode) {
+            case UP:
+                if (selectedSlotIndex >= 3) {
+                    selectedSlotIndex -= 3;
+                }
+                break;
+            case DOWN:
+                if (selectedSlotIndex < backPack.length - 3) {
+                    selectedSlotIndex += 3;
+                }
+                break;
+            case LEFT:
+                if (selectedSlotIndex % 3 != 0) {
+                    selectedSlotIndex--;
+                }
+                break;
+            case RIGHT:
+                if ((selectedSlotIndex + 1) % 3 != 0 && selectedSlotIndex < backPack.length - 1) {
+                    selectedSlotIndex++;
+                }
+                break;
+        }
+        view.setSelectedSlotIndex(selectedSlotIndex);
+        // Update the inventory view to reflect the selected slot
+        view.updateInventoryView(backPack);
+    }
+
+
 
     /*===========================
     *Item manipilation

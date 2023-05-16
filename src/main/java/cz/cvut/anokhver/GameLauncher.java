@@ -2,6 +2,7 @@ package cz.cvut.anokhver;
 
 import cz.cvut.anokhver.additional.Configuration;
 import javafx.application.Application;
+
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 

@@ -12,8 +12,6 @@ public class FileManagement {
            result.append(File.separator).append(i);
         }
 
-        //System.out.println(String.valueOf(result));
-
         return String.valueOf(result);
     }
 }

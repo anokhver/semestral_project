@@ -12,13 +12,10 @@
   "pathStarTexture": "src/main/resources/textures/star",
   "pathHeartTexture": "src/main/resources/textures/heart",
   "pathCoinTexture": "src/main/resources/textures/coin",
+  "pathItemTexture": "src/main/resources/textures/",
 
   "mapWidth": 10,
   "mapHeight" : 10,
-
-  "playerWidth":150,
-  "playerHeight": 150,
-
 
   "countStars": 3,
   "minimalDistStarts": 4,

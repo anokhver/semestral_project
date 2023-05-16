@@ -50,6 +50,9 @@ public class Configuration {
     public static String getPathLevel() {
         return json_config.getString("pathLevel");
     }
+    public static String getPathItem() {
+        return json_config.getString("pathItemTexture");
+    }
 
     public static int getMapWidth(){
         return json_config.getInt("mapWidth");
@@ -58,9 +61,6 @@ public class Configuration {
     public static int getMapHeight(){
         return json_config.getInt("mapHeight");
     }
-
-    public static int getPlayerWidth(){ return json_config.getInt("playerWidth");}
-    public static int getPlayerHeight(){ return json_config.getInt("playerHeight");}
 
     public static int getMinimalDistStars(){return json_config.getInt("minimalDistStarts");}
     public static int getCountStars(){return json_config.getInt("countStars");}

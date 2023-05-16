@@ -2,7 +2,7 @@ package cz.cvut.anokhver.enteties;
 
 import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.additional.Configuration;
-import cz.cvut.anokhver.additional.PlayerConfigutations;
+import cz.cvut.anokhver.additional.PlayerConfigurations;
 import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
@@ -29,28 +29,28 @@ public class Player extends Movable{
         this.inventory = inventory;
 
         this.setWalk_speed(walkSpeed);
-        loadAllTextures(Configuration.getPlayerWidth(), Configuration.getPlayerHeight());
+        loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
         setTexture(getTextures().get("anim4"));
     }
 
     public Player() {
         GameLauncher.log.info("Creating default player...");
-        PlayerConfigutations.init(create_proper_path("con_player.json"));
-        this.damage = PlayerConfigutations.getDamage();
-        this.health = PlayerConfigutations.getHealth();
-        speed_damage = PlayerConfigutations.getSpeedDamage();
-        damage_radius = PlayerConfigutations.getDamageRadius();
+        PlayerConfigurations.init(create_proper_path("con_player.json"));
+        this.damage = PlayerConfigurations.getDamage();
+        this.health = PlayerConfigurations.getHealth();
+        speed_damage = PlayerConfigurations.getSpeedDamage();
+        damage_radius = PlayerConfigurations.getDamageRadius();
         this.inventory = new InventoryController();
 
-        setWalk_speed(PlayerConfigutations.getWalkSpeed());
-        loadAllTextures(PlayerConfigutations.getTextureWidth(), PlayerConfigutations.getTextureHeight());
+        setWalk_speed(PlayerConfigurations.getWalkSpeed());
+        loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
     }
 
     public int checkForStars(List<Star> stars){
-        int playerCenterX = (int) (getPosition().getX() + Configuration.getPlayerWidth() / 2.0);
-        int playerCenterY = (int) (getPosition().getY() + Configuration.getPlayerHeight() / 2.0);
+        int playerCenterX = (int) (getPosition().getX() + PlayerConfigurations.getTextureWidth() / 2.0);
+        int playerCenterY = (int) (getPosition().getY() + PlayerConfigurations.getTextureHeight() / 2.0);
 
         for (int i = 0; i < stars.size(); i++) {
             Star star = stars.get(i);

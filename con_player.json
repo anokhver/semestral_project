@@ -9,9 +9,9 @@
   "walkSpeed": 120,
   "inventorySpace": 10,
   "Hat": false,
-  "Collar": false,
+  "Collar": true,
   "Bonus": false,
-  "Milk": 0,
+  "Milk": 4,
   "backpackSpace": 10
 }
 

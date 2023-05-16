@@ -2,14 +2,15 @@ package cz.cvut.anokhver.items;
 
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Player;
+import javafx.scene.image.Image;
 
-import java.awt.*;
-
-public class Item {
+public abstract class Item {
 
     private final String name;
     private final Integer id;
-    private final Image texture;
+
+    private Image texture;
+
     public boolean pickUp(Player player)
     {
         return player.getInventory().addItem(this);
@@ -23,7 +24,7 @@ public class Item {
     public Item(String name, Integer id) {
         this.name = name;
         this.id = id;
-        this.texture = null;
+        texture = null;
     }
 
     public String getName() {
@@ -32,5 +33,14 @@ public class Item {
 
     public Integer getId() {
         return id;
+    }
+
+    public Image getTexture() {
+        return texture;
+    }
+
+    protected void setTexture(Image texture)
+    {
+        this.texture = texture;
     }
 }
