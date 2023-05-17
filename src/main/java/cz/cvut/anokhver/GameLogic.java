@@ -23,9 +23,6 @@ import javafx.util.Duration;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import static java.lang.Thread.sleep;
-
-
 public class GameLogic {
 
     /**
@@ -157,18 +154,21 @@ public class GameLogic {
         stopGame();
         cur_level = null;
         hero.setStar_counter(0);
-        stage.setScene(new AreYouWinningSon("win"));
+        stage.setScene(null);
+        Scene cur_scene =new AreYouWinningSon("win");
+        stage.setScene(cur_scene);
         stage.show();
 
     }
 
     public static void lose(){
+        stopGame();
         cur_level = null;
         hero.setStar_counter(0);
-        stopGame();
-        stage.setScene(new AreYouWinningSon("lose"));
+        stage.setScene(null);
+        Scene cur_scene =new AreYouWinningSon("lose");
+        stage.setScene(cur_scene);
         stage.show();
-
     }
 
     public static void stopGame() {

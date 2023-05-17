@@ -26,7 +26,6 @@ public class AreYouWinningSon extends Scene {
         Pane root = (Pane) this.getRoot();
         root.getChildren().add(imageView);
         setOnKeyPressed(event -> GameLogic.setMainMenu());
-
     }
 
 

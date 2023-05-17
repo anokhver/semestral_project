@@ -122,8 +122,9 @@ public class LevelHandler extends AContoller {
             new DelayedAction(Duration.millis(2000), GameLogic::win);
         }
         //lose :(
-        if (hero.getHealth() <= 0)
+        if (hero.getHealth() <= 0 || level_config.getRemainingTime() == 0)
         {
+            GameLauncher.log.info("You lose :(");
             GameLogic.lose();
         }
 
