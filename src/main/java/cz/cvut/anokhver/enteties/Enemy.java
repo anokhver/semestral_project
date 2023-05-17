@@ -25,15 +25,19 @@ public class Enemy extends Movable{
     ///===================================//
     ///========= Constructors ============//
     ///===================================//
-    public Enemy(String name, float damage, float walkSpeed, Item dropChance, float seeRadius, double damageRadius, Image img) {
+    public Enemy(String name, float damage, float walkSpeed, float seeRadius, double damageRadius, float speedDamage, float health, Coordinates coordinates) {
         this.name = name;
+        this.health = health;
         this.damage = damage;
-        this.setWalk_speed(walkSpeed);
-        this.dropChance = dropChance;
-        this.seeRadius = seeRadius;
+        this.speedDamage = speedDamage;
         this.damageRadius = damageRadius;
+        this.seeRadius  = seeRadius;
+        this.setWalk_speed(walkSpeed);
 
+        EnemyConfigurations.init(create_proper_path("con_" + name + ".json"));
+        Image img = new Image("file:" + File.separator + create_proper_path(EnemyConfigurations.getTexture()), EnemyConfigurations.getTextureWidth(), EnemyConfigurations.getTextureHeight(), false, true);
         this.setTexture(img);
+        this.setPosition(coordinates);
     }
 
 

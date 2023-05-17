@@ -19,7 +19,7 @@ public class MainMenuController extends AContoller {
 
         temp_view.getStartButton().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                GameLogic.new_game(1);
+                GameLogic.new_game(1, false);
             }
         });
 

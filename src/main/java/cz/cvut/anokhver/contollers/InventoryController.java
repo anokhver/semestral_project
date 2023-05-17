@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 public class InventoryController extends AContoller {
 
     private static Item[] backPack;
+    private Integer backPackSpace;
     private Collar yourCollar = null;
     private Hat yourHat = null;
     private Bonus yourBonus = null;
@@ -17,9 +18,9 @@ public class InventoryController extends AContoller {
     public InventoryController() {
         // Initialize the inventory
 
-        Inventory temp_view = new Inventory();
 
-        backPack = new Item[PlayerConfigurations.getBackPackSpace()]; // Set the size of the backpack
+        backPackSpace = PlayerConfigurations.getBackPackSpace();
+        backPack = new Item[backPackSpace]; // Set the size of the backpack
         if (PlayerConfigurations.getItem("Collar"))
         {
             addItem(new Collar("Collar", 0));
@@ -38,6 +39,51 @@ public class InventoryController extends AContoller {
             addItem(new Milk("Milk", 0));
         }
 
+
+    }
+
+    public InventoryController(Boolean hat, Boolean collar, Boolean bonus, Integer count_milk,
+                               Integer space, Boolean hasInvBonus, Boolean hasInvHat, Boolean hasInvCollar)
+    {
+        // Initialize the inventory
+        backPackSpace = space;
+        backPack = new Item[backPackSpace]; // Set the size of the backpack
+        if (hasInvCollar)
+        {
+            addItem(new Collar("Collar", 0));
+        }
+        if (hasInvHat)
+        {
+            addItem(new Hat("Hat", 0));
+        }
+        if (hasInvBonus)
+        {
+            addItem(new Bonus("Bonus", 0));
+
+        }
+
+        if (collar)
+        {
+            yourCollar = new Collar("Collar", 0);
+        }
+        if (hat)
+        {
+            yourHat = new Hat("Hat", 0);
+        }
+        if (bonus)
+        {
+            yourBonus = new Bonus("Bonus", 0);
+
+        }
+
+        for(int i = 0; i < count_milk; i++)
+        {
+            addItem(new Milk("Milk", 0));
+        }
+
+    }
+    public void setViewStart(){
+        Inventory temp_view = new Inventory();
         temp_view.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
             if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN || keyCode == KeyCode.LEFT || keyCode == KeyCode.RIGHT) {
@@ -49,7 +95,6 @@ public class InventoryController extends AContoller {
 
         setView(temp_view);
     }
-
     private void handleEnterKeyPress() {
         // Handle the slot click event
         GameLauncher.log.info("Clicked slot: " + (((Inventory) getView()).getSelectedSlotIndex() + 1));
@@ -192,4 +237,12 @@ public class InventoryController extends AContoller {
     public static void setBackPack(Item[] backPack) {
         InventoryController.backPack = backPack;
     }
+    public Integer getBackPackSpace() {
+        return backPackSpace;
+    }
+
+    public void setBackPackSpace(Integer backPackSpace) {
+        this.backPackSpace = backPackSpace;
+    }
+
 }

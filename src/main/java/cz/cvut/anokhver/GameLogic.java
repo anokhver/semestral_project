@@ -1,5 +1,7 @@
 package cz.cvut.anokhver;
 
+import cz.cvut.anokhver.additional.FileManagement;
+import cz.cvut.anokhver.additional.SavingLoading;
 import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.contollers.GameMenuController;
 import cz.cvut.anokhver.contollers.InventoryController;
@@ -8,7 +10,6 @@ import cz.cvut.anokhver.contollers.MainMenuController;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.level.LevelHandler;
 import cz.cvut.anokhver.menu.AreYouWinningSon;
-import cz.cvut.anokhver.movement.Coordinates;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
@@ -32,20 +33,15 @@ public class GameLogic {
     private static AContoller cur_state;
 
     protected static LevelHandler cur_level;
-    private static final Player hero = new Player();
+    private static Player hero;
     private static final GameLoop gameLoop = new GameLoop();
 
     public GameLogic(Stage primaryStage){
         GameLauncher.log.info("Setting up the logic");
-        hero.setInventory(new InventoryController());
-
         GameLogic.stage = primaryStage;
-        //log.info("Setting coordinates to player 100, 100");
-        hero.setPosition(new Coordinates(100,100));
 
         controllers.put("MainMenu", new MainMenuController());
         controllers.put("InGameMenu", new GameMenuController());
-        controllers.put("Inventory", hero.getInventory());
         cur_state = controllers.get("MainMenu");
         setMainMenu();
 
@@ -80,12 +76,17 @@ public class GameLogic {
         stage.show();
     }
 
-    public static void new_game(int id){
+    public static void new_game(int id, boolean from_save){
         GameLauncher.log.info("Start new game");
         stage.setScene(null);
 
+        hero = new Player();
+        hero.setInventory(new InventoryController());
+        hero.getInventory().setViewStart();
+        controllers.put("Inventory", hero.getInventory());
+
         //creating and drawing
-        cur_level = new LevelHandler(hero, new Level(id), stage);
+        cur_level = new LevelHandler(hero, new Level(id, from_save), stage);
         controllers.put("CurLevel", cur_level);
 
         cur_level.draw_level_start();
@@ -101,8 +102,26 @@ public class GameLogic {
     }
     public static void load_game(){
         GameLauncher.log.info("Loading game from save");
+        stage.setScene(null);
+
+        hero = SavingLoading.loadFromJsonPlayer(FileManagement.create_proper_path("saves/player.json"));
+        hero.getInventory().setViewStart();
+        controllers.put("Inventory", hero.getInventory());
+
+        cur_level = new LevelHandler(hero, SavingLoading.loadFromJsonLevel(FileManagement.create_proper_path("saves/level.json")), stage);
+        controllers.put("CurLevel", cur_level);
+
+        cur_level.draw_level_start();
+
+        //starting game loop
+        startGame();
     }
 
+    public static void saveGame(){
+        GameLauncher.log.info("Saving current session");
+        SavingLoading.saveToJsonLevel(FileManagement.create_proper_path("saves/level.json"), cur_level.getLevel_config());
+        SavingLoading.saveToJsonPlayer(FileManagement.create_proper_path("saves/player.json"), hero);
+    }
     public static void win(){
         cur_level = null;
         hero.setStar_counter(0);

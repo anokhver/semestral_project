@@ -6,7 +6,6 @@ import cz.cvut.anokhver.additional.PlayerConfigurations;
 import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
-
 import java.util.List;
 
 import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
@@ -26,15 +25,17 @@ public class Player extends Movable{
     private InventoryController inventory;
     private int star_counter = 0;
 
-    public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius, InventoryController inventory) {
+    public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius) {
+        PlayerConfigurations.init(create_proper_path("con_player.json"));
+
         this.damage = damage;
         this.health = health;
         this.speed_damage = speedDamage;
         this.damage_radius = damageRadius;
         this.setWalk_speed(walkSpeed);
+
         loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
-        setTexture(getTextures().get("anim4"));
     }
 
     public Player() {
@@ -42,13 +43,15 @@ public class Player extends Movable{
         PlayerConfigurations.init(create_proper_path("con_player.json"));
         this.damage = PlayerConfigurations.getDamage();
         this.health = PlayerConfigurations.getHealth();
-        speed_damage = PlayerConfigurations.getSpeedDamage();
-        damage_radius = PlayerConfigurations.getDamageRadius();
+        this.speed_damage = PlayerConfigurations.getSpeedDamage();
+        this.damage_radius = PlayerConfigurations.getDamageRadius();
 
         setWalk_speed(PlayerConfigurations.getWalkSpeed());
         loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
         this.coins = PlayerConfigurations.getCoins();
+        this.setPosition(new Coordinates(100,100));
+
     }
 
     public int checkForStars(List<Star> stars){
@@ -68,6 +71,9 @@ public class Player extends Movable{
         return -1;
     }
 
+    /*===========================
+   *Getters & Setters
+   ===========================*/
     public int getStar_counter() {
         return star_counter;
     }

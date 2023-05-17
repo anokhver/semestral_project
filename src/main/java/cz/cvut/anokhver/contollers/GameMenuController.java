@@ -23,6 +23,12 @@ public class GameMenuController extends AContoller {
             }
         });
 
+        temp_view.getSaveButton().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                GameLogic.saveGame();
+            }
+        });
+
         this.setView(temp_view);
     }
 

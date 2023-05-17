@@ -13,15 +13,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Level {
 
     private final Integer id;
-    private final List<Enemy> enemies;
+
+    private List<Enemy> enemies;
     private List<Star> stars;
 
     private Tilemap map;
@@ -31,7 +30,7 @@ public class Level {
     private int elapsedSeconds = 0;
     private int totalTime = 60;
 
-    public Level(Integer id) {
+    public Level(Integer id, boolean fromJson) {
         GameLauncher.log.info("Generating level...");
         this.id = id;
         String dir = create_proper_path(Configuration.getPathLevel() + id.toString());
@@ -40,9 +39,12 @@ public class Level {
         this.map = new Tilemap(Configuration.getMapWidth(), Configuration.getMapHeight(), id);
         map.readMap(dir);
 
-        stars = generateStars();
-        enemies = generateEnemies();
+        if(!fromJson) {
+            stars = generateStars();
+            enemies = generateEnemies();
+        }
     }
+
 
     public List<Enemy> generateEnemies() {
         GameLauncher.log.info("Generating enemies on the level...");
@@ -130,6 +132,11 @@ public class Level {
             timer.stop();
         }
     }
+
+
+    /*===========================
+     *Saving and Load
+     ===========================*/
     /*===========================
     *Getters & Setters
     ===========================*/
@@ -181,6 +188,42 @@ public class Level {
 
     public List<Enemy> getEnemies() {
         return enemies;
+    }
+
+    public void setEnemies(List<Enemy> enemies) {
+        this.enemies = enemies;
+    }
+
+    public Integer getEnemyCount() {
+        return enemyCount;
+    }
+
+    public void setEnemyCount(Integer enemyCount) {
+        this.enemyCount = enemyCount;
+    }
+
+    public Timeline getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timeline timer) {
+        this.timer = timer;
+    }
+
+    public int getElapsedSeconds() {
+        return elapsedSeconds;
+    }
+
+    public void setElapsedSeconds(int elapsedSeconds) {
+        this.elapsedSeconds = elapsedSeconds;
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
     }
 
 }

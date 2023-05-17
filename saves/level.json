@@ -1,0 +1,20 @@
+{
+    "totalTime": 60,
+    "enemyCount": 1,
+    "enemies": [{
+        "damageRadius": 2,
+        "speedDamage": 5,
+        "walkSpeed": 121,
+        "damage": 1.5,
+        "name": "spider",
+        "seeRadius": 8,
+        "health": 30,
+        "position": "325 299"
+    }],
+    "id": 1,
+    "stars": [
+        {"position": "339 97"},
+        {"position": "432 93"}
+    ],
+    "elapsedSeconds": 4
+}

@@ -13,6 +13,7 @@ public class InGameMenu extends AMenu {
 
     protected Button continueButton;
     protected Button exitButton;
+    protected Button saveButton;
 
     public InGameMenu(){
 
@@ -28,14 +29,15 @@ public class InGameMenu extends AMenu {
         continueButton.setFont(Font.font("Impact", FontWeight.BOLD, 36));
         this.getChildren().add(continueButton);
 
+        saveButton = new Button("Save Game");
+        saveButton.setFont(Font.font("Impact", FontWeight.BOLD, 36));
+        this.getChildren().add(saveButton);
+
         exitButton = new Button("Exit");
         exitButton.setFont(Font.font("Impact", FontWeight.BOLD, 36));
-
         this.getChildren().add(exitButton);
 
         scene = new Scene(this, Configuration.getWindowWidth(), Configuration.getWindowHeight());
-
-
     }
 
 
@@ -65,5 +67,7 @@ public class InGameMenu extends AMenu {
         this.exitButton = exitButton;
     }
 
+    public void setSaveButton(Button saveButton) { this.saveButton = saveButton;}
+    public Button getSaveButton(){return saveButton;}
 
 }

@@ -1,0 +1,18 @@
+{
+    "damage": 3,
+    "walk_speed": 162,
+    "coins": 100,
+    "health": 20,
+    "Bonus": true,
+    "damage_radius": 3.5,
+    "star_counter": 1,
+    "BonusInv": false,
+    "speed_damage": 1,
+    "inventorySpace": 10,
+    "CollarInv": false,
+    "Hat": true,
+    "position": "38 0",
+    "Collar": true,
+    "HatInv": false,
+    "Milk": 4
+}

@@ -16,7 +16,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -81,11 +80,12 @@ public class LevelHandler extends AContoller {
      *Updating & Rendering
      ===========================*/
     public void update(double delta) {
-        check_keys(delta);
         //clear killed enemies
         level_config.getEnemies().removeIf(enemy -> enemy.getHealth() <= 0);
-        //change heart texture
         view.getHealthView().checkForChange(hero.getHealth());
+
+        check_keys(delta);
+        //change heart texture
 
         render();
         // if the move counter reaches the interval, make the enemies move randomly and reset the counter
@@ -93,16 +93,22 @@ public class LevelHandler extends AContoller {
         moveCounter++;
         if (moveCounter >= MOVE_INTERVAL) {
             for (Enemy enemy : level_config.getEnemies()) {
-                enemy.setCurDir(enemy.generateDirection());
+                if(enemy != null) {
+
+                    enemy.setCurDir(enemy.generateDirection());
+                }
             }
             moveCounter = 0;
         }
         //damaging player if he is close enough
         for (Enemy enemy : level_config.getEnemies()) {
-            enemy.move(enemy.getCurDirection(),delta);
-            enemy.cooldown-=1;
-            damagePlayerIfInRange(enemy);
+            if(enemy != null) {
+                enemy.move(enemy.getCurDirection(), delta);
+                enemy.cooldown -= 1;
+                damagePlayerIfInRange(enemy);
+            }
         }
+
 
         //win
         if(hero.getStar_counter() == 3)
