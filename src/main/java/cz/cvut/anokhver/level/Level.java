@@ -24,7 +24,7 @@ public class Level {
     private List<Star> stars;
 
     private Tilemap map;
-    private Integer enemyCount = 1;
+    private Integer enemyCount = 5;
 
     private Timeline timer;
     private int elapsedSeconds = 0;

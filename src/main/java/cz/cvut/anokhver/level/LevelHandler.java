@@ -1,5 +1,6 @@
 package cz.cvut.anokhver.level;
 
+import cz.cvut.anokhver.DelayedAction;
 import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
@@ -12,12 +13,10 @@ import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
 
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.util.HashSet;
 import java.util.List;
@@ -111,7 +110,7 @@ public class LevelHandler extends AContoller {
 
 
         //win
-        if(hero.getStar_counter() == 3)
+        if(hero.getStar_counter() == Configuration.getCountStars())
         {
             if(!gameWon){
                 GameLauncher.log.info("You win yepi :D");
@@ -120,13 +119,11 @@ public class LevelHandler extends AContoller {
             }
 
             gameWon = true; // set gameWon to true
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> GameLogic.win()));
-            timeline.play();
+            new DelayedAction(Duration.millis(2000), GameLogic::win);
         }
         //lose :(
         if (hero.getHealth() <= 0)
         {
-
             GameLogic.lose();
         }
 
@@ -213,7 +210,7 @@ public class LevelHandler extends AContoller {
         //inventory
         if(pushed_keys.contains(KeyCode.E))
         {
-            pushed_keys.remove(KeyCode.E);
+            pushed_keys.clear();
             GameLauncher.log.info(Player.class.getName() + " opened inventory");
             //stopping timer and game
             level_config.stopTimer();
@@ -225,7 +222,7 @@ public class LevelHandler extends AContoller {
         //in game menu
         if(pushed_keys.contains(KeyCode.ESCAPE))
         {
-            pushed_keys.remove(KeyCode.ESCAPE);
+            pushed_keys.clear();
             //stopping timer and game
             level_config.stopTimer();
             GameLogic.stopGame();

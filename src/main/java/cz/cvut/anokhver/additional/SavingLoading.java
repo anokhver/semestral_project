@@ -20,18 +20,9 @@ import java.util.Objects;
 public class SavingLoading {
 
     public static Level loadFromJsonLevel(String filename) {
-        StringBuilder jsonContent = new StringBuilder();
-        BufferedReader reader = null;
-
         try {
-            reader = new BufferedReader(new FileReader(filename));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonContent.append(line);
-            }
-
-            JSONObject levelJson = new JSONObject(jsonContent.toString());
-
+            JSONObject levelJson = CreateJsonForRead(filename);
+            if(levelJson == null) return null;
             // Extract level properties
             int id = levelJson.getInt("id");
             int enemyCount = levelJson.getInt("enemyCount");
@@ -73,7 +64,7 @@ public class SavingLoading {
                 int y = Integer.parseInt(positionArray[1]);
 
                 // Create Star instance and add it to the list
-                Star star = new Star(new Coordinates(x,y));
+                Star star = new Star(new Coordinates(x, y));
                 // Set star properties
                 stars.add(star);
             }
@@ -89,14 +80,6 @@ public class SavingLoading {
             return level;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         return null; // Return null if loading failed
@@ -208,21 +191,9 @@ public class SavingLoading {
 
     public static Player loadFromJsonPlayer(String filename) {
         try {
-            File file = new File(filename);
-            if (!file.exists()) {
-                // Handle the case where the file does not exist
-                return null;
-            }
+            JSONObject playerJson = CreateJsonForRead(filename);
 
-            FileReader reader = new FileReader(file);
-            StringBuilder jsonString = new StringBuilder();
-            int character;
-            while ((character = reader.read()) != -1) {
-                jsonString.append((char) character);
-            }
-            reader.close();
-
-            JSONObject playerJson = new JSONObject(jsonString.toString());
+            if(playerJson == null) return null;
 
             float damage = playerJson.getFloat("damage");
             float health = playerJson.getFloat("health");
@@ -250,7 +221,7 @@ public class SavingLoading {
             boolean hasInvBonus = playerJson.getBoolean("BonusInv");
             int milkCount = playerJson.getInt("Milk");
 
-            hero.setInventory(new InventoryController(hasHat, hasCollar, hasBonus , milkCount, inventorySpace,
+            hero.setInventory(new InventoryController(hasHat, hasCollar, hasBonus, milkCount, inventorySpace,
                     hasInvHat, hasInvCollar, hasInvBonus));
             hero.setPosition(new Coordinates(x, y));
 
@@ -262,5 +233,20 @@ public class SavingLoading {
         return null;
     }
 
+    private static JSONObject CreateJsonForRead(String filename) throws IOException {
+        File file = new File(filename);
+        if (!file.exists()) {
+            return null;
+        }
 
+        FileReader reader = new FileReader(file);
+        StringBuilder jsonString = new StringBuilder();
+        int character;
+        while ((character = reader.read()) != -1) {
+            jsonString.append((char) character);
+        }
+        reader.close();
+
+        return new JSONObject(jsonString.toString());
+    }
 }

@@ -1,17 +1,16 @@
 package cz.cvut.anokhver;
 
 import cz.cvut.anokhver.additional.Configuration;
-import javafx.application.Application;
+import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 
+import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
 
 
 public class GameLauncher extends Application {
@@ -31,7 +30,7 @@ public class GameLauncher extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         Configuration.init(create_proper_path("config.json"));
         log.info("Launching game");
@@ -42,7 +41,7 @@ public class GameLauncher extends Application {
 
         primaryStage.getIcons().add(new Image(new File(create_proper_path(Configuration.getPathIcon())).toURI().toString()));
 
-        GameLogic game = new GameLogic(primaryStage);
+        new GameLogic(primaryStage);
     }
 
 
