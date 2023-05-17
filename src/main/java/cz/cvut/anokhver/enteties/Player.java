@@ -18,7 +18,12 @@ public class Player extends Movable{
     private float speed_damage;
     private double damage_radius;
     private Integer coins = 0;
-    private final InventoryController inventory;
+
+    public void setInventory(InventoryController inventory) {
+        this.inventory = inventory;
+    }
+
+    private InventoryController inventory;
     private int star_counter = 0;
 
     public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius, InventoryController inventory) {
@@ -26,8 +31,6 @@ public class Player extends Movable{
         this.health = health;
         this.speed_damage = speedDamage;
         this.damage_radius = damageRadius;
-        this.inventory = inventory;
-
         this.setWalk_speed(walkSpeed);
         loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
@@ -41,11 +44,11 @@ public class Player extends Movable{
         this.health = PlayerConfigurations.getHealth();
         speed_damage = PlayerConfigurations.getSpeedDamage();
         damage_radius = PlayerConfigurations.getDamageRadius();
-        this.inventory = new InventoryController();
 
         setWalk_speed(PlayerConfigurations.getWalkSpeed());
         loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
+        this.coins = PlayerConfigurations.getCoins();
     }
 
     public int checkForStars(List<Star> stars){

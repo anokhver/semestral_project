@@ -15,7 +15,7 @@ public abstract class Item {
     {
         return player.getInventory().addItem(this);
     }
-
+    public abstract void useItem(Player hero);
     public boolean drop(Enemy enemy)
     {
         return enemy.setDropChance(this);
@@ -43,4 +43,5 @@ public abstract class Item {
     {
         this.texture = texture;
     }
+
 }

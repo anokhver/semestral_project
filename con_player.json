@@ -8,10 +8,11 @@
   "textureWidth": 150,
   "walkSpeed": 120,
   "inventorySpace": 10,
-  "Hat": false,
+  "Hat": true,
   "Collar": true,
-  "Bonus": false,
+  "Bonus": true,
   "Milk": 4,
-  "backpackSpace": 10
+  "backpackSpace": 10,
+  "Coins": 100
 }
 

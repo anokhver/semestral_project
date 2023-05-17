@@ -1,5 +1,6 @@
 package cz.cvut.anokhver.level;
 
+import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Movable;
@@ -54,11 +55,12 @@ public class LevelView extends Scene {
     /*===========================
     *Drawing & Cleaning
     ===========================*/
-    public void draw_all(Tilemap map, Player hero, List<Star> stars, Integer time){
+    public void draw_all(Tilemap map, List<Star> stars, Integer time){
+        Player hero = GameLogic.getPlayer();
         drawTileMap(map);
         drawCreature(hero, cur_canvases.get("player").getGraphicsContext2D());
         drawStar(stars);
-        drawStats(hero, time);
+        drawStats(time);
     }
 
     public void fillWithBlack(Canvas canvas) {
@@ -84,8 +86,9 @@ public class LevelView extends Scene {
     }
 
 
-    public void drawStats(Player hero, Integer time)
+    public void drawStats(Integer time)
     {
+        Player hero = GameLogic.getPlayer();
         GraphicsContext gc = cur_canvases.get("heroStats").getGraphicsContext2D();
         //draw heart
         gc.drawImage(healthView.getCurTexture(), 0, 0);

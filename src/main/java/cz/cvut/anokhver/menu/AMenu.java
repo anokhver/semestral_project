@@ -6,4 +6,5 @@ import javafx.scene.layout.VBox;
 public abstract class AMenu extends VBox {
     protected Scene scene;
     public abstract void init();
+    public abstract void update_menu();
 }

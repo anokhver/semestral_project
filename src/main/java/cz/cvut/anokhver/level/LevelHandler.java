@@ -7,6 +7,7 @@ import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.enteties.Star;
+import cz.cvut.anokhver.menu.AMenu;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
 
@@ -60,7 +61,7 @@ public class LevelHandler extends AContoller {
     public void draw_level_start(){
         GameLauncher.log.info("First draw of scene");
         level_config.startTimer();
-        view.draw_all(level_config.getMap(), hero, level_config.getStars(), level_config.getRemainingTime());
+        view.draw_all(level_config.getMap(), level_config.getStars(), level_config.getRemainingTime());
         view.setOnKeyPressed(this::keyPressedHandler);
         view.setOnKeyReleased(this::keyReleasedHandler);
 
@@ -130,7 +131,7 @@ public class LevelHandler extends AContoller {
         view.updateCamera(hero.getPosition().getX(), hero.getPosition().getY());
 
         view.clearCanvas(view.cur_canvases.get("heroStats").getGraphicsContext2D());
-        view.drawStats(hero, level_config.getRemainingTime());
+        view.drawStats(level_config.getRemainingTime());
 
         view.clearCanvas(view.cur_canvases.get("player").getGraphicsContext2D());
         view.drawCreature(hero, view.cur_canvases.get("player").getGraphicsContext2D());
@@ -213,6 +214,7 @@ public class LevelHandler extends AContoller {
             GameLogic.stopGame();
 
             GameLogic.setInventory();
+
         }
         //in game menu
         if(pushed_keys.contains(KeyCode.ESCAPE))
@@ -258,7 +260,7 @@ public class LevelHandler extends AContoller {
     }
 
     @Override
-    public VBox getView() {
+    public AMenu getView() {
         return null;
     }
 

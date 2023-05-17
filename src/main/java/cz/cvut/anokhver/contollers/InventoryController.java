@@ -1,22 +1,24 @@
 package cz.cvut.anokhver.contollers;
 
 import cz.cvut.anokhver.GameLauncher;
+import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.PlayerConfigurations;
 import cz.cvut.anokhver.items.*;
 import cz.cvut.anokhver.menu.Inventory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
 
 public class InventoryController extends AContoller {
+
     private static Item[] backPack;
     private Collar yourCollar = null;
     private Hat yourHat = null;
     private Bonus yourBonus = null;
 
-    private Inventory view;
-
     public InventoryController() {
         // Initialize the inventory
+
+        Inventory temp_view = new Inventory();
+
         backPack = new Item[PlayerConfigurations.getBackPackSpace()]; // Set the size of the backpack
         if (PlayerConfigurations.getItem("Collar"))
         {
@@ -35,9 +37,8 @@ public class InventoryController extends AContoller {
         {
             addItem(new Milk("Milk", 0));
         }
-        view = new Inventory();
 
-        view.setOnKeyPressed(event -> {
+        temp_view.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
             if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN || keyCode == KeyCode.LEFT || keyCode == KeyCode.RIGHT) {
                 handleArrowKeyPress(keyCode);
@@ -45,17 +46,20 @@ public class InventoryController extends AContoller {
                 handleEnterKeyPress();
             }
         });
-        view.updateInventoryView(backPack);
+
+        setView(temp_view);
     }
 
     private void handleEnterKeyPress() {
         // Handle the slot click event
-        GameLauncher.log.info("Clicked slot: " + (view.getSelectedSlotIndex() + 1));
+        GameLauncher.log.info("Clicked slot: " + (((Inventory) getView()).getSelectedSlotIndex() + 1));
 
         // Perform any desired actions with the clicked slot
-        Item clickedItem = backPack[view.getSelectedSlotIndex()];
+        Item clickedItem = backPack[((Inventory) getView()).getSelectedSlotIndex()];
         if (clickedItem != null) {
-           System.out.println(clickedItem.getName());
+           GameLauncher.log.info("Hero used:" + clickedItem.getName());
+           clickedItem.useItem(GameLogic.getPlayer());
+           ((Inventory) getView()).updateInventoryView(backPack);
         } else {
             // Slot is empty
             System.out.println("Slot is empty");
@@ -63,7 +67,7 @@ public class InventoryController extends AContoller {
     }
 
     private void handleArrowKeyPress(KeyCode keyCode) {
-        int selectedSlotIndex = view.getSelectedSlotIndex();
+        int selectedSlotIndex =((Inventory) getView()).getSelectedSlotIndex();
         // Handle arrow key presses for navigating through the inventory
         switch (keyCode) {
             case UP:
@@ -87,9 +91,9 @@ public class InventoryController extends AContoller {
                 }
                 break;
         }
-        view.setSelectedSlotIndex(selectedSlotIndex);
+        ((Inventory) getView()).setSelectedSlotIndex(selectedSlotIndex);
         // Update the inventory view to reflect the selected slot
-        view.updateInventoryView(backPack);
+        ((Inventory) getView()).updateInventoryView(backPack);
     }
 
 
@@ -154,11 +158,38 @@ public class InventoryController extends AContoller {
     }
 
     @Override
-    public VBox getView() {
-        return view;
-    }
-    @Override
     public void update(double delta) {
 
+    }
+
+    public Collar getYourCollar() {
+        return yourCollar;
+    }
+
+    public void setYourCollar(Collar yourCollar) {
+        this.yourCollar = yourCollar;
+    }
+
+    public Hat getYourHat() {
+        return yourHat;
+    }
+
+    public void setYourHat(Hat yourHat) {
+        this.yourHat = yourHat;
+    }
+
+    public Bonus getYourBonus() {
+        return yourBonus;
+    }
+
+    public void setYourBonus(Bonus yourBonus) {
+        this.yourBonus = yourBonus;
+    }
+    public static Item[] getBackPack() {
+        return backPack;
+    }
+
+    public static void setBackPack(Item[] backPack) {
+        InventoryController.backPack = backPack;
     }
 }

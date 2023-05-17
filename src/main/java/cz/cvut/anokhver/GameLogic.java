@@ -2,6 +2,7 @@ package cz.cvut.anokhver;
 
 import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.contollers.GameMenuController;
+import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.level.Level;
 import cz.cvut.anokhver.contollers.MainMenuController;
 import cz.cvut.anokhver.enteties.Player;
@@ -36,6 +37,7 @@ public class GameLogic {
 
     public GameLogic(Stage primaryStage){
         GameLauncher.log.info("Setting up the logic");
+        hero.setInventory(new InventoryController());
 
         GameLogic.stage = primaryStage;
         //log.info("Setting coordinates to player 100, 100");
@@ -66,6 +68,7 @@ public class GameLogic {
 
     public static void setInventory(){
         cur_state = controllers.get("Inventory");
+        cur_state.getView().update_menu();
         stage.setScene(cur_state.getView().getScene());
 
         stage.getScene().setOnKeyPressed(event -> {
@@ -122,6 +125,7 @@ public class GameLogic {
         gameLoop.start();
     }
 
+    public static Player getPlayer(){return hero;}
 }
 
 class GameLoop extends AnimationTimer {

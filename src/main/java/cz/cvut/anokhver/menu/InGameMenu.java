@@ -44,6 +44,11 @@ public class InGameMenu extends AMenu {
         new InGameMenu();
     }
 
+    @Override
+    public void update_menu() {
+
+    }
+
     public Button getContinueButton() {
         return continueButton;
     }

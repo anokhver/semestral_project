@@ -46,4 +46,6 @@ public class PlayerConfigurations {
     }
 
     public static Integer getBackPackSpace(){return json_config.getInt("backpackSpace");}
+    public static Integer getCoins(){return json_config.getInt("Coins");}
+
 }
