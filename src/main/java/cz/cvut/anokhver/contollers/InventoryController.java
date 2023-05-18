@@ -15,6 +15,9 @@ public class InventoryController extends AContoller {
     private Hat yourHat = null;
     private Bonus yourBonus = null;
 
+    /*===========================
+   *Setting basic
+   ===========================*/
     public InventoryController() {
         // Initialize the inventory
 
@@ -23,23 +26,23 @@ public class InventoryController extends AContoller {
         backPack = new Item[backPackSpace]; // Set the size of the backpack
         if (PlayerConfigurations.getItem("Collar"))
         {
-            addItem(new Collar("Collar", 0));
+            addItem(new Collar("Collar"));
         }
         if (PlayerConfigurations.getItem("Hat"))
         {
-            addItem(new Hat("Hat", 0));
+            addItem(new Hat("Hat"));
         }
         if (PlayerConfigurations.getItem("Bonus"))
         {
-            addItem(new Bonus("Bonus", 0));
+            addItem(new Bonus("Bonus"));
 
         }
         for(int i = 0; i < PlayerConfigurations.getMilk(); i++)
         {
-            addItem(new Milk("Milk", 0));
+            addItem(new Milk("Milk"));
         }
 
-
+        setViewStart();
     }
 
     public InventoryController(Boolean hat, Boolean collar, Boolean bonus, Integer count_milk,
@@ -50,64 +53,77 @@ public class InventoryController extends AContoller {
         backPack = new Item[backPackSpace]; // Set the size of the backpack
         if (hasInvCollar)
         {
-            addItem(new Collar("Collar", 0));
+            addItem(new Collar("Collar"));
         }
         if (hasInvHat)
         {
-            addItem(new Hat("Hat", 0));
+            addItem(new Hat("Hat"));
         }
         if (hasInvBonus)
         {
-            addItem(new Bonus("Bonus", 0));
+            addItem(new Bonus("Bonus"));
 
         }
 
         if (collar)
         {
-            yourCollar = new Collar("Collar", 0);
+            yourCollar = new Collar("Collar");
         }
         if (hat)
         {
-            yourHat = new Hat("Hat", 0);
+            yourHat = new Hat("Hat");
         }
         if (bonus)
         {
-            yourBonus = new Bonus("Bonus", 0);
+            yourBonus = new Bonus("Bonus");
 
         }
 
         for(int i = 0; i < count_milk; i++)
         {
-            addItem(new Milk("Milk", 0));
+            addItem(new Milk("Milk"));
         }
 
+        setViewStart();
     }
+
+    /*===========================
+    *View setting
+    ===========================*/
     public void setViewStart(){
         Inventory temp_view = new Inventory();
+
         temp_view.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
+            //if arrows pressed
             if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN || keyCode == KeyCode.LEFT || keyCode == KeyCode.RIGHT) {
                 handleArrowKeyPress(keyCode);
-            } else if (keyCode == KeyCode.ENTER) {
+            }
+            //if enter pressed
+            else if (keyCode == KeyCode.ENTER) {
                 handleEnterKeyPress();
             }
+            //if E pressed
+            else if (keyCode == KeyCode.E) {
+                    GameLogic.renewGame();
+                }
         });
 
         setView(temp_view);
     }
+
     private void handleEnterKeyPress() {
-        // Handle the slot click event
         GameLauncher.log.info("Clicked slot: " + (((Inventory) getView()).getSelectedSlotIndex() + 1));
 
-        // Perform any desired actions with the clicked slot
+        // Perform use item with the clicked slot
         Item clickedItem = backPack[((Inventory) getView()).getSelectedSlotIndex()];
         if (clickedItem != null) {
            GameLauncher.log.info("Hero used:" + clickedItem.getName());
            clickedItem.useItem(GameLogic.getPlayer());
-           ((Inventory) getView()).updateInventoryView(backPack);
+           getView().update_menu();
         } else {
             // Slot is empty
-            System.out.println("Slot is empty");
+            GameLauncher.log.info("Slot is empty");
         }
     }
 
@@ -138,41 +154,37 @@ public class InventoryController extends AContoller {
         }
         ((Inventory) getView()).setSelectedSlotIndex(selectedSlotIndex);
         // Update the inventory view to reflect the selected slot
-        ((Inventory) getView()).updateInventoryView(backPack);
+        getView().update_menu();
     }
-
-
 
     /*===========================
     *Item manipilation
     ===========================*/
-    public boolean addItem(Item item) {
+    public void addItem(Item item) {
         // Check if the inventory is full
         if (isFull()) {
-            return false;
+            return;
         }
 
         // Find an empty slot in the backpack
         for (int i = 0; i < backPack.length; i++) {
             if (backPack[i] == null) {
                 backPack[i] = item;
-                return true;
+                return;
             }
         }
 
-        return false; // If no empty slot is found
     }
 
-    public boolean removeItem(Item item) {
+    public void removeItem(Item item) {
         // Check if the item is in the backpack
         for (int i = 0; i < backPack.length; i++) {
             if (backPack[i] == item) {
                 backPack[i] = null;
-                return true;
+                return;
             }
         }
 
-        return false; // If the item is not found in the backpack
     }
 
     public boolean haveItem(Item item) {
@@ -197,16 +209,9 @@ public class InventoryController extends AContoller {
         return true; // If all slots are filled
     }
 
-    @Override
-    public void init() {
-
-    }
-
-    @Override
-    public void update(double delta) {
-
-    }
-
+    /*===========================
+    *Getter & Setter
+    ===========================*/
     public Collar getYourCollar() {
         return yourCollar;
     }
@@ -245,4 +250,8 @@ public class InventoryController extends AContoller {
         this.backPackSpace = backPackSpace;
     }
 
+    @Override
+    public void update(double delta) {
+
+    }
 }

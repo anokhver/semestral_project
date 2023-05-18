@@ -14,11 +14,15 @@ public class Tilemap {
     private int width;
     private int height;
 
-    public Tilemap(Integer width, Integer height, Integer id) {
+    public Tilemap(Integer width, Integer height) {
         this.width = width;
         this.height = height;
         tiles = new SingleTile[width][height];
     }
+
+    /*===========================
+    *Set tile & get tile
+    ===========================*/
 
     public void setTile(Integer x, Integer y, SingleTile tile) {
         tiles[x][y] = tile;
@@ -28,6 +32,9 @@ public class Tilemap {
         return tiles[x][y];
     }
 
+    /*===========================
+    *Read from file
+    ===========================*/
     public void readMap(String path) {
         GameLauncher.log.info("Reading map from:" + path);
         try {
@@ -55,6 +62,10 @@ public class Tilemap {
         }
     }
 
+
+    /*===========================
+    *Getters & setters
+    ===========================*/
     public int getWidth() {
         return width;
     }

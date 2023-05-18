@@ -1,9 +1,8 @@
 package cz.cvut.anokhver.level;
 
 import cz.cvut.anokhver.GameLauncher;
-import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
-import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
+import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 import static cz.cvut.anokhver.movement.Coordinates.minus;
 
 import cz.cvut.anokhver.enteties.Enemy;
@@ -33,10 +32,10 @@ public class Level {
     public Level(Integer id, boolean fromJson) {
         GameLauncher.log.info("Generating level...");
         this.id = id;
-        String dir = create_proper_path(Configuration.getPathLevel() + id.toString());
+        String dir = createProperPath(Configuration.getPathLevel() + id.toString());
         configureMap(dir);
 
-        this.map = new Tilemap(Configuration.getMapWidth(), Configuration.getMapHeight(), id);
+        this.map = new Tilemap(Configuration.getMapWidth(), Configuration.getMapHeight());
         map.readMap(dir);
 
         if(!fromJson) {
@@ -45,7 +44,35 @@ public class Level {
         }
     }
 
+    public void configureMap(String dir) {
+        try {
+            GameLauncher.log.info("Configuring map...");
+            int mapWidth = 0;
+            int mapHeight = 0;
 
+            try (BufferedReader br = new BufferedReader(new FileReader(dir))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    // Count the number of symbols in the line
+                    int lineLength = line.length();
+                    if (lineLength > mapWidth) {
+                        mapWidth = lineLength;
+                    }
+                    mapHeight++;
+                }
+            }
+
+            Configuration.setMapWidth(mapWidth);
+            Configuration.setMapHeight(mapHeight);
+
+        } catch (IOException e) {
+            GameLauncher.log.info("Failed to configure map: " + e.getMessage());
+        }
+    }
+
+    /*===========================
+    *Generating stars & enemies
+    ===========================*/
     public List<Enemy> generateEnemies() {
         GameLauncher.log.info("Generating enemies on the level...");
         Coordinates border = new Coordinates((map.getWidth() - 2)* Configuration.getTileSize(), (map.getHeight() - 2)* Configuration.getTileSize());
@@ -112,17 +139,17 @@ public class Level {
 
         return stars;
     }
+
+    /*===========================
+    *Timer
+    ===========================*/
     public void startTimer() {
         timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             elapsedSeconds++;
-            if (getRemainingTime() <= 0) {
-                GameLogic.lose();
-            }
         }));
         timer.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
         timer.play();
     }
-
     public int getRemainingTime() {
         return totalTime - elapsedSeconds;
     }
@@ -133,10 +160,6 @@ public class Level {
         }
     }
 
-
-    /*===========================
-     *Saving and Load
-     ===========================*/
     /*===========================
     *Getters & Setters
     ===========================*/
@@ -158,32 +181,6 @@ public class Level {
 
     public void setStars(List<Star> stars) {
         this.stars = stars;
-    }
-
-    public void configureMap(String dir) {
-        try {
-            GameLauncher.log.info("Configuring map...");
-            int mapWidth = 0;
-            int mapHeight = 0;
-
-            try (BufferedReader br = new BufferedReader(new FileReader(dir))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    // Count the number of symbols in the line
-                    int lineLength = line.length();
-                    if (lineLength > mapWidth) {
-                        mapWidth = lineLength;
-                    }
-                    mapHeight++;
-                }
-            }
-
-            Configuration.setMapWidth(mapWidth);
-            Configuration.setMapHeight(mapHeight);
-
-        } catch (IOException e) {
-            GameLauncher.log.info("Failed to configure map: " + e.getMessage());
-        }
     }
 
     public List<Enemy> getEnemies() {

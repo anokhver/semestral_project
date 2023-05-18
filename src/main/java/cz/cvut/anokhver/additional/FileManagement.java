@@ -4,8 +4,7 @@ import java.io.File;
 
 public class FileManagement {
 
-    public static String create_proper_path(String path)
-    {
+    public static String createProperPath(String path){
         StringBuilder result = new StringBuilder(System.getProperty("user.dir"));
         String[] array_path = path.split("/");
         for(String i : array_path){

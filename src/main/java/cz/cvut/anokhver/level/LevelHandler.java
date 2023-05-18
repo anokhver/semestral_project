@@ -4,6 +4,7 @@ import cz.cvut.anokhver.DelayedAction;
 import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
+import cz.cvut.anokhver.additional.PlayerConfigurations;
 import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Player;
@@ -22,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static cz.cvut.anokhver.enteties.Movable.rangeCalculateCreatures;
+import static cz.cvut.anokhver.movement.Coordinates.minus;
 
 public class LevelHandler extends AContoller {
     private static Stage cur_stage;
@@ -93,12 +95,12 @@ public class LevelHandler extends AContoller {
         if (moveCounter >= MOVE_INTERVAL) {
             for (Enemy enemy : level_config.getEnemies()) {
                 if(enemy != null) {
-
-                    enemy.setCurDir(enemy.generateDirection());
+                    chasePlayerIfInRange(enemy);
                 }
             }
             moveCounter = 0;
         }
+
         //damaging player if he is close enough
         for (Enemy enemy : level_config.getEnemies()) {
             if(enemy != null) {
@@ -184,7 +186,7 @@ public class LevelHandler extends AContoller {
         if(pushed_keys.contains(KeyCode.SPACE))
         {
             List<Star> stars = level_config.getStars();
-            int ind = hero.checkForStars(level_config.getStars());
+            int ind = checkForStars(level_config.getStars());
             if(ind != -1)
             {
                 stars.remove(ind);
@@ -232,7 +234,11 @@ public class LevelHandler extends AContoller {
         }
     }
 
-    public int checkForEnemies(List<Enemy> enemies, Player player) {
+    /*===========================
+    *Checkers
+    ===========================*/
+
+    private int checkForEnemies(List<Enemy> enemies, Player player) {
         for (int i = 0; i < enemies.size(); i++) {
             Enemy enemy = enemies.get(i);
             double distance = rangeCalculateCreatures(player, enemy);
@@ -243,7 +249,24 @@ public class LevelHandler extends AContoller {
         return -1;
     }
 
-    public void damagePlayerIfInRange(Enemy enemy) {
+    private int checkForStars(List<Star> stars){
+        int playerCenterX = (int) (GameLogic.getPlayer().getPosition().getX() + PlayerConfigurations.getTextureWidth() / 2.0);
+        int playerCenterY = (int) (GameLogic.getPlayer().getPosition().getY() + PlayerConfigurations.getTextureHeight() / 2.0);
+
+        for (int i = 0; i < stars.size(); i++) {
+            Star star = stars.get(i);
+            int starCenterX = (int) (star.getPosition().getX() + Configuration.getTileSize() / 2.0);
+            int starCenterY = (int) (star.getPosition().getY() + Configuration.getTileSize() / 2.0);
+
+            double distance = minus(new Coordinates(playerCenterX, playerCenterY), new Coordinates(starCenterX, starCenterY));
+            if (distance <= Configuration.getPickUp()) {
+                return  i;
+            }
+        }
+        return -1;
+    }
+
+    private void damagePlayerIfInRange(Enemy enemy) {
         double distance = rangeCalculateCreatures(hero, enemy);
         if (distance <= enemy.getDamageRadius() * Configuration.getTileSize() && enemy.cooldown <= 0 ) {
             hero.setHealth((hero.getHealth() - enemy.getDamage()));
@@ -252,6 +275,41 @@ public class LevelHandler extends AContoller {
         }
     }
 
+    private void chasePlayerIfInRange(Enemy enemy)
+    {
+        double distance = rangeCalculateCreatures(hero, enemy);
+        if (distance <= enemy.getSeeRadius() * Configuration.getTileSize())
+        {
+            enemy.setCurDir(calculateChaseDirection(enemy));
+        }
+        else {
+            enemy.setCurDir(Coordinates.generateDirection());
+        }
+    }
+
+    private Direction calculateChaseDirection(Enemy enemy) {
+        int playerX = hero.getPosition().getX();
+        int playerY = hero.getPosition().getY();
+        int enemyX = enemy.getPosition().getX();
+        int enemyY = enemy.getPosition().getY();
+
+        int distanceX = Math.abs(playerX - enemyX);
+        int distanceY = Math.abs(playerY - enemyY);
+
+        if (distanceX > distanceY) {
+            if (playerX < enemyX) {
+                return Direction.LEFT;
+            } else {
+                return Direction.RIGHT;
+            }
+        } else {
+            if (playerY < enemyY) {
+                return Direction.TOP;
+            } else {
+                return Direction.BOTTOM;
+            }
+        }
+    }
     /*===========================
       *Getters & Setters
      ===========================*/

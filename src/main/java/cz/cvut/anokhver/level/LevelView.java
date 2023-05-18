@@ -48,8 +48,6 @@ public class LevelView extends Scene {
         for (Node node : pane.getChildren()) {
             node.setOpacity(1.0);
         }
-
-        // Order the canvases
     }
 
     /*===========================
@@ -90,18 +88,22 @@ public class LevelView extends Scene {
     {
         Player hero = GameLogic.getPlayer();
         GraphicsContext gc = cur_canvases.get("heroStats").getGraphicsContext2D();
-        //draw heart
-        gc.drawImage(healthView.getCurTexture(), 0, 0);
-        //draw coins
-        gc.drawImage(coinView.getCurTexture(), 0, Configuration.getTileSize());
-
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Impact", FontWeight.BOLD, 14));
+
+        //draw heart
+        gc.drawImage(healthView.getCurTexture(), 0, 0);
         gc.fillText(String.valueOf(hero.getHealth()), Configuration.getTileSize() + 5, 15);
+
+        //draw coins
+        gc.drawImage(coinView.getCurTexture(), 0, Configuration.getTileSize());
         gc.fillText(String.valueOf(hero.getCoins()), Configuration.getTileSize() + 5, Configuration.getTileSize() + 15);
+
+        //draw time
         gc.setFont(Font.font("Impact", FontWeight.BOLD, 30));
         gc.fillText("Time left : " + time, Configuration.getWindowWidth() >> 1, 30);
 
+        //draw stars in player
         Coordinates drawing_coor = new Coordinates(0, 0);
         Star just_for_texture = new Star(drawing_coor);
         for(int i = 0; i < hero.getStar_counter(); i++)
@@ -113,7 +115,7 @@ public class LevelView extends Scene {
         }
     }
 
-    public void drawTileMap(Tilemap map) {
+    private void drawTileMap(Tilemap map) {
         System.out.println("Started rendered" + map.getWidth() + " " + map.getHeight());
 
         GraphicsContext gc = cur_canvases.get("map").getGraphicsContext2D();
@@ -126,6 +128,7 @@ public class LevelView extends Scene {
             }
         }
     }
+
     public void updateCamera(double playerX, double playerY) {
         double offsetX = (Configuration.getWindowWidth() >> 1) - playerX;
         double offsetY = (Configuration.getWindowHeight() >> 1) - playerY;

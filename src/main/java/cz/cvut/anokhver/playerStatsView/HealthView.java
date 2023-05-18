@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
-import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
+import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
 public class HealthView extends StatsView{
 
@@ -13,8 +13,8 @@ public class HealthView extends StatsView{
     {
 
         for(int i = 0; i <= 3; i++) {
-            String dir = create_proper_path(Configuration.getPathHeart()) + String.valueOf(i) + ".png";
-            this.getTextures().put("anim" + String.valueOf(i), new Image("file:" + File.separator + dir, Configuration.getTileSize(), Configuration.getTileSize(), false, false));
+            String dir = createProperPath(Configuration.getPathHeart()) + i + ".png";
+            this.getTextures().put("anim" + i, new Image("file:" + File.separator + dir, Configuration.getTileSize(), Configuration.getTileSize(), false, false));
         }
 
         setCurTextureByInd(0);

@@ -1,15 +1,12 @@
 package cz.cvut.anokhver.enteties;
 
 import cz.cvut.anokhver.GameLauncher;
-import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.additional.PlayerConfigurations;
 import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
-import java.util.List;
 
-import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
-import static cz.cvut.anokhver.movement.Coordinates.minus;
+import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
 public class Player extends Movable{
     private float damage;
@@ -26,7 +23,7 @@ public class Player extends Movable{
     private int star_counter = 0;
 
     public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius) {
-        PlayerConfigurations.init(create_proper_path("con_player.json"));
+        PlayerConfigurations.init(createProperPath("con_player.json"));
 
         this.damage = damage;
         this.health = health;
@@ -36,11 +33,12 @@ public class Player extends Movable{
 
         loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
+        this.setInventory(new InventoryController());
     }
 
     public Player() {
         GameLauncher.log.info("Creating default player...");
-        PlayerConfigurations.init(create_proper_path("con_player.json"));
+        PlayerConfigurations.init(createProperPath("con_player.json"));
         this.damage = PlayerConfigurations.getDamage();
         this.health = PlayerConfigurations.getHealth();
         this.speed_damage = PlayerConfigurations.getSpeedDamage();
@@ -51,24 +49,8 @@ public class Player extends Movable{
         setCurTextureDirection(Direction.STOP);
         this.coins = PlayerConfigurations.getCoins();
         this.setPosition(new Coordinates(100,100));
+        this.setInventory(new InventoryController());
 
-    }
-
-    public int checkForStars(List<Star> stars){
-        int playerCenterX = (int) (getPosition().getX() + PlayerConfigurations.getTextureWidth() / 2.0);
-        int playerCenterY = (int) (getPosition().getY() + PlayerConfigurations.getTextureHeight() / 2.0);
-
-        for (int i = 0; i < stars.size(); i++) {
-            Star star = stars.get(i);
-            int starCenterX = (int) (star.getPosition().getX() + Configuration.getTileSize() / 2.0);
-            int starCenterY = (int) (star.getPosition().getY() + Configuration.getTileSize() / 2.0);
-
-            double distance = minus(new Coordinates(playerCenterX, playerCenterY), new Coordinates(starCenterX, starCenterY));
-            if (distance <= Configuration.getPickUp()) {
-                return  i;
-            }
-        }
-        return -1;
     }
 
     /*===========================

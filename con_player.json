@@ -6,7 +6,7 @@
   "textureHeight": 150,
   "texturePath": "src/main/resources/textures/player",
   "textureWidth": 150,
-  "walkSpeed": 120,
+  "walkSpeed": 200,
   "inventorySpace": 10,
   "Hat": true,
   "Collar": true,

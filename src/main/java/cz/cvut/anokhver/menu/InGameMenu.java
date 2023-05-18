@@ -46,16 +46,6 @@ public class InGameMenu extends AMenu {
     }
 
 
-    @Override
-    public void init() {
-        new InGameMenu();
-    }
-
-    @Override
-    public void update_menu() {
-
-    }
-
     public Button getContinueButton() {
         return continueButton;
     }
@@ -82,4 +72,8 @@ public class InGameMenu extends AMenu {
         this.exitMainMenu = exitMainMenu;
     }
 
+    @Override
+    public void update_menu() {
+
+    }
 }

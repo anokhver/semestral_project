@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.io.File;
-import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
+import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
 public class SingleTile{
     private final Image image;
@@ -19,16 +19,14 @@ public class SingleTile{
         this.x = x;
         this.y = y;
         this.width = Configuration.getTileSize();
-        this.height = Configuration.getTileSize();;
+        this.height = Configuration.getTileSize();
     }
 
     public void render(GraphicsContext gc) {
         gc.drawImage(image, width*x, y*height, width, height);
     }
     public static Image loadImageForTile(String tileChar) {
-        String dir = create_proper_path( Configuration.getPathTile() + tileChar + ".png");
-        //System.out.println(dir);
-
+        String dir = createProperPath( Configuration.getPathTile() + tileChar + ".png");
         File file = new File(dir);
         return new Image(file.toURI().toString());
     }

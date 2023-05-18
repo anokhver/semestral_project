@@ -8,9 +8,9 @@ import javafx.scene.image.Image;
 import java.io.File;
 
 public class Bonus extends Item{
-    public Bonus(String name, Integer id) {
-        super(name, id);
-        Image img = new Image("file:" + File.separator + FileManagement.create_proper_path(Configuration.getPathItem()+ name + ".png"));
+    public Bonus(String name) {
+        super(name);
+        Image img = new Image("file:" + File.separator + FileManagement.createProperPath(Configuration.getPathItem()+ name + ".png"));
         this.setTexture(img);
     }
     public void useItem(Player hero) {

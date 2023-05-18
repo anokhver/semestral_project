@@ -63,13 +63,12 @@ public class Inventory extends AMenu {
         }
 
         for (int i = 0; i < 3; i++) {
-            int row = i;
             int col = backpackSpace/3;
 
             Region slotRegion = new Region();
             slotRegion.setStyle("-fx-background-color: white;");
             slotRegion.setPrefSize(100, 100);
-            gridPane.add(slotRegion, col, row);
+            gridPane.add(slotRegion, col, i);
 
             slotRegions[backpackSpace + i] = slotRegion; // Add the slot region to the slotRegions array
         }
@@ -96,10 +95,17 @@ public class Inventory extends AMenu {
         titleText.setFont(Font.font("Impact", FontWeight.SEMI_BOLD, 25));
         titleText.setTextAlignment(TextAlignment.RIGHT);
 
-        Text damageText = new Text("Damage: " + GameLogic.getPlayer().getDamage());
-        Text speedDamageText = new Text("Speed Damage: " + GameLogic.getPlayer().getSpeed_damage());
-        Text damageRadiusText = new Text("Damage Radius: " + GameLogic.getPlayer().getDamage_radius());
-        Text walkSpeedText = new Text("Speed walk" + GameLogic.getPlayer().getWalk_speed());
+        Text damageText = new Text("Damage: ");
+        Text speedDamageText = new Text("Speed Damage: ");
+        Text damageRadiusText = new Text("Damage Radius: ");
+        Text walkSpeedText = new Text("Speed walk: ");
+
+        if (GameLogic.getPlayer() != null) {
+            damageText.setText(damageText.getText() + GameLogic.getPlayer().getDamage());
+            speedDamageText.setText(speedDamageText.getText() + GameLogic.getPlayer().getSpeed_damage());
+            damageRadiusText.setText(damageRadiusText.getText() + GameLogic.getPlayer().getDamage_radius());
+            walkSpeedText.setText(walkSpeedText.getText() + GameLogic.getPlayer().getWalk_speed());
+        }
 
         playerStatsBox.getChildren().addAll(titleText, damageText, speedDamageText, damageRadiusText, walkSpeedText);
 
@@ -151,17 +157,11 @@ public class Inventory extends AMenu {
 
     }
 
-
     public void setSelectedSlotIndex(int selectedSlotIndex) {
         this.selectedSlotIndex = selectedSlotIndex;
     }
     public int getSelectedSlotIndex (){
         return  this.selectedSlotIndex;
-    }
-
-    @Override
-    public void init() {
-
     }
 
     @Override

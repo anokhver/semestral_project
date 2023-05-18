@@ -57,11 +57,6 @@ public class MainMenu extends AMenu {
     }
 
     @Override
-    public void init() {
-        new MainMenu();
-    }
-
-    @Override
     public void update_menu() {
 
     }

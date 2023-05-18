@@ -1,31 +1,12 @@
 package cz.cvut.anokhver.movement;
 
+import java.util.Random;
+
 public class Coordinates {
     private int x;
     private int y;
 
     public Coordinates(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setCoordinates(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -42,6 +23,35 @@ public class Coordinates {
         return Math.sqrt(dx*dx + dy*dy);
     }
 
+    public static Direction generateDirection() {
+        // Determine a random direction to move in
+        Direction[] directions = { Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT };
 
+        // Randomly choose a direction to move in
+        Direction direction = directions[new Random().nextInt(directions.length)];
+
+        // Adjust the direction with some probability
+        if (Math.random() < 0.2) {
+            direction = directions[new Random().nextInt(directions.length)];
+        }
+        return direction;
+    }
+
+    /*===========================
+     *Getters & Setters
+    ===========================*/
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setCoordinates(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }
 

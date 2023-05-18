@@ -10,14 +10,14 @@ import javafx.scene.layout.Pane;
 
 import java.io.File;
 
-import static cz.cvut.anokhver.additional.FileManagement.create_proper_path;
+import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
 public class AreYouWinningSon extends Scene {
 
     public AreYouWinningSon(String end)
     {
         super(new Pane(), Configuration.getWindowWidth(), Configuration.getWindowHeight());
-        Image image = new Image("file:" + File.separator + create_proper_path("src/main/resources/additional/" + end +".png"), Configuration.getWindowWidth(), Configuration.getWindowHeight(), false, false);
+        Image image = new Image("file:" + File.separator + createProperPath("src/main/resources/additional/" + end +".png"), Configuration.getWindowWidth(), Configuration.getWindowHeight(), false, false);
 
         // Create an ImageView to display the image
         ImageView imageView = new ImageView(image);

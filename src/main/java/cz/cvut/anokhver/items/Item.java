@@ -7,13 +7,20 @@ import javafx.scene.image.Image;
 public abstract class Item {
 
     private final String name;
-    private final Integer id;
 
     private Image texture;
 
-    public boolean pickUp(Player player)
+    public Item(String name) {
+        this.name = name;
+        texture = null;
+    }
+
+    /*===========================
+    *Basic interactions
+    ===========================*/
+    public void pickUp(Player player)
     {
-        return player.getInventory().addItem(this);
+        player.getInventory().addItem(this);
     }
     public abstract void useItem(Player hero);
     public boolean drop(Enemy enemy)
@@ -21,18 +28,12 @@ public abstract class Item {
         return enemy.setDropChance(this);
     }
 
-    public Item(String name, Integer id) {
-        this.name = name;
-        this.id = id;
-        texture = null;
-    }
+    /*===========================
+    *Getters & Setters
+    ===========================*/
 
     public String getName() {
         return name;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public Image getTexture() {

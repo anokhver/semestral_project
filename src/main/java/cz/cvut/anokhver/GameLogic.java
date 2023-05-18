@@ -5,7 +5,6 @@ import cz.cvut.anokhver.additional.FileManagement;
 import cz.cvut.anokhver.additional.SavingLoading;
 import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.contollers.GameMenuController;
-import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.level.Level;
 import cz.cvut.anokhver.contollers.MainMenuController;
 import cz.cvut.anokhver.enteties.Player;
@@ -15,7 +14,6 @@ import cz.cvut.anokhver.menu.AreYouWinningSon;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -35,7 +33,6 @@ public class GameLogic {
      * THE GAME PARAMETERS
      */
     private static AContoller cur_state;
-
     protected static LevelHandler cur_level;
     private static Player hero;
     private static final GameLoop gameLoop = new GameLoop();
@@ -51,35 +48,36 @@ public class GameLogic {
 
         stage.show();
     }
+
     /*===========================
     *Menu setters
     ===========================*/
+
+
+
     public static void setMainMenu(){
         stage.setScene(null);
+
         cur_state = controllers.get("MainMenu");
         stage.setScene(cur_state.getView().getScene());
         GameLauncher.log.info("Open main menu");
     }
 
     public static void setInGameMenu(){
+        stage.setScene(null);
+
         cur_state = controllers.get("InGameMenu");
         stage.setScene(cur_state.getView().getScene());
         GameLauncher.log.info("Open in game menu");
-        stage.show();
     }
 
     public static void setInventory(){
+        stage.setScene(null);
+
         cur_state = controllers.get("Inventory");
         cur_state.getView().update_menu();
         stage.setScene(cur_state.getView().getScene());
-
-        stage.getScene().setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.E) {
-                renewGame();
-            }
-        });
-
-        stage.show();
+        GameLauncher.log.info("Open inventory menu");
     }
 
     /*===========================
@@ -90,8 +88,6 @@ public class GameLogic {
         stage.setScene(null);
 
         hero = new Player();
-        hero.setInventory(new InventoryController());
-        hero.getInventory().setViewStart();
         controllers.put("Inventory", hero.getInventory());
 
         //creating and drawing
@@ -113,15 +109,13 @@ public class GameLogic {
         GameLauncher.log.info("Loading game from save");
         stage.setScene(null);
 
-        hero = SavingLoading.loadFromJsonPlayer(FileManagement.create_proper_path("saves/player.json"));
+        hero = SavingLoading.loadFromJsonPlayer(FileManagement.createProperPath("saves/player.json"));
         if(hero == null){
-            hero = new Player() ;
-            hero.setInventory(new InventoryController());
+            hero = new Player();
         }
-        hero.getInventory().setViewStart();
         controllers.put("Inventory", hero.getInventory());
 
-        Level level_con = SavingLoading.loadFromJsonLevel(FileManagement.create_proper_path("saves/level.json"));
+        Level level_con = SavingLoading.loadFromJsonLevel(FileManagement.createProperPath("saves/level.json"));
         if(level_con == null){
             GameLauncher.log.info("Could not find a save");
 
@@ -141,10 +135,11 @@ public class GameLogic {
         startGame();
     }
 
+
     public static void saveGame(){
         GameLauncher.log.info("Saving current session");
-        SavingLoading.saveToJsonLevel(FileManagement.create_proper_path("saves/level.json"), cur_level.getLevel_config());
-        SavingLoading.saveToJsonPlayer(FileManagement.create_proper_path("saves/player.json"), hero);
+        SavingLoading.saveToJsonLevel(FileManagement.createProperPath("saves/level.json"), cur_level.getLevel_config());
+        SavingLoading.saveToJsonPlayer(FileManagement.createProperPath("saves/player.json"), hero);
     }
 
     /*===========================
