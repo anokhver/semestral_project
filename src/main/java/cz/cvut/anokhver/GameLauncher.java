@@ -1,15 +1,16 @@
 package cz.cvut.anokhver;
 
 import cz.cvut.anokhver.additional.Configuration;
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
-
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+
+import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
 public class GameLauncher extends Application {
     public static Logger log;

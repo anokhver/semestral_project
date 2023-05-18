@@ -9,7 +9,6 @@ import cz.cvut.anokhver.enteties.Star;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.playerStatsView.CoinView;
 import cz.cvut.anokhver.playerStatsView.HealthView;
-
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -22,12 +21,21 @@ import javafx.scene.text.FontWeight;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Implements a view for any level
+ * draws all entities/stats/background/etc...
+ *
+ * @author Veronika
+ */
 public class LevelView extends Scene {
 
-    public HashMap<String, Canvas> cur_canvases = new HashMap<>();
     private final HealthView healthView = new HealthView();
     private final CoinView coinView = new CoinView();
+    public HashMap<String, Canvas> cur_canvases = new HashMap<>();
 
+    /**
+     * Creating needed canvases and sorting them in right order
+     */
     public LevelView() {
         super(new Pane(), Configuration.getWindowWidth(), Configuration.getWindowHeight());
         Pane pane = (Pane) this.getRoot();
@@ -37,10 +45,10 @@ public class LevelView extends Scene {
 
         fillWithBlack(cur_canvases.get("background"));
 
-        String[] canvasKeys = { "map", "player", "star", "enemies"};
+        String[] canvasKeys = {"map", "player", "star", "enemies"};
 
         for (String key : canvasKeys) {
-            cur_canvases.put(key, new Canvas(Configuration.getMapWidth()*Configuration.getTileSize(), Configuration.getMapHeight()*Configuration.getTileSize()));
+            cur_canvases.put(key, new Canvas(Configuration.getMapWidth() * Configuration.getTileSize(), Configuration.getMapHeight() * Configuration.getTileSize()));
         }
 
         pane.getChildren().setAll(cur_canvases.get("background"), cur_canvases.get("map"), cur_canvases.get("player"), cur_canvases.get("star"), cur_canvases.get("enemies"), cur_canvases.get("heroStats"));
@@ -53,7 +61,16 @@ public class LevelView extends Scene {
     /*===========================
     *Drawing & Cleaning
     ===========================*/
-    public void draw_all(Tilemap map, List<Star> stars, Integer time){
+
+    /**
+     * Draw the level
+     *
+     * @param map
+     * @param stars all stars left
+     * @param time  left till the end
+     */
+
+    public void draw_all(Tilemap map, List<Star> stars, Integer time) {
         Player hero = GameLogic.getPlayer();
         drawTileMap(map);
         drawCreature(hero, cur_canvases.get("player").getGraphicsContext2D());
@@ -61,31 +78,42 @@ public class LevelView extends Scene {
         drawStats(time);
     }
 
-    public void fillWithBlack(Canvas canvas) {
+    private void fillWithBlack(Canvas canvas) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
+    /**
+     * Draws all stars
+     *
+     * @param stars
+     */
     public void drawStar(List<Star> stars) {
         GraphicsContext gc = cur_canvases.get("star").getGraphicsContext2D();
 
-        for(Star st : stars)
-        {
+        for (Star st : stars) {
             st.render(gc);
         }
     }
 
+    /**
+     * Draws all enemies
+     *
+     * @param enemies
+     */
     public void drawEnemies(List<Enemy> enemies) {
-        for(Enemy enemy : enemies)
-        {
+        for (Enemy enemy : enemies) {
             drawCreature(enemy, cur_canvases.get("enemies").getGraphicsContext2D());
         }
     }
 
-
-    public void drawStats(Integer time)
-    {
+    /**
+     * Draws stats of player
+     *
+     * @param time left till the
+     */
+    public void drawStats(Integer time) {
         Player hero = GameLogic.getPlayer();
         GraphicsContext gc = cur_canvases.get("heroStats").getGraphicsContext2D();
         gc.setFill(Color.WHITE);
@@ -106,9 +134,8 @@ public class LevelView extends Scene {
         //draw stars in player
         Coordinates drawing_coor = new Coordinates(0, 0);
         Star just_for_texture = new Star(drawing_coor);
-        for(int i = 0; i < hero.getStar_counter(); i++)
-        {
-            drawing_coor = new Coordinates(Configuration.getWindowWidth() - Configuration.getTileSize()*(3-i), 0);
+        for (int i = 0; i < hero.getStar_counter(); i++) {
+            drawing_coor = new Coordinates(Configuration.getWindowWidth() - Configuration.getTileSize() * (3 - i), 0);
             just_for_texture.setPosition(drawing_coor);
             just_for_texture.setAnim_ind(0);
             just_for_texture.render(gc);
@@ -129,6 +156,12 @@ public class LevelView extends Scene {
         }
     }
 
+    /**
+     * Centers the camera to the player
+     *
+     * @param playerX coor
+     * @param playerY coor
+     */
     public void updateCamera(double playerX, double playerY) {
         double offsetX = (Configuration.getWindowWidth() >> 1) - playerX;
         double offsetY = (Configuration.getWindowHeight() >> 1) - playerY;
@@ -142,13 +175,24 @@ public class LevelView extends Scene {
         cur_canvases.get("heroStats").setLayoutY(-offsetY);
 
     }
-    public void drawCreature(Movable enetety,GraphicsContext gc )
-    {
-        gc.drawImage(enetety.getTexture(), enetety.getPosition().getX(), enetety.getPosition().getY());
+
+    /**
+     * Draw the some entity
+     *
+     * @param entity
+     * @param gc     where it will be drawn
+     */
+    public void drawCreature(Movable entity, GraphicsContext gc) {
+        gc.drawImage(entity.getTexture(), entity.getPosition().getX(), entity.getPosition().getY());
     }
 
-    public void clearCanvas(GraphicsContext gc){
-        gc.clearRect(0, 0, Configuration.getMapWidth()*Configuration.getTileSize(), Configuration.getMapHeight()*Configuration.getTileSize());
+    /**
+     * Clear the graphic context
+     *
+     * @param gc
+     */
+    public void clearCanvas(GraphicsContext gc) {
+        gc.clearRect(0, 0, Configuration.getMapWidth() * Configuration.getTileSize(), Configuration.getMapHeight() * Configuration.getTileSize());
     }
 
 

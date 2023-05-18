@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Getting configuration from standard json file
+ *
+ * @author Veronika
+ */
 public class PlayerConfigurations {
 
     private static JSONObject json_config;
@@ -29,23 +34,48 @@ public class PlayerConfigurations {
         return json_config.getString("texturePath");
     }
 
-    public static float getHealth(){return json_config.getFloat("health");}
-    public static float getDamage(){return json_config.getFloat("damage");}
-    public static float getSpeedDamage(){return json_config.getFloat("speedDamage");}
-    public static float getDamageRadius(){return json_config.getFloat("damageRadius");}
-    public static float getWalkSpeed(){return json_config.getFloat("walkSpeed");}
-    public static int getTextureWidth(){return json_config.getInt("textureWidth");}
-    public static int getTextureHeight(){return json_config.getInt("textureHeight");}
+    public static float getHealth() {
+        return json_config.getFloat("health");
+    }
 
-    public static boolean getItem(String itemName){
+    public static float getDamage() {
+        return json_config.getFloat("damage");
+    }
+
+    public static float getSpeedDamage() {
+        return json_config.getFloat("speedDamage");
+    }
+
+    public static float getDamageRadius() {
+        return json_config.getFloat("damageRadius");
+    }
+
+    public static float getWalkSpeed() {
+        return json_config.getFloat("walkSpeed");
+    }
+
+    public static int getTextureWidth() {
+        return json_config.getInt("textureWidth");
+    }
+
+    public static int getTextureHeight() {
+        return json_config.getInt("textureHeight");
+    }
+
+    public static boolean getItem(String itemName) {
         return json_config.getBoolean(itemName);
     }
 
-    public static Integer getMilk(){
+    public static Integer getMilk() {
         return json_config.getInt("Milk");
     }
 
-    public static Integer getBackPackSpace(){return json_config.getInt("backpackSpace");}
-    public static Integer getCoins(){return json_config.getInt("Coins");}
+    public static Integer getBackPackSpace() {
+        return json_config.getInt("backpackSpace");
+    }
+
+    public static Integer getCoins() {
+        return json_config.getInt("Coins");
+    }
 
 }

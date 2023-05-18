@@ -7,10 +7,21 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class Milk extends Item{
+/**
+ * Milk item heath the player by 10
+ *
+ * @author Veronika
+ */
+public class Milk extends Item {
+
+    /**
+     * Creates milk
+     *
+     * @param name "Milk"
+     */
     public Milk(String name) {
         super(name);
-        Image img = new Image("file:" + File.separator + FileManagement.createProperPath(Configuration.getPathItem()+ name + ".png"));
+        Image img = new Image("file:" + File.separator + FileManagement.createProperPath(Configuration.getPathItem() + name + ".png"));
         this.setTexture(img);
     }
 

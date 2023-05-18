@@ -7,7 +7,7 @@
   "speedDamage": 5,
   "textureHeight": 110,
   "texturePath": "src/main/resources/textures/spider.png",
-  "textureWidth": 200,
-  "walkSpeed": 121
+  "textureWidth": 110,
+  "walkSpeed": 140
 }
 

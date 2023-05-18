@@ -1,19 +1,31 @@
 package cz.cvut.anokhver.level;
 
 
-import static cz.cvut.anokhver.level.SingleTile.loadImageForTile;
-
 import cz.cvut.anokhver.GameLauncher;
 import javafx.scene.image.Image;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static cz.cvut.anokhver.level.SingleTile.loadImageForTile;
+
+/**
+ * Represents a map by two dementional array of tiles
+ *
+ * @author Veronika
+ */
 public class Tilemap {
     private final SingleTile[][] tiles;
     private int width;
     private int height;
 
+    /**
+     * Allocates the array for map
+     *
+     * @param width  of array
+     * @param height of array
+     */
     public Tilemap(Integer width, Integer height) {
         this.width = width;
         this.height = height;
@@ -35,6 +47,13 @@ public class Tilemap {
     /*===========================
     *Read from file
     ===========================*/
+
+    /**
+     * Reading map from the file
+     *
+     * @param path to file
+     */
+
     public void readMap(String path) {
         GameLauncher.log.info("Reading map from:" + path);
         try {
@@ -47,7 +66,6 @@ public class Tilemap {
                 for (String s : line.split("")) {
                     // Create a new Tile object based on the character read from the file
                     // and add it to the Tilemap
-
                     Image image = loadImageForTile(s);
                     SingleTile tile = new SingleTile(image, x, y);
                     this.setTile(x, y, tile);

@@ -4,12 +4,22 @@ import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Player;
 import javafx.scene.image.Image;
 
+/**
+ * Implements the items that player can use on itself
+ *
+ * @author Veronika
+ */
 public abstract class Item {
 
     private final String name;
 
     private Image texture;
 
+    /**
+     * standard item constructor
+     *
+     * @param name "item name"
+     */
     public Item(String name) {
         this.name = name;
         texture = null;
@@ -18,13 +28,18 @@ public abstract class Item {
     /*===========================
     *Basic interactions
     ===========================*/
-    public void pickUp(Player player)
-    {
+    public void pickUp(Player player) {
         player.getInventory().addItem(this);
     }
+
+    /**
+     * Uses item on player
+     *
+     * @param hero player
+     */
     public abstract void useItem(Player hero);
-    public boolean drop(Enemy enemy)
-    {
+
+    public boolean drop(Enemy enemy) {
         return enemy.setDropChance(this);
     }
 
@@ -40,8 +55,7 @@ public abstract class Item {
         return texture;
     }
 
-    protected void setTexture(Image texture)
-    {
+    protected void setTexture(Image texture) {
         this.texture = texture;
     }
 

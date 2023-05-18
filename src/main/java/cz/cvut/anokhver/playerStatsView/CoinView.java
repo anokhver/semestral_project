@@ -7,11 +7,15 @@ import java.io.File;
 
 import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
-public class CoinView extends StatsView{
+public class CoinView extends StatsView {
 
-    public CoinView(){
+    /**
+     * Creating Coin view
+     */
+    public CoinView() {
 
-        for(int i = 0; i <= 0; i++) {
+        //setting all textures for animation
+        for (int i = 0; i <= 0; i++) {
             String dir = createProperPath(Configuration.getPathCoin()) + i + ".png";
             this.getTextures().put("anim" + i, new Image("file:" + File.separator + dir, Configuration.getTileSize(), Configuration.getTileSize(), false, false));
         }

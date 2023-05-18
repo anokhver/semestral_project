@@ -8,20 +8,33 @@ import cz.cvut.anokhver.movement.Direction;
 
 import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
-public class Player extends Movable{
+/**
+ * The player instance
+ * user controls it, fights monsters etc...
+ *
+ * @author Veronika
+ */
+public class Player extends Movable {
+
     private float damage;
     private float health;
     private float speed_damage;
     private double damage_radius;
     private Integer coins = 0;
 
-    public void setInventory(InventoryController inventory) {
-        this.inventory = inventory;
-    }
-
     private InventoryController inventory;
     private int star_counter = 0;
 
+    /**
+     * Create player from given parameters
+     * usually used for loading from saves
+     *
+     * @param damage
+     * @param walkSpeed
+     * @param health
+     * @param speedDamage
+     * @param damageRadius
+     */
     public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius) {
         PlayerConfigurations.init(createProperPath("con_player.json"));
 
@@ -36,6 +49,9 @@ public class Player extends Movable{
         this.setInventory(new InventoryController());
     }
 
+    /**
+     * Create player from regular player configuration
+     */
     public Player() {
         GameLauncher.log.info("Creating default player...");
         PlayerConfigurations.init(createProperPath("con_player.json"));
@@ -48,7 +64,7 @@ public class Player extends Movable{
         loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
         this.coins = PlayerConfigurations.getCoins();
-        this.setPosition(new Coordinates(100,100));
+        this.setPosition(new Coordinates(100, 100));
         this.setInventory(new InventoryController());
 
     }
@@ -100,6 +116,9 @@ public class Player extends Movable{
         return inventory;
     }
 
+    public void setInventory(InventoryController inventory) {
+        this.inventory = inventory;
+    }
 
     public double getDamage_radius() {
         return damage_radius;
@@ -108,5 +127,6 @@ public class Player extends Movable{
     public void setDamage_radius(double damage_radius) {
         this.damage_radius = damage_radius;
     }
+
 }
 

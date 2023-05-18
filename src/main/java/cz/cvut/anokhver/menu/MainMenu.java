@@ -9,14 +9,21 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * Main menu view
+ *
+ * @author Veronika
+ */
 public class MainMenu extends AMenu {
 
     protected Button startButton;
     protected Button loadButton;
     protected Button exitButton;
 
-
-    public MainMenu(){
+    /**
+     * Creating basic view of main menu with 3 buttons
+     */
+    public MainMenu() {
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
         this.setPadding(new Insets(20, 20, 20, 20));
@@ -43,6 +50,9 @@ public class MainMenu extends AMenu {
 
 
     }
+    /*===================
+    /Getters & Setters
+    =====================*/
 
     public Button getExitButton() {
         return exitButton;

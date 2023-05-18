@@ -9,6 +9,11 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * In game menu view
+ *
+ * @author Veronika
+ */
 public class InGameMenu extends AMenu {
 
     protected Button continueButton;
@@ -16,7 +21,10 @@ public class InGameMenu extends AMenu {
     protected Button saveButton;
     protected Button exitMainMenu;
 
-    public InGameMenu(){
+    /**
+     * Creating standard in game menu view with 4 buttons
+     */
+    public InGameMenu() {
 
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
@@ -46,6 +54,9 @@ public class InGameMenu extends AMenu {
     }
 
 
+    /*===================
+    /Getters & Setters
+    =====================*/
     public Button getContinueButton() {
         return continueButton;
     }
@@ -62,8 +73,14 @@ public class InGameMenu extends AMenu {
         this.exitButton = exitButton;
     }
 
-    public void setSaveButton(Button saveButton) { this.saveButton = saveButton;}
-    public Button getSaveButton(){return saveButton;}
+    public Button getSaveButton() {
+        return saveButton;
+    }
+
+    public void setSaveButton(Button saveButton) {
+        this.saveButton = saveButton;
+    }
+
     public Button getExitMainMenu() {
         return exitMainMenu;
     }

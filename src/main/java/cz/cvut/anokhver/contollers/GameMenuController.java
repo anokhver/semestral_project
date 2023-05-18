@@ -4,9 +4,16 @@ import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.menu.InGameMenu;
 import javafx.scene.input.KeyCode;
 
+/**
+ * Controller for the game menu
+ *
+ * @author Veronika
+ */
 public class GameMenuController extends AContoller {
 
-
+    /**
+     * Setting all button pushes for view etc...
+     */
     public GameMenuController() {
         InGameMenu temp_view = new InGameMenu();
 
@@ -39,7 +46,7 @@ public class GameMenuController extends AContoller {
     }
 
 
-
+    @Override
     public void update(double delta) {
 
     }

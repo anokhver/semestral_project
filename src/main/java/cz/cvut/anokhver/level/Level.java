@@ -2,9 +2,6 @@ package cz.cvut.anokhver.level;
 
 import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.additional.Configuration;
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
-import static cz.cvut.anokhver.movement.Coordinates.minus;
-
 import cz.cvut.anokhver.enteties.Enemy;
 import cz.cvut.anokhver.enteties.Star;
 import cz.cvut.anokhver.movement.Coordinates;
@@ -12,9 +9,23 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
+import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
+import static cz.cvut.anokhver.movement.Coordinates.minus;
+
+/**
+ * Level configuration
+ * saves all monsters all stars and stats
+ *
+ * @author Veronika
+ */
 public class Level {
 
     private final Integer id;
@@ -29,21 +40,30 @@ public class Level {
     private int elapsedSeconds = 0;
     private int totalTime = 60;
 
-    public Level(Integer id, boolean fromJson) {
+    /**
+     * Setting level from id
+     *
+     * @param id
+     */
+    public Level(int id) {
         GameLauncher.log.info("Generating level...");
         this.id = id;
-        String dir = createProperPath(Configuration.getPathLevel() + id.toString());
+        String dir = createProperPath(Configuration.getPathLevel() + id);
         configureMap(dir);
 
         this.map = new Tilemap(Configuration.getMapWidth(), Configuration.getMapHeight());
         map.readMap(dir);
 
-        if(!fromJson) {
-            stars = generateStars();
-            enemies = generateEnemies();
-        }
+        stars = generateStars();
+        enemies = generateEnemies();
+
     }
 
+    /**
+     * Configure map width & heights to reuse it later
+     *
+     * @param dir of the map
+     */
     public void configureMap(String dir) {
         try {
             GameLauncher.log.info("Configuring map...");
@@ -73,9 +93,9 @@ public class Level {
     /*===========================
     *Generating stars & enemies
     ===========================*/
-    public List<Enemy> generateEnemies() {
+    private List<Enemy> generateEnemies() {
         GameLauncher.log.info("Generating enemies on the level...");
-        Coordinates border = new Coordinates((map.getWidth() - 2)* Configuration.getTileSize(), (map.getHeight() - 2)* Configuration.getTileSize());
+        Coordinates border = new Coordinates((map.getWidth() - 2) * Configuration.getTileSize(), (map.getHeight() - 2) * Configuration.getTileSize());
         List<String> configFiles = Arrays.asList("frog", "spider", "moth");
         int minDistance = Configuration.getMinimalDistStars();
 
@@ -107,10 +127,10 @@ public class Level {
         return enemies;
     }
 
-    public List<Star> generateStars() {
+    private List<Star> generateStars() {
         GameLauncher.log.info("Generating stars on the level...");
         //default configurations
-        Coordinates border = new Coordinates((map.getWidth() - 1)* Configuration.getTileSize(), (map.getHeight() - 1)* Configuration.getTileSize());
+        Coordinates border = new Coordinates((map.getWidth() - 1) * Configuration.getTileSize(), (map.getHeight() - 1) * Configuration.getTileSize());
         int count = Configuration.getCountStars();
         int minDistance = Configuration.getMinimalDistStars();
 
@@ -143,6 +163,10 @@ public class Level {
     /*===========================
     *Timer
     ===========================*/
+
+    /**
+     * Start count down till lose
+     */
     public void startTimer() {
         timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             elapsedSeconds++;
@@ -150,10 +174,19 @@ public class Level {
         timer.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
         timer.play();
     }
+
+    /**
+     * Get how much time is left
+     *
+     * @return time
+     */
     public int getRemainingTime() {
         return totalTime - elapsedSeconds;
     }
 
+    /**
+     * Stops timer
+     */
     public void stopTimer() {
         if (timer != null) {
             timer.stop();

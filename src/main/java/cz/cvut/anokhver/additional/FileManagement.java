@@ -2,13 +2,18 @@ package cz.cvut.anokhver.additional;
 
 import java.io.File;
 
+/**
+ * Class to create proper path for loading different files
+ *
+ * @author Veronika
+ */
 public class FileManagement {
 
-    public static String createProperPath(String path){
+    public static String createProperPath(String path) {
         StringBuilder result = new StringBuilder(System.getProperty("user.dir"));
         String[] array_path = path.split("/");
-        for(String i : array_path){
-           result.append(File.separator).append(i);
+        for (String i : array_path) {
+            result.append(File.separator).append(i);
         }
 
         return String.valueOf(result);

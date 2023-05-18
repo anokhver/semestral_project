@@ -1,4 +1,4 @@
-package cz.cvut.anokhver;
+package cz.cvut.anokhver.additional;
 
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;

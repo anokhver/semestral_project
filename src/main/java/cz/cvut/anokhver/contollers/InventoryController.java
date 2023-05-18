@@ -7,7 +7,9 @@ import cz.cvut.anokhver.items.*;
 import cz.cvut.anokhver.menu.Inventory;
 import javafx.scene.input.KeyCode;
 
-public class InventoryController extends AContoller {
+import java.util.logging.Level;
+
+public final class InventoryController extends AContoller {
 
     private static Item[] backPack;
     private Integer backPackSpace;
@@ -15,72 +17,80 @@ public class InventoryController extends AContoller {
     private Hat yourHat = null;
     private Bonus yourBonus = null;
 
-    /*===========================
+   /*===========================
    *Setting basic
    ===========================*/
+
+    /**
+     * Create standard inventory controller
+     * add items from player configuration
+     * set view
+     */
+
     public InventoryController() {
         // Initialize the inventory
 
 
         backPackSpace = PlayerConfigurations.getBackPackSpace();
         backPack = new Item[backPackSpace]; // Set the size of the backpack
-        if (PlayerConfigurations.getItem("Collar"))
-        {
+        if (PlayerConfigurations.getItem("Collar")) {
             addItem(new Collar("Collar"));
         }
-        if (PlayerConfigurations.getItem("Hat"))
-        {
+        if (PlayerConfigurations.getItem("Hat")) {
             addItem(new Hat("Hat"));
         }
-        if (PlayerConfigurations.getItem("Bonus"))
-        {
+        if (PlayerConfigurations.getItem("Bonus")) {
             addItem(new Bonus("Bonus"));
 
         }
-        for(int i = 0; i < PlayerConfigurations.getMilk(); i++)
-        {
+        for (int i = 0; i < PlayerConfigurations.getMilk(); i++) {
             addItem(new Milk("Milk"));
         }
 
         setViewStart();
     }
 
+    /**
+     * Create inventory controller from parameters
+     * usually used to load from saves
+     *
+     * @param hat
+     * @param collar
+     * @param bonus
+     * @param count_milk
+     * @param space
+     * @param hasInvBonus
+     * @param hasInvHat
+     * @param hasInvCollar
+     */
     public InventoryController(Boolean hat, Boolean collar, Boolean bonus, Integer count_milk,
-                               Integer space, Boolean hasInvBonus, Boolean hasInvHat, Boolean hasInvCollar)
-    {
+                               Integer space, Boolean hasInvBonus, Boolean hasInvHat, Boolean hasInvCollar) {
         // Initialize the inventory
         backPackSpace = space;
         backPack = new Item[backPackSpace]; // Set the size of the backpack
-        if (hasInvCollar)
-        {
+        if (hasInvCollar) {
             addItem(new Collar("Collar"));
         }
-        if (hasInvHat)
-        {
+        if (hasInvHat) {
             addItem(new Hat("Hat"));
         }
-        if (hasInvBonus)
-        {
+        if (hasInvBonus) {
             addItem(new Bonus("Bonus"));
 
         }
 
-        if (collar)
-        {
+        if (collar) {
             yourCollar = new Collar("Collar");
         }
-        if (hat)
-        {
+        if (hat) {
             yourHat = new Hat("Hat");
         }
-        if (bonus)
-        {
+        if (bonus) {
             yourBonus = new Bonus("Bonus");
 
         }
 
-        for(int i = 0; i < count_milk; i++)
-        {
+        for (int i = 0; i < count_milk; i++) {
             addItem(new Milk("Milk"));
         }
 
@@ -90,22 +100,36 @@ public class InventoryController extends AContoller {
     /*===========================
     *View setting
     ===========================*/
-    public void setViewStart(){
+
+    public static Item[] getBackPack() {
+        return backPack;
+    }
+
+    public static void setBackPack(Item[] backPack) {
+        InventoryController.backPack = backPack;
+    }
+
+    private void setViewStart() {
         Inventory temp_view = new Inventory();
 
         temp_view.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
-            //if arrows pressed
-            if (keyCode == KeyCode.UP || keyCode == KeyCode.DOWN || keyCode == KeyCode.LEFT || keyCode == KeyCode.RIGHT) {
-                handleArrowKeyPress(keyCode);
-            }
-            //if enter pressed
-            else if (keyCode == KeyCode.ENTER) {
-                handleEnterKeyPress();
-            }
-            //if E pressed
-            else if (keyCode == KeyCode.E) {
-                    GameLogic.renewGame();
+            if (null != keyCode) //if arrows pressed
+                switch (keyCode) {
+                    case UP:
+                    case DOWN:
+                    case LEFT:
+                    case RIGHT:
+                        handleArrowKeyPress(keyCode);
+                        break;
+                    case ENTER:
+                        handleEnterKeyPress();
+                        break;
+                    case E:
+                        GameLogic.renewGame();
+                        break;
+                    default:
+                        break;
                 }
         });
 
@@ -113,14 +137,14 @@ public class InventoryController extends AContoller {
     }
 
     private void handleEnterKeyPress() {
-        GameLauncher.log.info("Clicked slot: " + (((Inventory) getView()).getSelectedSlotIndex() + 1));
+        GameLauncher.log.log(Level.INFO, "Clicked slot: {0}{1}", new Object[]{((Inventory) getView()).getSelectedSlotIndex(), 1});
 
         // Perform use item with the clicked slot
         Item clickedItem = backPack[((Inventory) getView()).getSelectedSlotIndex()];
         if (clickedItem != null) {
-           GameLauncher.log.info("Hero used:" + clickedItem.getName());
-           clickedItem.useItem(GameLogic.getPlayer());
-           getView().update_menu();
+            GameLauncher.log.log(Level.INFO, "Hero used:{0}", clickedItem.getName());
+            clickedItem.useItem(GameLogic.getPlayer());
+            getView().update_menu();
         } else {
             // Slot is empty
             GameLauncher.log.info("Slot is empty");
@@ -128,7 +152,7 @@ public class InventoryController extends AContoller {
     }
 
     private void handleArrowKeyPress(KeyCode keyCode) {
-        int selectedSlotIndex =((Inventory) getView()).getSelectedSlotIndex();
+        int selectedSlotIndex = ((Inventory) getView()).getSelectedSlotIndex();
         // Handle arrow key presses for navigating through the inventory
         switch (keyCode) {
             case UP:
@@ -235,13 +259,7 @@ public class InventoryController extends AContoller {
     public void setYourBonus(Bonus yourBonus) {
         this.yourBonus = yourBonus;
     }
-    public static Item[] getBackPack() {
-        return backPack;
-    }
 
-    public static void setBackPack(Item[] backPack) {
-        InventoryController.backPack = backPack;
-    }
     public Integer getBackPackSpace() {
         return backPackSpace;
     }

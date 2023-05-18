@@ -17,12 +17,19 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-
+/**
+ * Inventory view
+ *
+ * @author Veronika
+ */
 public class Inventory extends AMenu {
     private GridPane gridPane;
     private Region[] slotRegions;
     private int selectedSlotIndex = 0;
 
+    /**
+     * Creating standard inventory view
+     */
     public Inventory() {
         createInventoryGridPane(PlayerConfigurations.getBackPackSpace());
         this.setAlignment(Pos.CENTER);
@@ -38,6 +45,7 @@ public class Inventory extends AMenu {
     /*===========================
      *Visually settings
      ===========================*/
+
     private void createInventoryGridPane(int backpackSpace) {
         // Clear the current children of the VBox
         this.getChildren().clear();
@@ -63,7 +71,7 @@ public class Inventory extends AMenu {
         }
 
         for (int i = 0; i < 3; i++) {
-            int col = backpackSpace/3;
+            int col = backpackSpace / 3;
 
             Region slotRegion = new Region();
             slotRegion.setStyle("-fx-background-color: white;");
@@ -72,7 +80,6 @@ public class Inventory extends AMenu {
 
             slotRegions[backpackSpace + i] = slotRegion; // Add the slot region to the slotRegions array
         }
-
 
 
         Text instructionsText = new Text("CLOSE INVENTORY: E  USE ITEM: ENTER");
@@ -112,6 +119,12 @@ public class Inventory extends AMenu {
         return playerStatsBox;
     }
 
+    /**
+     * Updating inventory view based on the backPack
+     * (adding textures on right places hight lighting chosen slots)
+     *
+     * @param backPack player backpack
+     */
     public void updateInventoryView(Item[] backPack) {
         // Update the inventory view to reflect the selected slot
         for (int i = 0; i < backPack.length; i++) {
@@ -140,12 +153,12 @@ public class Inventory extends AMenu {
 
             if (GameLogic.getPlayer().getInventory().getYourHat() != null) {
                 Region slotRegionAdditional = slotRegions[backPack.length + 1];
-                String imageUrl = GameLogic.getPlayer().getInventory().getYourHat() .getTexture().impl_getUrl();
+                String imageUrl = GameLogic.getPlayer().getInventory().getYourHat().getTexture().impl_getUrl();
                 String imageStyle = "-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;";
                 slotRegionAdditional.setStyle("-fx-border-color: black; -fx-background-color: white;" + imageStyle);
             }
 
-            if (GameLogic.getPlayer().getInventory().getYourBonus()  != null) {
+            if (GameLogic.getPlayer().getInventory().getYourBonus() != null) {
                 Region slotRegionAdditional = slotRegions[backPack.length + 2];
                 String imageUrl = GameLogic.getPlayer().getInventory().getYourBonus().getTexture().impl_getUrl();
                 String imageStyle = "-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;";
@@ -153,15 +166,20 @@ public class Inventory extends AMenu {
             }
         }
 
-        this.getChildren().set(2,  createPlayerStatsView()); // Assuming the player stats VBox is at index 2
+        this.getChildren().set(2, createPlayerStatsView()); // Assuming the player stats VBox is at index 2
 
+    }
+    
+    /*===================
+    /Getters & Setters
+    =====================*/
+
+    public int getSelectedSlotIndex() {
+        return this.selectedSlotIndex;
     }
 
     public void setSelectedSlotIndex(int selectedSlotIndex) {
         this.selectedSlotIndex = selectedSlotIndex;
-    }
-    public int getSelectedSlotIndex (){
-        return  this.selectedSlotIndex;
     }
 
     @Override

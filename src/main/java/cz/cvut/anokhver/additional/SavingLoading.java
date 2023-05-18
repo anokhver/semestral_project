@@ -12,17 +12,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class SavingLoading {
 
+    /**
+     * Load level from Json file
+     *
+     * @param filename name of json file
+     * @return level loaded
+     */
     public static Level loadFromJsonLevel(String filename) {
         try {
             JSONObject levelJson = CreateJsonForRead(filename);
-            if(levelJson == null) return null;
+            if (levelJson == null) return null;
             // Extract level properties
             int id = levelJson.getInt("id");
             int enemyCount = levelJson.getInt("enemyCount");
@@ -70,7 +79,7 @@ public class SavingLoading {
             }
 
             // Create Level instance and set its properties
-            Level level = new Level(id, true);
+            Level level = new Level(id);
             level.setEnemyCount(enemyCount);
             level.setElapsedSeconds(elapsedSeconds);
             level.setTotalTime(totalTime);
@@ -85,6 +94,12 @@ public class SavingLoading {
         return null; // Return null if loading failed
     }
 
+    /**
+     * Save level to the json file
+     *
+     * @param filename where to save
+     * @param level    what to save
+     */
     public static void saveToJsonLevel(String filename, Level level) {
         JSONObject levelJson = new JSONObject();
         levelJson.put("id", level.getId());
@@ -128,7 +143,7 @@ public class SavingLoading {
             writer.write(levelJson.toString(4)); // Use 4 spaces for indentation
             writer.flush();
 
-            GameLauncher.log.info("Level saved to " + filename);
+            GameLauncher.log.log(java.util.logging.Level.INFO, "Level saved to {0}", filename);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -142,6 +157,12 @@ public class SavingLoading {
         }
     }
 
+    /**
+     * Save player to Json file
+     *
+     * @param filename where to save
+     * @param hero     what save
+     */
     public static void saveToJsonPlayer(String filename, Player hero) {
         JSONObject playerJson = new JSONObject();
         playerJson.put("damage", hero.getDamage());
@@ -178,22 +199,28 @@ public class SavingLoading {
                 file.createNewFile();
             }
 
-            FileWriter writer = new FileWriter(file);
-            writer.write(playerJson.toString(4)); // Use 4 spaces for indentation
-            writer.flush();
-            writer.close();
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(playerJson.toString(4)); // Use 4 spaces for indentation
+                writer.flush();
+            } // Use 4 spaces for indentation
 
-            GameLauncher.log.info("Player saved to " + filename);
+            GameLauncher.log.log(java.util.logging.Level.INFO, "Player saved to {0}", filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Load player from json file
+     *
+     * @param filename name of json file
+     * @return player loaded
+     */
     public static Player loadFromJsonPlayer(String filename) {
         try {
             JSONObject playerJson = CreateJsonForRead(filename);
 
-            if(playerJson == null) return null;
+            if (playerJson == null) return null;
 
             float damage = playerJson.getFloat("damage");
             float health = playerJson.getFloat("health");

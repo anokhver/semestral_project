@@ -3,20 +3,16 @@
   "windowWidth": 1200,
   "windowHeight": 1200,
   "tileSize": 110,
-
-
   "pathIcon": "src/main/resources/additional/AppIconNightWalk.png",
   "pathTile": "src/main/resources/tiles/",
-  "pathLevel" : "src/main/resources/level",
+  "pathLevel": "src/main/resources/level",
   "pathPlayerTexture": "src/main/resources/textures/player",
   "pathStarTexture": "src/main/resources/textures/star",
   "pathHeartTexture": "src/main/resources/textures/heart",
   "pathCoinTexture": "src/main/resources/textures/coin",
   "pathItemTexture": "src/main/resources/textures/",
-
   "mapWidth": 10,
-  "mapHeight" : 10,
-
+  "mapHeight": 10,
   "countStars": 3,
   "minimalDistStarts": 4,
   "pickupDistanceStar": 100

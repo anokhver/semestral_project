@@ -4,10 +4,19 @@ import javafx.scene.image.Image;
 
 import java.util.HashMap;
 
-public abstract class  StatsView {
-    private final HashMap<String,Image> textures = new HashMap<>();
+/**
+ * Abstract class for the representing view of some player stats
+ *
+ * @author Veronika
+ */
+public abstract class StatsView {
+
+    private final HashMap<String, Image> textures = new HashMap<>();
     private Image curTexture;
 
+    /*===================
+    /Getters & Setters
+    =====================*/
     public Image getCurTexture() {
         return curTexture;
     }
@@ -20,8 +29,14 @@ public abstract class  StatsView {
         return textures;
     }
 
+    /**
+     * Setting current texture by index of animation
+     * with which it is stored in textures HashMap
+     *
+     * @param cur_state the index of animation texture
+     */
     public void setCurTextureByInd(Integer cur_state) {
-        this.curTexture = textures.get("anim" + String.valueOf(cur_state));
+        this.curTexture = textures.get("anim" + cur_state);
     }
 
 }
