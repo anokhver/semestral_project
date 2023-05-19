@@ -44,7 +44,7 @@ public class Player extends Movable {
         this.damage_radius = damageRadius;
         this.setWalk_speed(walkSpeed);
 
-        loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
+        loadAllTextures(PlayerConfigurations.getTexture(),PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
         this.setInventory(new InventoryController());
     }
@@ -61,7 +61,7 @@ public class Player extends Movable {
         this.damage_radius = PlayerConfigurations.getDamageRadius();
 
         setWalk_speed(PlayerConfigurations.getWalkSpeed());
-        loadAllTextures(PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
+        loadAllTextures(PlayerConfigurations.getTexture(),PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
         setCurTextureDirection(Direction.STOP);
         this.coins = PlayerConfigurations.getCoins();
         this.setPosition(new Coordinates(100, 100));
