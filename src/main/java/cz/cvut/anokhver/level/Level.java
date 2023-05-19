@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 import static cz.cvut.anokhver.movement.Coordinates.minus;
 
 /**
@@ -48,7 +47,7 @@ public class Level {
     public Level(int id) {
         GameLauncher.log.info("Generating level...");
         this.id = id;
-        String dir = createProperPath(Configuration.getPathLevel() + id);
+        String dir = (Configuration.getPathLevel() + id);
         configureMap(dir);
 
         this.map = new Tilemap(Configuration.getMapWidth(), Configuration.getMapHeight());

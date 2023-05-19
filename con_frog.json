@@ -6,7 +6,7 @@
   "seeRadius": 6,
   "speedDamage": 5,
   "textureHeight": 110,
-  "texturePath": "src/main/resources/textures/frog.png",
+  "texturePath": "textures/frog.png",
   "textureWidth": 130,
   "walkSpeed": 130
 }

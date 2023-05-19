@@ -2,7 +2,6 @@ package cz.cvut.anokhver.additional;
 
 import java.io.File;
 import java.io.InputStream;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +13,7 @@ import java.nio.file.Paths;
 public class FileManagement {
 
     public static String createProperPath(String path) {
-        StringBuilder result = new StringBuilder(System.getProperty("user.dir"));
+        StringBuilder result = new StringBuilder();
         String[] array_path = path.split("/");
         for (String i : array_path) {
             result.append(File.separator).append(i);
@@ -23,10 +22,10 @@ public class FileManagement {
         return String.valueOf(result);
     }
 
-    public InputStream getFileFromResourceAsStream(String fileName) {
+    public static InputStream getFileFromResourceAsStream(String fileName) {
 
         // The class loader that loaded the class
-        ClassLoader classLoader = getClass().getClassLoader();
+        ClassLoader classLoader = FileManagement.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
 
         // the stream holding the file content
@@ -39,13 +38,11 @@ public class FileManagement {
     }
 
     public static void createFolderIfNotExists(String folderPath) {
-        Path path = Paths.get(folderPath);
+        Path path = Paths.get(createProperPath(folderPath));
         if (!Files.exists(path)) {
             try {
                 Files.createDirectories(path);
-                System.out.println("Folder created successfully: " + folderPath);
             } catch (Exception e) {
-                System.out.println("Failed to create the folder: " + folderPath);
                 e.printStackTrace();
             }
         } else {

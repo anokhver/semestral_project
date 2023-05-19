@@ -4,9 +4,7 @@ import cz.cvut.anokhver.additional.Configuration;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.io.File;
-
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
+import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 
 /**
  * Implements single tile for the map
@@ -36,9 +34,7 @@ public class SingleTile {
     }
 
     public static Image loadImageForTile(String tileChar) {
-        String dir = createProperPath(Configuration.getPathTile() + tileChar + ".png");
-        File file = new File(dir);
-        return new Image(file.toURI().toString());
+        return new Image(getFileFromResourceAsStream(Configuration.getPathTile() + tileChar + ".png"));
     }
 
     /**

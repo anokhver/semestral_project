@@ -1,8 +1,12 @@
 package cz.cvut.anokhver.items;
 
-import cz.cvut.anokhver.enteties.Enemy;
+import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.enteties.Player;
 import javafx.scene.image.Image;
+
+import java.io.InputStream;
+
+import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 
 /**
  * Implements the items that player can use on itself
@@ -15,6 +19,7 @@ public abstract class Item {
 
     private Image texture;
 
+    private Configuration positionDroped;
     /**
      * standard item constructor
      *
@@ -22,7 +27,9 @@ public abstract class Item {
      */
     public Item(String name) {
         this.name = name;
-        texture = null;
+        System.out.println(Configuration.getPathItem() + name + ".png");
+        InputStream stream = getFileFromResourceAsStream(Configuration.getPathItem() + name + ".png");
+        texture = new Image(stream);
     }
 
     /*===========================
@@ -38,10 +45,7 @@ public abstract class Item {
      * @param hero player
      */
     public abstract void useItem(Player hero);
-
-    public boolean drop(Enemy enemy) {
-        return enemy.setDropChance(this);
-    }
+    public abstract void UnUseItem(Player hero);
 
     /*===========================
     *Getters & Setters
@@ -59,4 +63,11 @@ public abstract class Item {
         this.texture = texture;
     }
 
+    public Configuration getPositionDroped() {
+        return positionDroped;
+    }
+
+    public void setPositionDroped(Configuration positionDroped) {
+        this.positionDroped = positionDroped;
+    }
 }

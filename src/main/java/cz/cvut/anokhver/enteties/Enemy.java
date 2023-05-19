@@ -1,14 +1,12 @@
 package cz.cvut.anokhver.enteties;
 
 import cz.cvut.anokhver.additional.EnemyConfigurations;
-import cz.cvut.anokhver.items.Item;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
 import javafx.scene.image.Image;
 
-import java.io.File;
-
 import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
+import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 
 /**
  * Enemy class it fights the player
@@ -24,7 +22,6 @@ public class Enemy extends Movable {
     public float cooldown = 0;
     private float health;
     private float speedDamage;
-    private Item dropChance;
     private Direction curDirection = Direction.STOP;
 
     /**
@@ -50,7 +47,9 @@ public class Enemy extends Movable {
         this.setWalk_speed(walkSpeed);
 
         EnemyConfigurations.init(createProperPath("con_" + name + ".json"));
-        Image img = new Image("file:" + File.separator + createProperPath(EnemyConfigurations.getTexture()), EnemyConfigurations.getTextureWidth(), EnemyConfigurations.getTextureHeight(), false, true);
+
+
+        Image img = new Image(getFileFromResourceAsStream(EnemyConfigurations.getTexture()), EnemyConfigurations.getTextureWidth(), EnemyConfigurations.getTextureHeight(), false, true);
         this.setTexture(img);
         this.setPosition(coordinates);
     }
@@ -62,7 +61,7 @@ public class Enemy extends Movable {
      * @param coordinates where to put enemy
      */
     public Enemy(String conName, Coordinates coordinates) {
-        EnemyConfigurations.init(createProperPath("con_" + conName + ".json"));
+        EnemyConfigurations.init("con_" + conName + ".json");
         this.name = EnemyConfigurations.getName();
         this.health = EnemyConfigurations.getHealth();
         this.damage = EnemyConfigurations.getDamage();
@@ -71,7 +70,7 @@ public class Enemy extends Movable {
         this.seeRadius = EnemyConfigurations.getSeeRadius();
         this.setWalk_speed(EnemyConfigurations.getWalkSpeed());
 
-        Image img = new Image("file:" + File.separator + createProperPath(EnemyConfigurations.getTexture()), EnemyConfigurations.getTextureWidth(), EnemyConfigurations.getTextureHeight(), false, true);
+        Image img = new Image(getFileFromResourceAsStream(EnemyConfigurations.getTexture()), EnemyConfigurations.getTextureWidth(), EnemyConfigurations.getTextureHeight(), false, true);
         this.setTexture(img);
 
         if (coordinates != null) {
@@ -82,11 +81,6 @@ public class Enemy extends Movable {
     /*===========================
     *Getters & Setters
     ===========================*/
-    public boolean setDropChance(Item item) {
-        this.dropChance = item;
-        return true;
-    }
-
     public String getName() {
         return name;
     }
@@ -109,10 +103,6 @@ public class Enemy extends Movable {
 
     public void setSpeedDamage(float speedDamage) {
         this.speedDamage = speedDamage;
-    }
-
-    public Item getDropChance() {
-        return dropChance;
     }
 
     public float getSeeRadius() {

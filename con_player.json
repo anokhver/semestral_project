@@ -1,10 +1,10 @@
 {
   "damage": 1,
-  "damageRadius": 1.5,
+  "damageRadius": 1,
   "health": 80,
   "speedDamage": 1,
   "textureHeight": 150,
-  "texturePath": "src/main/resources/textures/player",
+  "texturePath": "textures/player",
   "textureWidth": 150,
   "walkSpeed": 200,
   "inventorySpace": 10,

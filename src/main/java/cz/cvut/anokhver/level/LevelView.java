@@ -1,5 +1,6 @@
 package cz.cvut.anokhver.level;
 
+import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
 import cz.cvut.anokhver.enteties.Enemy;
@@ -143,7 +144,7 @@ public class LevelView extends Scene {
     }
 
     private void drawTileMap(Tilemap map) {
-        System.out.println("Started rendered" + map.getWidth() + " " + map.getHeight());
+        GameLauncher.log.info("Map rendered" + map.getWidth() + " " + map.getHeight());
 
         GraphicsContext gc = cur_canvases.get("map").getGraphicsContext2D();
         for (int i = 0; i < map.getWidth(); i++) {

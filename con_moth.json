@@ -6,7 +6,7 @@
   "seeRadius": 4,
   "speedDamage": 5,
   "textureHeight": 120,
-  "texturePath": "src/main/resources/textures/moth.png",
+  "texturePath": "textures/moth.png",
   "textureWidth": 110,
   "walkSpeed": 110
 }

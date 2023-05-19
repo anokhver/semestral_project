@@ -54,7 +54,7 @@ public class Player extends Movable {
      */
     public Player() {
         GameLauncher.log.info("Creating default player...");
-        PlayerConfigurations.init(createProperPath("con_player.json"));
+        PlayerConfigurations.init("con_player.json");
         this.damage = PlayerConfigurations.getDamage();
         this.health = PlayerConfigurations.getHealth();
         this.speed_damage = PlayerConfigurations.getSpeedDamage();

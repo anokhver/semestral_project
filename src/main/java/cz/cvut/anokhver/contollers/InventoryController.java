@@ -17,6 +17,7 @@ public final class InventoryController extends AContoller {
     private Hat yourHat = null;
     private Bonus yourBonus = null;
 
+    private Boolean isRegularInv = true;
    /*===========================
    *Setting basic
    ===========================*/
@@ -101,14 +102,6 @@ public final class InventoryController extends AContoller {
     *View setting
     ===========================*/
 
-    public static Item[] getBackPack() {
-        return backPack;
-    }
-
-    public static void setBackPack(Item[] backPack) {
-        InventoryController.backPack = backPack;
-    }
-
     private void setViewStart() {
         Inventory temp_view = new Inventory();
 
@@ -128,6 +121,9 @@ public final class InventoryController extends AContoller {
                     case E:
                         GameLogic.renewGame();
                         break;
+                    case Q:
+                        handleChangeInventory();
+                        break;
                     default:
                         break;
                 }
@@ -136,47 +132,119 @@ public final class InventoryController extends AContoller {
         setView(temp_view);
     }
 
-    private void handleEnterKeyPress() {
-        GameLauncher.log.log(Level.INFO, "Clicked slot: {0}{1}", new Object[]{((Inventory) getView()).getSelectedSlotIndex(), 1});
-
-        // Perform use item with the clicked slot
-        Item clickedItem = backPack[((Inventory) getView()).getSelectedSlotIndex()];
-        if (clickedItem != null) {
-            GameLauncher.log.log(Level.INFO, "Hero used:{0}", clickedItem.getName());
-            clickedItem.useItem(GameLogic.getPlayer());
-            getView().update_menu();
-        } else {
-            // Slot is empty
-            GameLauncher.log.info("Slot is empty");
+    private void handleChangeInventory(){
+        isRegularInv = !isRegularInv;
+        if(isRegularInv)
+        {
+            ((Inventory) getView()).setSelectedSlotIndex(0);
+            ((Inventory) getView()).setSelectedSpecialSlotIndex(-1);
         }
+        else
+        {
+            ((Inventory) getView()).setSelectedSlotIndex(-1);
+            ((Inventory) getView()).setSelectedSpecialSlotIndex(0);
+        }
+        getView().update_menu();
+
+    }
+
+    private void handleEnterKeyPress() {
+        Item clickedItem = null;
+        // Perform use item with the clicked slot
+        if(isRegularInv) {
+            GameLauncher.log.log(Level.INFO, "Clicked slot: {0}{1}", new Object[]{((Inventory) getView()).getSelectedSlotIndex(), 1});
+
+            clickedItem = backPack[((Inventory) getView()).getSelectedSlotIndex()];
+
+            if (clickedItem != null) {
+                GameLauncher.log.log(Level.INFO, "Hero used:{0}", clickedItem.getName());
+                clickedItem.useItem(GameLogic.getPlayer());
+                getView().update_menu();
+            } else {
+                // Slot is empty
+                GameLauncher.log.info("Slot is empty");
+            }
+        }
+        else {
+            GameLauncher.log.log(Level.INFO, "Clicked slot equipment: {0}{1}", new Object[]{((Inventory) getView()).getSelectedSpecialSlotIndex(), 1});
+            // Remove the equipped item from the slot
+            switch (((Inventory) getView()).getSelectedSpecialSlotIndex()){
+                case 0:
+                    clickedItem = yourCollar;
+                    setYourCollar(null);
+                    break;
+                case 1:
+                    clickedItem = yourHat;
+                    setYourHat(null);
+                    break;
+                case 2:
+                    clickedItem = yourBonus;
+                    setYourBonus(null);
+                    break;
+                default:
+                    break;
+            }
+            if (clickedItem != null) {
+                GameLauncher.log.log(Level.INFO, "Hero used:{0}", clickedItem.getName());
+                clickedItem.UnUseItem(GameLogic.getPlayer());
+                addItem(clickedItem);
+                getView().update_menu();
+            } else {
+                // Slot is empty
+                GameLauncher.log.info("Slot is empty");
+            }
+        }
+
+
+        getView().update_menu();
     }
 
     private void handleArrowKeyPress(KeyCode keyCode) {
-        int selectedSlotIndex = ((Inventory) getView()).getSelectedSlotIndex();
-        // Handle arrow key presses for navigating through the inventory
-        switch (keyCode) {
-            case UP:
-                if (selectedSlotIndex >= 3) {
-                    selectedSlotIndex -= 3;
-                }
-                break;
-            case DOWN:
-                if (selectedSlotIndex < backPack.length - 3) {
-                    selectedSlotIndex += 3;
-                }
-                break;
-            case LEFT:
-                if (selectedSlotIndex % 3 != 0) {
-                    selectedSlotIndex--;
-                }
-                break;
-            case RIGHT:
-                if ((selectedSlotIndex + 1) % 3 != 0 && selectedSlotIndex < backPack.length - 1) {
-                    selectedSlotIndex++;
-                }
-                break;
+        int selectedSlotIndex;
+        if(isRegularInv) {
+            selectedSlotIndex = ((Inventory) getView()).getSelectedSlotIndex();
+            // Handle arrow key presses for navigating through the inventory
+            switch (keyCode) {
+                case UP:
+                    if (selectedSlotIndex >= 3) {
+                        selectedSlotIndex -= 3;
+                    }
+                    break;
+                case DOWN:
+                    if (selectedSlotIndex < backPack.length - 3) {
+                        selectedSlotIndex += 3;
+                    }
+                    break;
+                case LEFT:
+                    if (selectedSlotIndex % 3 != 0) {
+                        selectedSlotIndex--;
+                    }
+                    break;
+                case RIGHT:
+                    if ((selectedSlotIndex + 1) % 3 != 0 && selectedSlotIndex < backPack.length - 1) {
+                        selectedSlotIndex++;
+                    }
+                    break;
+            }
+            ((Inventory) getView()).setSelectedSlotIndex(selectedSlotIndex);
+
         }
-        ((Inventory) getView()).setSelectedSlotIndex(selectedSlotIndex);
+        else {
+            selectedSlotIndex = ((Inventory) getView()).getSelectedSpecialSlotIndex();
+            switch (keyCode) {
+                case UP:
+                    if (selectedSlotIndex > 0) {
+                        selectedSlotIndex -= 1;
+                    }
+                    break;
+                case DOWN:
+                    if (selectedSlotIndex < 2) {
+                        selectedSlotIndex += 1;
+                    }
+                    break;
+            }
+            ((Inventory) getView()).setSelectedSpecialSlotIndex(selectedSlotIndex);
+        }
         // Update the inventory view to reflect the selected slot
         getView().update_menu();
     }
@@ -186,7 +254,7 @@ public final class InventoryController extends AContoller {
     ===========================*/
     public void addItem(Item item) {
         // Check if the inventory is full
-        if (isFull()) {
+        if (isFull() || item == null) {
             return;
         }
 
@@ -268,6 +336,13 @@ public final class InventoryController extends AContoller {
         this.backPackSpace = backPackSpace;
     }
 
+    public static Item[] getBackPack() {
+        return backPack;
+    }
+
+    public static void setBackPack(Item[] backPack) {
+        InventoryController.backPack = backPack;
+    }
     @Override
     public void update(double delta) {
 

@@ -5,10 +5,9 @@ import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
 import javafx.scene.image.Image;
 
-import java.io.File;
 import java.util.HashMap;
 
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
+import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 import static cz.cvut.anokhver.movement.Coordinates.minus;
 
 /**
@@ -91,8 +90,7 @@ public abstract class Movable {
     protected void loadAllTextures(String fileName, int width, int heights) {
 
         for (Direction direction : Direction.values()) {
-            String dir = createProperPath(fileName) + direction.name() + ".png";
-            this.getTextures().put("anim" + direction, new Image("file:" + File.separator + dir, width, heights, false, false));
+            this.getTextures().put("anim" + direction, new Image(getFileFromResourceAsStream(fileName + direction.name() + ".png"), width, heights, false, false));
         }
     }
 

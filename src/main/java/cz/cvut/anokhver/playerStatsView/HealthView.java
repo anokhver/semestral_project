@@ -3,9 +3,7 @@ package cz.cvut.anokhver.playerStatsView;
 import cz.cvut.anokhver.additional.Configuration;
 import javafx.scene.image.Image;
 
-import java.io.File;
-
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
+import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 
 /**
  * Representation of health view of player
@@ -20,8 +18,7 @@ public class HealthView extends StatsView {
     public HealthView() {
         //loading all textures needed for animation
         for (int i = 0; i <= 3; i++) {
-            String dir = createProperPath(Configuration.getPathHeart()) + i + ".png";
-            this.getTextures().put("anim" + i, new Image("file:" + File.separator + dir, Configuration.getTileSize(), Configuration.getTileSize(), false, false));
+            this.getTextures().put("anim" + i, new Image(getFileFromResourceAsStream(Configuration.getPathHeart() + i + ".png"), Configuration.getTileSize(), Configuration.getTileSize(), false, false));
         }
         setCurTextureByInd(0);
     }

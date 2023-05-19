@@ -21,6 +21,8 @@ import javafx.util.Duration;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
+
 /**
  * handling all game logic
  * setting correct views
@@ -144,7 +146,7 @@ public class GameLogic {
         stage.setScene(null);
 
         //loading the hero if the save was not found creating default player
-        hero = SavingLoading.loadFromJsonPlayer(FileManagement.createProperPath("saves/player.json"));
+        hero = SavingLoading.loadFromJsonPlayer(createProperPath("saves/player.json"));
         if (hero == null) {
             hero = new Player();
         }

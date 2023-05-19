@@ -3,9 +3,9 @@ package cz.cvut.anokhver.playerStatsView;
 import cz.cvut.anokhver.additional.Configuration;
 import javafx.scene.image.Image;
 
-import java.io.File;
+import java.io.InputStream;
 
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
+import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 
 public class CoinView extends StatsView {
 
@@ -16,8 +16,8 @@ public class CoinView extends StatsView {
 
         //setting all textures for animation
         for (int i = 0; i <= 0; i++) {
-            String dir = createProperPath(Configuration.getPathCoin()) + i + ".png";
-            this.getTextures().put("anim" + i, new Image("file:" + File.separator + dir, Configuration.getTileSize(), Configuration.getTileSize(), false, false));
+            InputStream stream = getFileFromResourceAsStream(Configuration.getPathCoin() + i + ".png");
+            this.getTextures().put("anim" + i, new Image(stream, Configuration.getTileSize(), Configuration.getTileSize(), false, false));
         }
 
         setCurTextureByInd(0);

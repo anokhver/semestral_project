@@ -6,7 +6,7 @@
   "seeRadius": 3,
   "speedDamage": 5,
   "textureHeight": 110,
-  "texturePath": "src/main/resources/textures/spider.png",
+  "texturePath": "textures/spider.png",
   "textureWidth": 110,
   "walkSpeed": 140
 }

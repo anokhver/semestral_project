@@ -8,8 +8,9 @@ import cz.cvut.anokhver.items.Item;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -19,13 +20,14 @@ import javafx.scene.text.TextAlignment;
 
 /**
  * Inventory view
- *
- * @author Veronika
+ * Displays items using images
  */
 public class Inventory extends AMenu {
-    private GridPane gridPane;
-    private Region[] slotRegions;
+    private StackPane[] slotPanes;
+    private StackPane[] slotPanesSpecial;
     private int selectedSlotIndex = 0;
+
+    private int selectedSpecialSlotIndex = -1;
 
     /**
      * Creating standard inventory view
@@ -51,45 +53,55 @@ public class Inventory extends AMenu {
         this.getChildren().clear();
 
         // Create the grid pane for the inventory
-        gridPane = new GridPane();
+        GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
         // Create and add slots to the grid pane
-        slotRegions = new Region[backpackSpace + 3];
+        slotPanes = new StackPane[backpackSpace];
         for (int i = 0; i < backpackSpace; i++) {
             int row = i / 3;
             int col = i % 3;
 
-            Region slotRegion = new Region();
-            slotRegion.setStyle("-fx-background-color: white;");
-            slotRegion.setPrefSize(100, 100);
-            gridPane.add(slotRegion, col, row);
+            StackPane slotPane = createSlotPane();
+            gridPane.add(slotPane, col, row);
 
-            slotRegions[i] = slotRegion; // Add the slot region to the slotRegions array
+            slotPanes[i] = slotPane; // Add the slot pane to the slotPanes array
         }
 
+        //special slots
+        slotPanesSpecial = new StackPane[3];
         for (int i = 0; i < 3; i++) {
             int col = backpackSpace / 3;
 
-            Region slotRegion = new Region();
-            slotRegion.setStyle("-fx-background-color: white;");
-            slotRegion.setPrefSize(100, 100);
-            gridPane.add(slotRegion, col, i);
+            StackPane slotPane = createSlotPane();
+            gridPane.add(slotPane, col, i);
+            GridPane.setMargin(slotPane, new Insets(0, 0, 0, 50));
 
-            slotRegions[backpackSpace + i] = slotRegion; // Add the slot region to the slotRegions array
+            slotPanesSpecial[i] = slotPane; // Add the slot pane to the slotPanes array
         }
 
+        Text instructionsText = createInstructionsText();
 
-        Text instructionsText = new Text("CLOSE INVENTORY: E  USE ITEM: ENTER");
+        // Add the grid pane and instructions text to the VBox
+        this.setSpacing(10);
+        this.getChildren().addAll(instructionsText, gridPane, createPlayerStatsView());
+    }
+
+    private StackPane createSlotPane() {
+        StackPane slotPane = new StackPane();
+        slotPane.setStyle("-fx-border-color: black; -fx-background-color: white;");
+        slotPane.setPrefSize(100, 100);
+        return slotPane;
+    }
+
+    private Text createInstructionsText() {
+        Text instructionsText = new Text("CLOSE INVENTORY: E || USE ITEM: ENTER || CHANGE TO THE EQUIPMENT PART & BACK: Q");
         instructionsText.setFill(Color.RED);
         instructionsText.setFont(Font.font("Impact", FontWeight.SEMI_BOLD, 25));
         instructionsText.setTextAlignment(TextAlignment.CENTER);
-        // Add the grid pane to the VBox
-        this.setSpacing(10);
-
-        this.getChildren().addAll(instructionsText, gridPane, createPlayerStatsView());
+        return instructionsText;
     }
 
     private VBox createPlayerStatsView() {
@@ -120,56 +132,62 @@ public class Inventory extends AMenu {
     }
 
     /**
-     * Updating inventory view based on the backPack
-     * (adding textures on right places hight lighting chosen slots)
+     * Updating inventory view based on the backpack
+     * (adding textures on the right places, highlighting chosen slots)
      *
-     * @param backPack player backpack
+     * @param backpack player's backpack
      */
-    public void updateInventoryView(Item[] backPack) {
+    public void updateInventoryView(Item[] backpack) {
         // Update the inventory view to reflect the selected slot
-        for (int i = 0; i < backPack.length; i++) {
-            Region slotRegion = slotRegions[i];
-            Item item = backPack[i];
+        for (int i = 0; i < backpack.length; i++) {
+            StackPane slotPane = slotPanes[i];
+            Item item = backpack[i];
 
             if (i == selectedSlotIndex) {
-                slotRegion.setStyle("-fx-border-color: white; -fx-background-color: #ea6969;");
+                slotPane.setStyle("-fx-border-color: white; -fx-background-color: #ea6969;");
             } else {
-                slotRegion.setStyle("-fx-border-color: black; -fx-background-color: white;");
+                slotPane.setStyle("-fx-border-color: black; -fx-background-color: white;");
             }
+
+            slotPane.getChildren().clear();
 
             if (item != null) {
-                String imageUrl = item.getTexture().impl_getUrl();
-                String imageStyle = "-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;";
-                slotRegion.setStyle(slotRegion.getStyle() + imageStyle);
-            }
-
-            // Display collar, hat, and bonus in the additional slots
-            if (GameLogic.getPlayer().getInventory().getYourCollar() != null) {
-                Region slotRegionAdditional = slotRegions[backPack.length];
-                String imageUrl = GameLogic.getPlayer().getInventory().getYourCollar().getTexture().impl_getUrl();
-                String imageStyle = "-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;";
-                slotRegionAdditional.setStyle("-fx-border-color: black; -fx-background-color: white;" + imageStyle);
-            }
-
-            if (GameLogic.getPlayer().getInventory().getYourHat() != null) {
-                Region slotRegionAdditional = slotRegions[backPack.length + 1];
-                String imageUrl = GameLogic.getPlayer().getInventory().getYourHat().getTexture().impl_getUrl();
-                String imageStyle = "-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;";
-                slotRegionAdditional.setStyle("-fx-border-color: black; -fx-background-color: white;" + imageStyle);
-            }
-
-            if (GameLogic.getPlayer().getInventory().getYourBonus() != null) {
-                Region slotRegionAdditional = slotRegions[backPack.length + 2];
-                String imageUrl = GameLogic.getPlayer().getInventory().getYourBonus().getTexture().impl_getUrl();
-                String imageStyle = "-fx-background-image: url('" + imageUrl + "'); -fx-background-size: cover;";
-                slotRegionAdditional.setStyle("-fx-border-color: black; -fx-background-color: white;" + imageStyle);
+                ImageView imageView = createItemImageView(item);
+                slotPane.getChildren().add(imageView);
             }
         }
 
-        this.getChildren().set(2, createPlayerStatsView()); // Assuming the player stats VBox is at index 2
+        // Update the additional slots (collar, hat, and bonus)
+        updateAdditionalSlot(0, GameLogic.getPlayer().getInventory().getYourCollar());
+        updateAdditionalSlot(1, GameLogic.getPlayer().getInventory().getYourHat());
+        updateAdditionalSlot(2, GameLogic.getPlayer().getInventory().getYourBonus());
 
+        this.getChildren().set(2, createPlayerStatsView()); // Assuming the player stats VBox is at index 2
     }
-    
+
+    private ImageView createItemImageView(Item item) {
+        ImageView imageView = new ImageView(item.getTexture());
+        imageView.setFitWidth(80);
+        imageView.setFitHeight(80);
+        return imageView;
+    }
+
+    private void updateAdditionalSlot(int index, Item item) {
+        StackPane slotPane = slotPanesSpecial[index];
+        slotPane.getChildren().clear();
+
+        if (item != null) {
+            ImageView imageView = createItemImageView(item);
+            slotPane.getChildren().add(imageView);
+        }
+
+        if (index == selectedSpecialSlotIndex) {
+            slotPane.setStyle("-fx-border-color: white; -fx-background-color: #ea6969;");
+        } else {
+            slotPane.setStyle("-fx-border-color: black; -fx-background-color: white;");
+        }
+    }
+
     /*===================
     /Getters & Setters
     =====================*/
@@ -185,6 +203,14 @@ public class Inventory extends AMenu {
     @Override
     public void update_menu() {
         this.updateInventoryView(InventoryController.getBackPack());
+    }
+
+    public int getSelectedSpecialSlotIndex() {
+        return selectedSpecialSlotIndex;
+    }
+
+    public void setSelectedSpecialSlotIndex(int selectedSpecialSlotIndex) {
+        this.selectedSpecialSlotIndex = selectedSpecialSlotIndex;
     }
 
 }

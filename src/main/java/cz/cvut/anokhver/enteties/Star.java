@@ -5,10 +5,9 @@ import cz.cvut.anokhver.movement.Coordinates;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.io.File;
 import java.util.HashMap;
 
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
+import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 
 /**
  * Star object
@@ -30,8 +29,7 @@ public class Star {
     public Star(Coordinates position) {
 
         for (int i = 0; i < 3; i++) {
-            String dir = createProperPath(Configuration.getPathStar()) + i + ".png";
-            textures.put("anim" + i, new Image("file:" + File.separator + dir, Configuration.getTileSize(), Configuration.getTileSize(), false, false));
+            textures.put("anim" + i, new Image(getFileFromResourceAsStream(Configuration.getPathStar() + i + ".png"), Configuration.getTileSize(), Configuration.getTileSize(), false, false));
         }
 
         this.position = position;
