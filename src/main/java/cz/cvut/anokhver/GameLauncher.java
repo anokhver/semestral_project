@@ -7,10 +7,10 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import static cz.cvut.anokhver.additional.FileManagement.createFolderIfNotExists;
 import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
 public class GameLauncher extends Application {
@@ -18,6 +18,8 @@ public class GameLauncher extends Application {
 
     public static void main(String[] args) {
 
+        createFolderIfNotExists("logger");
+        createFolderIfNotExists("saves");
         //setting up the logger
         try {
             LogManager.getLogManager().readConfiguration(
