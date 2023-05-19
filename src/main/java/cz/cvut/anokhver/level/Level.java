@@ -33,11 +33,11 @@ public class Level {
     private List<Star> stars;
 
     private Tilemap map;
-    private Integer enemyCount = 5;
+    private Integer enemyCount = Configuration.getCountEnemy();
 
     private Timeline timer;
     private int elapsedSeconds = 0;
-    private int totalTime = 60;
+    private int totalTime = Configuration.getCountTime();
 
     /**
      * Setting level from id

@@ -98,6 +98,15 @@ public class Configuration {
     public static int getCountStars() {
         return json_config.getInt("countStars");
     }
+    public static int getCountEnemy() {
+        return json_config.getInt("countEnemy");
+    }
+    public static int getCountTime() {
+        return json_config.getInt("countTime");
+    }
+    public static int getIdLevel() {
+        return json_config.getInt("Leveled");
+    }
 
     public static double getPickUp() {
         return json_config.getDouble("pickupDistanceStar");

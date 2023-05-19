@@ -133,7 +133,7 @@ public class GameLogic {
         stage.setScene(null);
 
         if (cur_level != null) cur_level.draw_level_start();
-        else new_game(1);
+        else new_game(Configuration.getIdLevel());
 
         startGame();
     }
