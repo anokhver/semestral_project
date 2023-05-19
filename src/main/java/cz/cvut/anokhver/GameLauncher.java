@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -37,6 +38,11 @@ public class GameLauncher extends Application {
 
         primaryStage.setTitle(Configuration.getWindowName());
         primaryStage.setResizable(false);
+
+        //InputStream iconStream = GameLauncher.class.getResourceAsStream(Configuration.getPathIcon());
+        //System.out.println(Configuration.getPathIcon());
+        //System.out.println(iconStream);
+        //primaryStage.getIcons().add(new Image(iconStream));
 
         primaryStage.getIcons().add(new Image(new File(createProperPath(Configuration.getPathIcon())).toURI().toString()));
 
