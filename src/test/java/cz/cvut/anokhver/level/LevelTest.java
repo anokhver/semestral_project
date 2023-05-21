@@ -1,106 +1,110 @@
 package cz.cvut.anokhver.level;
 
-import cz.cvut.anokhver.enteties.Enemy;
-import cz.cvut.anokhver.enteties.Star;
-
-import java.util.List;
-
-import javafx.animation.Timeline;
+import cz.cvut.anokhver.GameLauncher;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.cvut.anokhver.enteties.Star;
+import cz.cvut.anokhver.enteties.Enemy;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 class LevelTest {
-    /**
-     * Method under test: {@link Level#Level(int)}
-     */
-    @Test
-    void testConstructor() {
-        new Level(1);
+
+    private Level level;
+
+    @BeforeEach
+    void setUp() {
+        new GameLauncher();
+        GameLauncher.setUplog();
+        level = new Level(1); // Create a Level instance with ID 1 for testing
     }
 
-    /**
-     * Method under test: {@link Level#configureMap(String)}
-     */
     @Test
-    void testConfigureMap() {
-        (new Level(1)).configureMap("Dir");
+    void startTimer() {
+        // Test startTimer method
+        level.startTimer();
+        assertNotNull(level.getTimer());
     }
 
-    /**
-     * Method under test: {@link Level#startTimer()}
-     */
     @Test
-    void testStartTimer() {
-        (new Level(1)).startTimer();
+    void getId() {
+        // Test getId method
+        assertNotNull(level.getId());
     }
 
-    /**
-     * Method under test: {@link Level#getRemainingTime()}
-     */
     @Test
-    void testGetRemainingTime() {
-        (new Level(1)).getRemainingTime();
+    void getMap() {
+        // Test getMap method
+        assertNotNull(level.getMap());
     }
 
-    /**
-     * Method under test: {@link Level#stopTimer()}
-     */
     @Test
-    void testStopTimer() {
-        (new Level(1)).stopTimer();
-    }
-
-    /**
-     * Methods under test:
-     *
-     * <ul>
-     *   <li>{@link Level#setElapsedSeconds(int)}
-     *   <li>{@link Level#setEnemies(List)}
-     *   <li>{@link Level#setEnemyCount(Integer)}
-     *   <li>{@link Level#setMap(Tilemap)}
-     *   <li>{@link Level#setStars(List)}
-     *   <li>{@link Level#setTimer(Timeline)}
-     *   <li>{@link Level#setTotalTime(int)}
-     *   <li>{@link Level#getElapsedSeconds()}
-     *   <li>{@link Level#getEnemies()}
-     *   <li>{@link Level#getEnemyCount()}
-     *   <li>{@link Level#getId()}
-     *   <li>{@link Level#getMap()}
-     *   <li>{@link Level#getStars()}
-     *   <li>{@link Level#getTimer()}
-     *   <li>{@link Level#getTotalTime()}
-     * </ul>
-     */
-    @Test
-    void testSetElapsedSeconds() {
-
-        Level level = null;
-        int elapsedSeconds = 0;
-
-        // Act
-        level.setElapsedSeconds(elapsedSeconds);
-        List<Enemy> enemies = null;
-        level.setEnemies(enemies);
-        Integer enemyCount = null;
-        level.setEnemyCount(enemyCount);
-        Tilemap map = null;
+    void setMap() {
+        // Test setMap method
+        Tilemap map = new Tilemap(10, 10); // Example map instance
         level.setMap(map);
-        List<Star> stars = null;
-        level.setStars(stars);
-        Timeline timer = null;
-        level.setTimer(timer);
-        int totalTime = 0;
-        level.setTotalTime(totalTime);
-        int actualElapsedSeconds = level.getElapsedSeconds();
-        List<Enemy> actualEnemies = level.getEnemies();
-        Integer actualEnemyCount = level.getEnemyCount();
-        Integer actualId = level.getId();
-        Tilemap actualMap = level.getMap();
-        List<Star> actualStars = level.getStars();
-        Timeline actualTimer = level.getTimer();
-        int actualTotalTime = level.getTotalTime();
+        assertEquals(map, level.getMap());
+    }
 
-        // Assert
-        // TODO: Add assertions on result
+    @Test
+    void getStars() {
+        // Test getStars method
+        assertNotNull(level.getStars());
+    }
+
+    @Test
+    void setStars() {
+        // Test setStars method
+        List<Star> stars = new ArrayList<>(); // Example stars list
+        level.setStars(stars);
+        assertEquals(stars, level.getStars());
+    }
+
+    @Test
+    void getEnemies() {
+        // Test getEnemies method
+        assertNotNull(level.getEnemies());
+    }
+
+    @Test
+    void setEnemies() {
+        // Test setEnemies method
+        List<Enemy> enemies = new ArrayList<>(); // Example enemies list
+        level.setEnemies(enemies);
+        assertEquals(enemies, level.getEnemies());
+    }
+
+    @Test
+    void getEnemyCount() {
+        // Test getEnemyCount method
+        assertNotNull(level.getEnemyCount());
+    }
+
+    @Test
+    void setEnemyCount() {
+        // Test setEnemyCount method
+        level.setEnemyCount(5); // Example enemy count
+        assertEquals(5, level.getEnemyCount());
+    }
+
+
+    @Test
+    void setElapsedSeconds() {
+        // Test setElapsedSeconds method
+        level.setElapsedSeconds(10); // Example elapsed seconds
+        assertEquals(10, level.getElapsedSeconds());
+    }
+
+
+    @Test
+    void setTotalTime() {
+        // Test setTotalTime method
+        level.setTotalTime(60); // Example total time
+        assertEquals(60, level.getTotalTime());
     }
 }
-

@@ -2,10 +2,12 @@ package cz.cvut.anokhver.menu;
 
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
+import cz.cvut.anokhver.additional.DelayedAction;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 
@@ -32,7 +34,7 @@ public class AreYouWinningSon extends Scene {
         // Create a StackPane layout and add the ImageView to it
         Pane root = (Pane) this.getRoot();
         root.getChildren().add(imageView);
-        setOnKeyPressed(event -> GameLogic.setMainMenu());
+        new DelayedAction(Duration.millis(2000), GameLogic::setMainMenu);
     }
 
 

@@ -6,6 +6,7 @@ import cz.cvut.anokhver.additional.FileManagement;
 import cz.cvut.anokhver.additional.SavingLoading;
 import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.contollers.GameMenuController;
+import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.contollers.MainMenuController;
 import cz.cvut.anokhver.enteties.Player;
 import cz.cvut.anokhver.level.Level;
@@ -35,11 +36,13 @@ public class GameLogic {
 
     private static final Dictionary<String, AContoller> controllers = new Hashtable<>();
     private static final GameLoop gameLoop = new GameLoop();
-    protected static LevelHandler cur_level;
+
+    private static LevelHandler cur_level;
     /**
      * STAGE + MENU
      */
     private static Stage stage;
+
     /**
      * THE GAME PARAMETERS
      */
@@ -67,8 +70,6 @@ public class GameLogic {
      * the view is taken from controllers array
      */
     public static void setMainMenu() {
-        stage.setScene(null);
-
         cur_state = controllers.get("MainMenu");
         stage.setScene(cur_state.getView().getScene());
         GameLauncher.log.info("Open main menu");
@@ -80,9 +81,10 @@ public class GameLogic {
      * the view is taken from controllers array
      */
     public static void setInGameMenu() {
-        stage.setScene(null);
+        stopGame();
 
         cur_state = controllers.get("InGameMenu");
+
         stage.setScene(cur_state.getView().getScene());
         GameLauncher.log.info("Open in game menu");
     }
@@ -92,7 +94,7 @@ public class GameLogic {
      * the view is taken from controllers array
      */
     public static void setInventory() {
-        stage.setScene(null);
+        stopGame();
 
         cur_state = controllers.get("Inventory");
         cur_state.getView().update_menu();
@@ -111,9 +113,13 @@ public class GameLogic {
      */
     public static void new_game(int id) {
         GameLauncher.log.info("Start new game");
-        stage.setScene(null);
+
+        GameLauncher.log.info("Creating default player...");
 
         hero = new Player();
+        hero.setInventory(new InventoryController());
+        hero.getInventory().setViewStart();
+
         controllers.put("Inventory", hero.getInventory());
 
         //creating and drawing
@@ -130,8 +136,8 @@ public class GameLogic {
      */
     public static void renewGame() {
         GameLauncher.log.info("Renew game");
-        stage.setScene(null);
 
+        cur_state = controllers.get("CurLevel");
         if (cur_level != null) cur_level.draw_level_start();
         else new_game(Configuration.getIdLevel());
 
@@ -143,13 +149,14 @@ public class GameLogic {
      */
     public static void load_game() {
         GameLauncher.log.info("Loading game from save");
-        stage.setScene(null);
 
         //loading the hero if the save was not found creating default player
         hero = SavingLoading.loadFromJsonPlayer(createProperPath("saves/player.json"));
         if (hero == null) {
             hero = new Player();
+            hero.setInventory(new InventoryController());
         }
+        hero.getInventory().setViewStart();
         controllers.put("Inventory", hero.getInventory());
 
         //loading full level if not found write on the screen and come back to the main menu
@@ -168,7 +175,6 @@ public class GameLogic {
         //setting curent level
         cur_level = new LevelHandler(hero, level_con, stage);
         controllers.put("CurLevel", cur_level);
-
         cur_level.draw_level_start();
 
         //starting game loop
@@ -221,18 +227,23 @@ public class GameLogic {
      * Stop game loop
      */
     public static void stopGame() {
-        gameLoop.stop();
+        GameLauncher.log.info("Stop current session");
     }
 
     /**
      * Start game loop
      */
     public static void startGame() {
+        cur_state = controllers.get("CurLevel");
         gameLoop.start();
     }
 
     public static Player getPlayer() {
         return hero;
+    }
+
+    public static AContoller getCur_state() {
+        return cur_state;
     }
 }
 
@@ -247,7 +258,7 @@ class GameLoop extends AnimationTimer {
         // Frame rate cap
         if (delta > 1 / 1000.00) {
             lastNanoTime = now;
-            GameLogic.cur_level.update(delta);
+            GameLogic.getCur_state().update(delta);
         }
     }
 

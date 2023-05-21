@@ -15,10 +15,10 @@
   "mapWidth": 10,
   "mapHeight": 10,
 
-  "countEnemy": 5,
-  "countTime": 60,
-  "countStars": 3,
-  "minimalDistStarts": 4,
+  "countEnemy": 10,
+  "countTime": 120,
+  "countStars": 4,
+  "minimalDistStarts": 10,
   "pickupDistanceStar": 100,
   "Leveled": 1
 }

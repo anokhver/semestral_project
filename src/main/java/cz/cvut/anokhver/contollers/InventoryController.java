@@ -55,17 +55,17 @@ public final class InventoryController extends AContoller {
      * Create inventory controller from parameters
      * usually used to load from saves
      *
-     * @param hat
-     * @param collar
-     * @param bonus
-     * @param count_milk
-     * @param space
-     * @param hasInvBonus
-     * @param hasInvHat
-     * @param hasInvCollar
+     * @param hat - if equipped
+     * @param collar -  if equipped
+     * @param bonus - if equipped
+     * @param count_milk -
+     * @param space - space in inventory for items
+     * @param hasInvBonus - if just in inventory
+     * @param hasInvHat - if just in inventory
+     * @param hasInvCollar - if just in inventory
      */
     public InventoryController(Boolean hat, Boolean collar, Boolean bonus, Integer count_milk,
-                               Integer space, Boolean hasInvBonus, Boolean hasInvHat, Boolean hasInvCollar) {
+                               Integer space, Boolean hasInvHat, Boolean hasInvCollar, Boolean hasInvBonus) {
         // Initialize the inventory
         backPackSpace = space;
         backPack = new Item[backPackSpace]; // Set the size of the backpack
@@ -94,16 +94,14 @@ public final class InventoryController extends AContoller {
         for (int i = 0; i < count_milk; i++) {
             addItem(new Milk("Milk"));
         }
-
-        setViewStart();
     }
 
     /*===========================
     *View setting
     ===========================*/
 
-    private void setViewStart() {
-        Inventory temp_view = new Inventory();
+    public void setViewStart() {
+        Inventory temp_view = new Inventory(backPackSpace);
 
         temp_view.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
@@ -336,7 +334,7 @@ public final class InventoryController extends AContoller {
         this.backPackSpace = backPackSpace;
     }
 
-    public static Item[] getBackPack() {
+    public Item[] getBackPack() {
         return backPack;
     }
 

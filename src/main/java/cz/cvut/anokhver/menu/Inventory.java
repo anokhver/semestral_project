@@ -2,27 +2,24 @@ package cz.cvut.anokhver.menu;
 
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
-import cz.cvut.anokhver.additional.PlayerConfigurations;
-import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.items.Item;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import static javafx.scene.paint.Color.*;
+
 /**
  * Inventory view
  * Displays items using images
- */
-public class Inventory extends AMenu {
+ */public class Inventory extends AMenu {
     private StackPane[] slotPanes;
     private StackPane[] slotPanesSpecial;
     private int selectedSlotIndex = 0;
@@ -32,16 +29,18 @@ public class Inventory extends AMenu {
     /**
      * Creating standard inventory view
      */
-    public Inventory() {
-        createInventoryGridPane(PlayerConfigurations.getBackPackSpace());
+    public Inventory(int backpackSpace) {
+
         this.setAlignment(Pos.CENTER);
+        this.setBackground(new Background(new BackgroundFill(BLACK, null, null)));
+
+        createInventoryGridPane(backpackSpace);
 
         // Create a StackPane and add the inventoryGridPane as its child
-        scene = new Scene(this, Configuration.getWindowWidth(), Configuration.getWindowHeight());
-        scene.setFill(Color.BLACK);
+        this.scene = new Scene(this, Configuration.getWindowWidth(), Configuration.getWindowHeight());
 
         // Request focus on the scene to ensure key presses are detected
-        scene.getRoot().requestFocus();
+        this.scene.getRoot().requestFocus();
     }
 
     /*===========================
@@ -82,26 +81,25 @@ public class Inventory extends AMenu {
             slotPanesSpecial[i] = slotPane; // Add the slot pane to the slotPanes array
         }
 
-        Text instructionsText = createInstructionsText();
-
-        // Add the grid pane and instructions text to the VBox
+        // Add the grid pane to the VBox
         this.setSpacing(10);
-        this.getChildren().addAll(instructionsText, gridPane, createPlayerStatsView());
-    }
-
-    private StackPane createSlotPane() {
-        StackPane slotPane = new StackPane();
-        slotPane.setStyle("-fx-border-color: black; -fx-background-color: white;");
-        slotPane.setPrefSize(100, 100);
-        return slotPane;
+        this.getChildren().addAll(createInstructionsText(), gridPane, createPlayerStatsView());
     }
 
     private Text createInstructionsText() {
         Text instructionsText = new Text("CLOSE INVENTORY: E || USE ITEM: ENTER || CHANGE TO THE EQUIPMENT PART & BACK: Q");
-        instructionsText.setFill(Color.RED);
         instructionsText.setFont(Font.font("Impact", FontWeight.SEMI_BOLD, 25));
         instructionsText.setTextAlignment(TextAlignment.CENTER);
+        instructionsText.setFill(Color.WHITE);
         return instructionsText;
+    }
+
+    private StackPane createSlotPane() {
+        StackPane slotPane = new StackPane();
+        slotPane.setPrefSize(100, 100);
+        slotPane.setBackground(new Background(new BackgroundFill(ANTIQUEWHITE, null, null)));
+
+        return slotPane;
     }
 
     private VBox createPlayerStatsView() {
@@ -110,14 +108,22 @@ public class Inventory extends AMenu {
         playerStatsBox.setPadding(new Insets(10));
 
         Text titleText = new Text("Player Stats");
-        titleText.setFill(Color.RED);
         titleText.setFont(Font.font("Impact", FontWeight.SEMI_BOLD, 25));
         titleText.setTextAlignment(TextAlignment.RIGHT);
+        titleText.setFill(Color.WHITE);
 
         Text damageText = new Text("Damage: ");
+        damageText.setFill(Color.WHITE);
+
         Text speedDamageText = new Text("Speed Damage: ");
+        speedDamageText.setFill(Color.WHITE);
+
         Text damageRadiusText = new Text("Damage Radius: ");
+        damageRadiusText.setFill(Color.WHITE);
+
         Text walkSpeedText = new Text("Speed walk: ");
+        walkSpeedText.setFill(Color.WHITE);
+
 
         if (GameLogic.getPlayer() != null) {
             damageText.setText(damageText.getText() + GameLogic.getPlayer().getDamage());
@@ -143,11 +149,7 @@ public class Inventory extends AMenu {
             StackPane slotPane = slotPanes[i];
             Item item = backpack[i];
 
-            if (i == selectedSlotIndex) {
-                slotPane.setStyle("-fx-border-color: white; -fx-background-color: #ea6969;");
-            } else {
-                slotPane.setStyle("-fx-border-color: black; -fx-background-color: white;");
-            }
+            updateSlotStyle(slotPane, i == selectedSlotIndex);
 
             slotPane.getChildren().clear();
 
@@ -176,16 +178,24 @@ public class Inventory extends AMenu {
         StackPane slotPane = slotPanesSpecial[index];
         slotPane.getChildren().clear();
 
+
+        updateSlotStyle(slotPane, index == selectedSpecialSlotIndex);
+
         if (item != null) {
             ImageView imageView = createItemImageView(item);
             slotPane.getChildren().add(imageView);
         }
+    }
 
-        if (index == selectedSpecialSlotIndex) {
-            slotPane.setStyle("-fx-border-color: white; -fx-background-color: #ea6969;");
-        } else {
-            slotPane.setStyle("-fx-border-color: black; -fx-background-color: white;");
-        }
+
+    private void updateSlotStyle(StackPane slotPane, boolean isSelected) {
+        Color borderColor = isSelected ? BLACK : ANTIQUEWHITE;
+        Color backgroundColor = isSelected ? ROSYBROWN : ANTIQUEWHITE;
+
+        BorderStroke borderStroke = new BorderStroke(borderColor, BorderStrokeStyle.DASHED, null, new BorderWidths(3));
+        Border border = new Border(borderStroke);
+        slotPane.setBorder(border);
+        slotPane.setBackground(new Background(new BackgroundFill(backgroundColor, null, null)));
     }
 
     /*===================
@@ -202,7 +212,7 @@ public class Inventory extends AMenu {
 
     @Override
     public void update_menu() {
-        this.updateInventoryView(InventoryController.getBackPack());
+        this.updateInventoryView(GameLogic.getPlayer().getInventory().getBackPack());
     }
 
     public int getSelectedSpecialSlotIndex() {
@@ -212,5 +222,4 @@ public class Inventory extends AMenu {
     public void setSelectedSpecialSlotIndex(int selectedSpecialSlotIndex) {
         this.selectedSpecialSlotIndex = selectedSpecialSlotIndex;
     }
-
 }

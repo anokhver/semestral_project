@@ -3,7 +3,6 @@ package cz.cvut.anokhver.level;
 import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.GameLogic;
 import cz.cvut.anokhver.additional.Configuration;
-import cz.cvut.anokhver.additional.DelayedAction;
 import cz.cvut.anokhver.additional.PlayerConfigurations;
 import cz.cvut.anokhver.contollers.AContoller;
 import cz.cvut.anokhver.enteties.Enemy;
@@ -15,7 +14,6 @@ import cz.cvut.anokhver.movement.Direction;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,23 +31,21 @@ import static cz.cvut.anokhver.movement.Coordinates.minus;
  */
 public class LevelHandler extends AContoller {
     private static Stage cur_stage;
-
     private final LevelView view;
     private final HashSet<KeyCode> pushed_keys = new HashSet<>();
-    private final int MOVE_INTERVAL = 20; // make the enemies move every 20 ticks
-    protected Player hero;
-    private Level level_config;
+    private Player hero;
+    private final Level level_config;
     //some variables that help but could be done much better...
+    private final int MOVE_INTERVAL = 20; // make the enemies move every 20 ticks
     private int moveCounter = 0;
     private int redrawStarsCounter = 0;
-    private Boolean gameWon = false;
 
     /**
      * Passing all needed param to control the level
      *
-     * @param hero
-     * @param level
-     * @param stage
+     * @param hero = our mane player
+     * @param level - the level we are on
+     * @param stage - where to draw
      */
     public LevelHandler(Player hero, Level level, Stage stage) {
         GameLauncher.log.info("Setting level handler...");
@@ -64,14 +60,6 @@ public class LevelHandler extends AContoller {
     /*===========================
      *Basic setting
      ===========================*/
-
-    public static Stage getCur_stage() {
-        return cur_stage;
-    }
-
-    public static void setCur_stage(Stage cur_stage) {
-        LevelHandler.cur_stage = cur_stage;
-    }
 
     /**
      * Draw level the first time
@@ -105,18 +93,15 @@ public class LevelHandler extends AContoller {
      * damage player pick up stars
      * render new view
      *
-     * @param delta
+     * @param delta - for animation porpuses
      */
     @Override
     public void update(double delta) {
         //clear killed enemies
         level_config.getEnemies().removeIf(enemy -> enemy.getHealth() <= 0);
+        //change heart texture
         view.getHealthView().checkForChange(hero.getHealth());
 
-        check_keys(delta);
-        //change heart texture
-
-        render();
         // if the move counter reaches the interval, make the enemies move randomly and reset the counter
         // increment the move counter for controlling random monsters movement
         moveCounter++;
@@ -141,20 +126,18 @@ public class LevelHandler extends AContoller {
 
         //win
         if (hero.getStar_counter() == Configuration.getCountStars()) {
-            if (!gameWon) {
-                GameLauncher.log.info("You win yepi :D");
-                level_config.getEnemies().removeAll(level_config.getEnemies());
-                level_config.stopTimer();
-            }
 
-            gameWon = true; // set gameWon to true
-            new DelayedAction(Duration.millis(2000), GameLogic::win);
+            GameLauncher.log.info("You win yepi :D");
+            GameLogic.win();
         }
         //lose :(
         if (hero.getHealth() <= 0 || level_config.getRemainingTime() == 0) {
             GameLauncher.log.info("You lose :(");
             GameLogic.lose();
         }
+
+        check_keys(delta);
+        render();
 
 
     }
@@ -196,14 +179,14 @@ public class LevelHandler extends AContoller {
             hero.move(Direction.TOP, delta);
             hero.setCurTextureDirection(Direction.TOP);
         }
-        if (pushed_keys.contains(KeyCode.A)) {
-            hero.move(Direction.LEFT, delta);
-            hero.setCurTextureDirection(Direction.LEFT);
-
-        }
         if (pushed_keys.contains(KeyCode.S)) {
             hero.move(Direction.BOTTOM, delta);
             hero.setCurTextureDirection(Direction.BOTTOM);
+
+        }
+        if (pushed_keys.contains(KeyCode.A)) {
+            hero.move(Direction.LEFT, delta);
+            hero.setCurTextureDirection(Direction.LEFT);
 
         }
         if (pushed_keys.contains(KeyCode.D)) {
@@ -211,6 +194,7 @@ public class LevelHandler extends AContoller {
             hero.setCurTextureDirection(Direction.RIGHT);
 
         }
+
         //objet interact
         if (pushed_keys.contains(KeyCode.SPACE)) {
             List<Star> stars = level_config.getStars();
@@ -239,20 +223,18 @@ public class LevelHandler extends AContoller {
         if (pushed_keys.contains(KeyCode.E)) {
             pushed_keys.clear();
             GameLauncher.log.info(Player.class.getName() + " opened inventory");
+
             //stopping timer and game
             level_config.stopTimer();
-            GameLogic.stopGame();
-
             GameLogic.setInventory();
 
         }
         //in game menu
         if (pushed_keys.contains(KeyCode.ESCAPE)) {
             pushed_keys.clear();
+
             //stopping timer and game
             level_config.stopTimer();
-            GameLogic.stopGame();
-
             GameLogic.setInGameMenu();
         }
     }
@@ -334,10 +316,6 @@ public class LevelHandler extends AContoller {
         return level_config;
     }
 
-    public Coordinates getCharacterPosition() {
-        return hero.getPosition();
-    }
-
     @Override
     public AMenu getView() {
         return null;
@@ -347,9 +325,6 @@ public class LevelHandler extends AContoller {
         return level_config;
     }
 
-    public void setLevel_config(Level level_config) {
-        this.level_config = level_config;
-    }
 
     public Player getHero() {
         return hero;

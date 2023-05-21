@@ -33,20 +33,24 @@ public class Level {
     private List<Star> stars;
 
     private Tilemap map;
-    private Integer enemyCount = Configuration.getCountEnemy();
+    private Integer enemyCount;
 
     private Timeline timer;
     private int elapsedSeconds = 0;
-    private int totalTime = Configuration.getCountTime();
+    private int totalTime;
 
     /**
      * Setting level from id
      *
-     * @param id
+     * @param id - id of level map
      */
     public Level(int id) {
+        Configuration.init("config.json");
+
         GameLauncher.log.info("Generating level...");
         this.id = id;
+        enemyCount = Configuration.getCountEnemy();
+        totalTime = Configuration.getCountTime();
         String dir = (Configuration.getPathLevel() + id);
         configureMap(dir);
 
@@ -58,12 +62,7 @@ public class Level {
 
     }
 
-    /**
-     * Configure map width & heights to reuse it later
-     *
-     * @param dir of the map
-     */
-    public void configureMap(String dir) {
+    private void configureMap(String dir) {
         try {
             GameLauncher.log.info("Configuring map...");
             int mapWidth = 0;
@@ -167,9 +166,7 @@ public class Level {
      * Start count down till lose
      */
     public void startTimer() {
-        timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            elapsedSeconds++;
-        }));
+        timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> elapsedSeconds++));
         timer.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
         timer.play();
     }
@@ -233,10 +230,6 @@ public class Level {
 
     public Timeline getTimer() {
         return timer;
-    }
-
-    public void setTimer(Timeline timer) {
-        this.timer = timer;
     }
 
     public int getElapsedSeconds() {

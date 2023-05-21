@@ -20,7 +20,15 @@ public class GameLauncher extends Application {
 
         createFolderIfNotExists("logger");
         createFolderIfNotExists("saves");
+        setUplog();
         //setting up the logger
+        launch(args);
+    }
+
+    /**
+     * Set ups log configuration
+     */
+    public static void setUplog(){
         try {
             LogManager.getLogManager().readConfiguration(
                     GameLauncher.class.getResourceAsStream("/logger/logging.properties"));
@@ -28,13 +36,11 @@ public class GameLauncher extends Application {
         } catch (IOException e) {
             System.err.println("Could not setup logger configuration: " + e);
         }
-        launch(args);
     }
-
     @Override
     public void start(Stage primaryStage) {
 
-        Configuration.init(("config.json"));
+        Configuration.init("config.json");
         log.info("Launching game");
         //setting the main stage
 

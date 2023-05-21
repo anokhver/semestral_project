@@ -5,7 +5,6 @@ import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
 import javafx.scene.image.Image;
 
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 import static cz.cvut.anokhver.additional.FileManagement.getFileFromResourceAsStream;
 
 /**
@@ -28,14 +27,14 @@ public class Enemy extends Movable {
      * Create enemy from given parameters
      * usually used for loading from saves
      *
-     * @param name
-     * @param damage
-     * @param walkSpeed
-     * @param seeRadius
-     * @param damageRadius
-     * @param speedDamage
-     * @param health
-     * @param coordinates
+     * @param name -
+     * @param damage -
+     * @param walkSpeed -
+     * @param seeRadius -
+     * @param damageRadius -
+     * @param speedDamage -
+     * @param health -
+     * @param coordinates -
      */
     public Enemy(String name, float damage, float walkSpeed, float seeRadius, double damageRadius, float speedDamage, float health, Coordinates coordinates) {
         this.name = name;
@@ -46,7 +45,7 @@ public class Enemy extends Movable {
         this.seeRadius = seeRadius;
         this.setWalk_speed(walkSpeed);
 
-        EnemyConfigurations.init(createProperPath("con_" + name + ".json"));
+        EnemyConfigurations.init("con_" + name + ".json");
 
 
         Image img = new Image(getFileFromResourceAsStream(EnemyConfigurations.getTexture()), EnemyConfigurations.getTextureWidth(), EnemyConfigurations.getTextureHeight(), false, true);

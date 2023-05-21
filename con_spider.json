@@ -5,9 +5,9 @@
   "name": "spider",
   "seeRadius": 3,
   "speedDamage": 5,
-  "textureHeight": 110,
+  "textureHeight": 120,
   "texturePath": "textures/spider.png",
-  "textureWidth": 110,
+  "textureWidth": 200,
   "walkSpeed": 140
 }
 

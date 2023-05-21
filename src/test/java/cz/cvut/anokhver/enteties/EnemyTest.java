@@ -2,62 +2,178 @@ package cz.cvut.anokhver.enteties;
 
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class EnemyTest {
-    /**
-     * Method under test: {@link Enemy#Enemy(String, float, float, float, double, float, float, Coordinates)}
-     */
+
     @Test
-    void testConstructor() {
-        new Enemy("Name", 10.0f, 10.0f, 10.0f, 10.0d, 10.0f, 10.0f, new Coordinates(2, 3));
+    void getName() {
+        String name = "spider";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        assertEquals(name, enemy.getName());
     }
 
-    /**
-     * Method under test: {@link Enemy#Enemy(String, Coordinates)}
-     */
     @Test
-    void testConstructor2() {
-        new Enemy("Con Name", new Coordinates(2, 3));
+    void getDamage() {
+        String name = "spider";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        assertEquals(damage, enemy.getDamage());
     }
 
-    /**
-     * Methods under test:
-     *
-     * <ul>
-     *   <li>{@link Enemy#setCurDir(Direction)}
-     *   <li>{@link Enemy#setHealth(float)}
-     *   <li>{@link Enemy#setSpeedDamage(float)}
-     *   <li>{@link Enemy#getCurDirection()}
-     *   <li>{@link Enemy#getDamage()}
-     *   <li>{@link Enemy#getDamageRadius()}
-     *   <li>{@link Enemy#getHealth()}
-     *   <li>{@link Enemy#getName()}
-     *   <li>{@link Enemy#getSeeRadius()}
-     *   <li>{@link Enemy#getSpeedDamage()}
-     * </ul>
-     */
     @Test
-    void testSetCurDir() {
-        Enemy enemy = null;
-        Direction cur_dir = Direction.TOP;
+    void getHealth() {
+        String name = "spider";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
 
-        // Act
-        enemy.setCurDir(cur_dir);
-        float health = 0.0f;
-        enemy.setHealth(health);
-        float speedDamage = 0.0f;
-        enemy.setSpeedDamage(speedDamage);
-        Direction actualCurDirection = enemy.getCurDirection();
-        float actualDamage = enemy.getDamage();
-        double actualDamageRadius = enemy.getDamageRadius();
-        float actualHealth = enemy.getHealth();
-        String actualName = enemy.getName();
-        float actualSeeRadius = enemy.getSeeRadius();
-        float actualSpeedDamage = enemy.getSpeedDamage();
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
 
+        assertEquals(health, enemy.getHealth());
+    }
 
+    @Test
+    void setHealth() {
+        String name = "spider";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        float newHealth = 80.0f;
+        enemy.setHealth(newHealth);
+
+        assertEquals(newHealth, enemy.getHealth());
+    }
+
+    @Test
+    void getSpeedDamage() {
+        String name = "spider";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        assertEquals(speedDamage, enemy.getSpeedDamage());
+    }
+
+    @Test
+    void setSpeedDamage() {
+        String name = "spider";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        float newSpeedDamage = 6.0f;
+        enemy.setSpeedDamage(newSpeedDamage);
+
+        assertEquals(newSpeedDamage, enemy.getSpeedDamage());
+    }
+
+    @Test
+    void getSeeRadius() {
+        String name = "moth";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        assertEquals(seeRadius, enemy.getSeeRadius());
+    }
+
+    @Test
+    void getDamageRadius() {
+        String name = "frog";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        assertEquals(damageRadius, enemy.getDamageRadius());
+    }
+
+    @Test
+    void getCurDirection() {
+        String name = "frog";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        assertEquals(Direction.STOP, enemy.getCurDirection());
+    }
+
+    @Test
+    void setCurDir() {
+        String name = "frog";
+        float damage = 10.0f;
+        float walkSpeed = 5.0f;
+        float seeRadius = 20.0f;
+        double damageRadius = 15.0;
+        float speedDamage = 8.0f;
+        float health = 100.0f;
+        Coordinates coordinates = new Coordinates(0, 0);
+
+        Enemy enemy = new Enemy(name, damage, walkSpeed, seeRadius, damageRadius, speedDamage, health, coordinates);
+
+        Direction newDirection = Direction.LEFT;
+        enemy.setCurDir(newDirection);
+
+        assertEquals(newDirection, enemy.getCurDirection());
     }
 }
-

@@ -19,15 +19,15 @@ public abstract class Item {
 
     private Image texture;
 
-    private Configuration positionDroped;
     /**
      * standard item constructor
      *
      * @param name "item name"
      */
     public Item(String name) {
+        Configuration.init("config.json");
+
         this.name = name;
-        System.out.println(Configuration.getPathItem() + name + ".png");
         InputStream stream = getFileFromResourceAsStream(Configuration.getPathItem() + name + ".png");
         texture = new Image(stream);
     }
@@ -35,9 +35,6 @@ public abstract class Item {
     /*===========================
     *Basic interactions
     ===========================*/
-    public void pickUp(Player player) {
-        player.getInventory().addItem(this);
-    }
 
     /**
      * Uses item on player
@@ -59,15 +56,5 @@ public abstract class Item {
         return texture;
     }
 
-    protected void setTexture(Image texture) {
-        this.texture = texture;
-    }
 
-    public Configuration getPositionDroped() {
-        return positionDroped;
-    }
-
-    public void setPositionDroped(Configuration positionDroped) {
-        this.positionDroped = positionDroped;
-    }
 }

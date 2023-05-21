@@ -66,7 +66,7 @@ public class LevelView extends Scene {
     /**
      * Draw the level
      *
-     * @param map
+     * @param map the map to draw
      * @param stars all stars left
      * @param time  left till the end
      */
@@ -88,7 +88,7 @@ public class LevelView extends Scene {
     /**
      * Draws all stars
      *
-     * @param stars
+     * @param stars - array with stars
      */
     public void drawStar(List<Star> stars) {
         GraphicsContext gc = cur_canvases.get("star").getGraphicsContext2D();
@@ -101,7 +101,7 @@ public class LevelView extends Scene {
     /**
      * Draws all enemies
      *
-     * @param enemies
+     * @param enemies - array of enemies
      */
     public void drawEnemies(List<Enemy> enemies) {
         for (Enemy enemy : enemies) {
@@ -136,7 +136,7 @@ public class LevelView extends Scene {
         Coordinates drawing_coor = new Coordinates(0, 0);
         Star just_for_texture = new Star(drawing_coor);
         for (int i = 0; i < hero.getStar_counter(); i++) {
-            drawing_coor = new Coordinates(Configuration.getWindowWidth() - Configuration.getTileSize() * (3 - i), 0);
+            drawing_coor = new Coordinates(Configuration.getWindowWidth() - Configuration.getTileSize() * (Configuration.getCountStars() - i), 0);
             just_for_texture.setPosition(drawing_coor);
             just_for_texture.setAnim_ind(0);
             just_for_texture.render(gc);
@@ -180,7 +180,7 @@ public class LevelView extends Scene {
     /**
      * Draw the some entity
      *
-     * @param entity
+     * @param entity some entity
      * @param gc     where it will be drawn
      */
     public void drawCreature(Movable entity, GraphicsContext gc) {
@@ -190,7 +190,7 @@ public class LevelView extends Scene {
     /**
      * Clear the graphic context
      *
-     * @param gc
+     * @param gc - what graphic context to clear
      */
     public void clearCanvas(GraphicsContext gc) {
         gc.clearRect(0, 0, Configuration.getMapWidth() * Configuration.getTileSize(), Configuration.getMapHeight() * Configuration.getTileSize());
@@ -200,13 +200,6 @@ public class LevelView extends Scene {
     /*===========================
      *Getters & Setters
      ===========================*/
-    public HashMap<String, Canvas> getCur_canvases() {
-        return cur_canvases;
-    }
-
-    public void setCur_canvases(HashMap<String, Canvas> cur_canvases) {
-        this.cur_canvases = cur_canvases;
-    }
 
     public HealthView getHealthView() {
         return healthView;

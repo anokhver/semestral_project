@@ -173,16 +173,18 @@ public class SavingLoading {
         playerJson.put("coins", hero.getCoins());
         playerJson.put("star_counter", hero.getStar_counter());
         playerJson.put("inventorySpace", hero.getInventory().getBackPackSpace());
+
         playerJson.put("Hat", (hero.getInventory().getYourHat() != null));
         playerJson.put("Collar", (hero.getInventory().getYourCollar() != null));
         playerJson.put("Bonus", (hero.getInventory().getYourBonus() != null));
+
         playerJson.put("position", hero.getPosition().getX() + " " + hero.getPosition().getY());
         playerJson.put("CollarInv", false);
         playerJson.put("HatInv", false);
         playerJson.put("BonusInv", false);
 
         Integer milkCount = 0;
-        for (Item item : InventoryController.getBackPack()) {
+        for (Item item : hero.getInventory().getBackPack()) {
             if (item != null) {
                 if (Objects.equals(item.getName(), "Milk")) milkCount += 1;
                 if (Objects.equals(item.getName(), "Collar")) playerJson.put("CollarInv", true);
@@ -243,9 +245,11 @@ public class SavingLoading {
             boolean hasHat = playerJson.getBoolean("Hat");
             boolean hasCollar = playerJson.getBoolean("Collar");
             boolean hasBonus = playerJson.getBoolean("Bonus");
+
             boolean hasInvHat = playerJson.getBoolean("HatInv");
             boolean hasInvCollar = playerJson.getBoolean("CollarInv");
             boolean hasInvBonus = playerJson.getBoolean("BonusInv");
+
             int milkCount = playerJson.getInt("Milk");
 
             hero.setInventory(new InventoryController(hasHat, hasCollar, hasBonus, milkCount, inventorySpace,

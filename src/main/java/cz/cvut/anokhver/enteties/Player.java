@@ -1,12 +1,9 @@
 package cz.cvut.anokhver.enteties;
 
-import cz.cvut.anokhver.GameLauncher;
 import cz.cvut.anokhver.additional.PlayerConfigurations;
 import cz.cvut.anokhver.contollers.InventoryController;
 import cz.cvut.anokhver.movement.Coordinates;
 import cz.cvut.anokhver.movement.Direction;
-
-import static cz.cvut.anokhver.additional.FileManagement.createProperPath;
 
 /**
  * The player instance
@@ -22,39 +19,15 @@ public class Player extends Movable {
     private double damage_radius;
     private Integer coins = 0;
 
-    private InventoryController inventory;
+    private InventoryController inventory = null;
     private int star_counter = 0;
-
-    /**
-     * Create player from given parameters
-     * usually used for loading from saves
-     *
-     * @param damage
-     * @param walkSpeed
-     * @param health
-     * @param speedDamage
-     * @param damageRadius
-     */
-    public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius) {
-        PlayerConfigurations.init(createProperPath("con_player.json"));
-
-        this.damage = damage;
-        this.health = health;
-        this.speed_damage = speedDamage;
-        this.damage_radius = damageRadius;
-        this.setWalk_speed(walkSpeed);
-
-        loadAllTextures(PlayerConfigurations.getTexture(),PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
-        setCurTextureDirection(Direction.STOP);
-        this.setInventory(new InventoryController());
-    }
 
     /**
      * Create player from regular player configuration
      */
     public Player() {
-        GameLauncher.log.info("Creating default player...");
         PlayerConfigurations.init("con_player.json");
+
         this.damage = PlayerConfigurations.getDamage();
         this.health = PlayerConfigurations.getHealth();
         this.speed_damage = PlayerConfigurations.getSpeedDamage();
@@ -65,9 +38,32 @@ public class Player extends Movable {
         setCurTextureDirection(Direction.STOP);
         this.coins = PlayerConfigurations.getCoins();
         this.setPosition(new Coordinates(100, 100));
-        this.setInventory(new InventoryController());
-
     }
+
+
+    /**
+     * Create player from given parameters
+     * usually used for loading from saves
+     *
+     * @param damage - damage
+     * @param walkSpeed -
+     * @param health -
+     * @param speedDamage -
+     * @param damageRadius -
+     */
+    public Player(float damage, float walkSpeed, float health, float speedDamage, double damageRadius) {
+        PlayerConfigurations.init("con_player.json");
+
+        this.damage = damage;
+        this.health = health;
+        this.speed_damage = speedDamage;
+        this.damage_radius = damageRadius;
+        this.setWalk_speed(walkSpeed);
+
+        loadAllTextures(PlayerConfigurations.getTexture(),PlayerConfigurations.getTextureWidth(), PlayerConfigurations.getTextureHeight());
+        setCurTextureDirection(Direction.STOP);
+    }
+
 
     /*===========================
    *Getters & Setters
